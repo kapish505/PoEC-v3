@@ -29,7 +29,7 @@ export const BackendProvider = ({ children }: { children: ReactNode }) => {
             const controller = new AbortController();
             const timeoutId = setTimeout(() => controller.abort(), 5000); // 5s ping timeout
 
-            const res = await fetch(`${API_URL}/`, { signal: controller.signal });
+            const res = await fetch(`${API_URL}/health`, { signal: controller.signal });
             clearTimeout(timeoutId);
 
             if (res.ok) {

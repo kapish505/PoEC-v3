@@ -3,8 +3,10 @@ import Head from 'next/head';
 import Link from 'next/link';
 import { motion, useScroll, useTransform } from 'framer-motion';
 import { ShieldCheck, Network, Activity, ArrowRight, Database, Lock, Search, AlertTriangle, Check, GitMerge, FileSearch } from 'lucide-react';
+import { useBackend } from '../components/BackendContext';
 
 export default function Home() {
+    const { status: serverStatus } = useBackend();
     const { scrollY } = useScroll();
     const y1 = useTransform(scrollY, [0, 500], [0, 200]);
     const y2 = useTransform(scrollY, [0, 500], [0, -150]);
@@ -51,12 +53,15 @@ export default function Home() {
                         animate={{ opacity: 1, scale: 1 }}
                         transition={{ duration: 1 }}
                     >
-                        <div className="inline-flex items-center gap-2 px-3 py-1 rounded-full border border-blue-500/30 bg-blue-500/10 text-blue-400 text-xs font-mono mb-6">
+                        <div className={`inline-flex items-center gap-2 px-3 py-1 rounded-full border text-xs font-mono mb-6 transition-colors
+                            ${serverStatus === 'online'
+                                ? 'border-emerald-500/30 bg-emerald-500/10 text-emerald-400'
+                                : 'border-amber-500/30 bg-amber-500/10 text-amber-400'}`}>
                             <span className="relative flex h-2 w-2">
-                                <span className="animate-ping absolute inline-flex h-full w-full rounded-full bg-blue-400 opacity-75"></span>
-                                <span className="relative inline-flex rounded-full h-2 w-2 bg-blue-500"></span>
+                                <span className={`animate-ping absolute inline-flex h-full w-full rounded-full opacity-75 ${serverStatus === 'online' ? 'bg-emerald-400' : 'bg-amber-400'}`}></span>
+                                <span className={`relative inline-flex rounded-full h-2 w-2 ${serverStatus === 'online' ? 'bg-emerald-500' : 'bg-amber-500'}`}></span>
                             </span>
-                            System Operational
+                            {serverStatus === 'online' ? 'System Operational' : 'Connecting to Neural Core...'}
                         </div>
                     </motion.div>
 

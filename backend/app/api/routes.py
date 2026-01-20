@@ -361,7 +361,7 @@ async def run_analysis(db: Session = Depends(database.get_db)):
         "snapshot": snapshot,
         "anomalies": anomalies,
         "results_hash": results_hash,
-        "model_hash": hashing.hash_content("PoEC_GNN_v1.0")[:66], # Simulate model hash
+        "model_hash": hashing.hash_content(json.load(open("config/models.json")).get("active_model_version", "unknown"))[:66], 
         "graph_data": graph_data
     }
 
@@ -369,7 +369,7 @@ class AnchorRequest(BaseModel):
     data_hash: str
     model_hash: str
     result_hash: str
-    ipfs_cid: str = "QmMockIPFSHashForExample"
+    ipfs_cid: str = ""
 
 @router.get("/anchor/status")
 async def get_anchor_status():

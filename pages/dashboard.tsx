@@ -20,7 +20,7 @@ const GraphViz = dynamic(() => import('../components/GraphViz'), {
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
 
 import { useBackend } from '../components/BackendContext';
-import ServerWakeupModal from '../components/ServerWakeupModal';
+
 
 export default function Dashboard() {
     // --- Global Context ---
@@ -728,7 +728,11 @@ export default function Dashboard() {
                                 </div>
 
                                 <div className="pt-4 border-t border-white/5 text-center text-xs text-slate-500">
-                                    PoEC Node ID: <span className="font-mono text-slate-300">0x4F...92A1</span>
+                                    PoEC Node ID: <span className="font-mono text-slate-300">
+                                        {web3Status?.wallet_address
+                                            ? `${web3Status.wallet_address.substring(0, 6)}...${web3Status.wallet_address.substring(38)}`
+                                            : "Locating..."}
+                                    </span>
                                 </div>
                             </div>
                         </motion.div>

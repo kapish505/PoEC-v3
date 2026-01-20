@@ -1,1 +1,8 @@
-{}
+{
+    "active_model_version": "PoEC_GNN_v1.0",
+    "parameters": {
+        "gnn_layers": 2,
+        "hidden_channels": 64,
+        "dropout": 0.1
+    }
+}

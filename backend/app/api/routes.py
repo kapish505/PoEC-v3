@@ -444,8 +444,8 @@ async def anchor_hash(req: AnchorRequest):
         receipt = w3.eth.wait_for_transaction_receipt(tx_hash)
         
         return {
-            "transaction_hash": receipt.transaction_hash.hex(),
-            "block_number": receipt.block_number,
+            "transaction_hash": receipt['transactionHash'].hex(),
+            "block_number": receipt['blockNumber'],
             "status": "confirmed"
         }
     except Exception as e:

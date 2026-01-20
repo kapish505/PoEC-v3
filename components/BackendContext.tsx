@@ -1,5 +1,5 @@
 
-import React, { createContext, useContext, useEffect, useState, ReactNode } from 'react';
+import React, { createContext, useContext, useEffect, useState, ReactNode, useCallback } from 'react';
 
 type BackendStatus = 'checking' | 'online' | 'offline';
 
@@ -24,7 +24,7 @@ export const BackendProvider = ({ children }: { children: ReactNode }) => {
     const [status, setStatus] = useState<BackendStatus>('checking');
     const [attempts, setAttempts] = useState(0);
 
-    const checkStatus = async () => {
+    const checkStatus = useCallback(async () => {
         try {
             const controller = new AbortController();
             const timeoutId = setTimeout(() => controller.abort(), 5000); // 5s ping timeout
@@ -41,25 +41,20 @@ export const BackendProvider = ({ children }: { children: ReactNode }) => {
         } catch (e) {
             console.log(`Backend ping failed (Attempt ${attempts + 1})`);
 
-            // If we are already online, stay online unless repeated failures (logic can be improved)
-            // For cold start, we just want to know when it COMES online.
-
             if (status !== 'online') {
-                // Exponential backoff or simple retry
-                if (attempts < 20) { // Try for ~100s total (Render cold start is ~45s)
+                if (attempts < 20) {
                     setAttempts(prev => prev + 1);
-                    // Retry is handled by useEffect below
                 } else {
                     setStatus('offline');
                 }
             }
         }
-    };
+    }, [attempts, status]);
 
     useEffect(() => {
         // Initial Check
         checkStatus();
-    }, []);
+    }, [checkStatus]);
 
     useEffect(() => {
         let timer: NodeJS.Timeout;
@@ -68,7 +63,7 @@ export const BackendProvider = ({ children }: { children: ReactNode }) => {
             timer = setTimeout(checkStatus, 5000);
         }
         return () => clearTimeout(timer);
-    }, [status, attempts]);
+    }, [status, attempts, checkStatus]);
 
     return (
         <BackendContext.Provider value={{ status, checkStatus }}>

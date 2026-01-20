@@ -87,9 +87,9 @@ export default function About() {
                             </p>
 
                             <div className="bg-[#111] p-6 rounded-xl border border-white/10 my-8 font-mono text-sm text-slate-300">
-                                <p className="mb-2 text-purple-400">// The Encoder</p>
+                                <p className="mb-2 text-purple-400">{'// The Encoder'}</p>
                                 <p className="mb-4">Z = GCN(X, A)</p>
-                                <p className="mb-2 text-purple-400">// The Decoder</p>
+                                <p className="mb-2 text-purple-400">{'// The Decoder'}</p>
                                 <p>Â = σ(Z Z^T)</p>
                             </div>
 

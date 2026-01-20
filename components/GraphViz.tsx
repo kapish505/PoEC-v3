@@ -274,7 +274,7 @@ export default function GraphViz({ elements, focusedAnomaly, theme = 'light' }: 
         return () => {
             cy.off('tap', onTap);
         };
-    }, [cyRef.current]);
+    }, []);
 
     // Re-run layout on data change
     useEffect(() => {

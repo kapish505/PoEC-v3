@@ -14,7 +14,7 @@ module.exports = {
       accounts: process.env.DEPLOYER_PRIVATE_KEY ? [process.env.DEPLOYER_PRIVATE_KEY] : []
     },
     sepolia: {
-      url: "https://rpc.sepolia.org", // Or use Alchemy/Infura URL if preferred
+      url: process.env.SEPOLIA_RPC_URL || "https://rpc.sepolia.org",
       chainId: 11155111,
       accounts: process.env.DEPLOYER_PRIVATE_KEY ? [process.env.DEPLOYER_PRIVATE_KEY] : []
     }

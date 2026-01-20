@@ -211,9 +211,16 @@ async def run_analysis(db: Session = Depends(database.get_db)):
         print("DEBUG: running GNN inference")
         try:
             if sub_G.number_of_edges() > 10: # Min 10 edges to trigger GNN
-                detector = gnn.AnomalyDetector()
-                detector.train_baseline(sub_G, epochs=100) # Keep high epochs for quality
-                gnn_output = detector.detect(sub_G)
+                # OPTIMIZATION: Run heavy ML compute in threadpool to avoid blocking heartbeat
+                # OPTIMIZATION: Reduced epochs from 100 to 25 for real-time responsiveness
+                from starlette.concurrency import run_in_threadpool
+                
+                def _exec_gnn_sync(graph_obj):
+                    detector = gnn.AnomalyDetector()
+                    detector.train_baseline(graph_obj, epochs=25) 
+                    return detector.detect(graph_obj)
+
+                gnn_output = await run_in_threadpool(_exec_gnn_sync, sub_G)
                 gnn_results = gnn_output["anomalies"]
                 
                 # Collect scores for visualization

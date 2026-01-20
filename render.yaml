@@ -22,6 +22,8 @@ services:
         value: pinata
       - key: PINATA_JWT
         sync: false
+      - key: BLOCKCHAIN_NETWORK
+        value: Sepolia Testnet
 
 databases:
   - name: poec-db

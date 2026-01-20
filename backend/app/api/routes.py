@@ -15,8 +15,16 @@ from app.engine.overlays import TaxOverlay
 
 router = APIRouter()
 
-# Web3 Setup
-w3 = Web3(Web3.HTTPProvider(os.getenv("ETHEREUM_NODE_URL", "http://localhost:8545")))
+# Web3 Setup - Lazy initialization to ensure env vars are read at request time
+_w3_instance = None
+
+def get_web3():
+    global _w3_instance
+    if _w3_instance is None:
+        node_url = os.getenv("ETHEREUM_NODE_URL", "http://localhost:8545")
+        print(f"DEBUG: Initializing Web3 with URL: {node_url}")
+        _w3_instance = Web3(Web3.HTTPProvider(node_url))
+    return _w3_instance
 # Minimal ABI for verifyHash
 CONTRACT_ABI = [
     {
@@ -93,7 +101,7 @@ async def ingest_data(file: UploadFile = File(...), db: Session = Depends(databa
             batch_id=raw_hash[:8],
             record_count=len(db_objs),
             content_hash=raw_hash,
-            message="Ingestion successful (Persisted to SQLite)"
+            message="Ingestion successful"
         )
     except HTTPException as he:
         # Re-raise HTTP exceptions (like validation errors from ingest_csv)
@@ -383,13 +391,14 @@ async def get_anchor_status():
     """
     Returns the server-side wallet configuration for transparency.
     """
+    w3 = get_web3()
     if not w3.is_connected():
          return {"status": "disconnected", "network": "Unknown"}
     
     # Re-derive account (same logic as anchor_hash)
     PRIVATE_KEY = os.getenv("DEPLOYER_PRIVATE_KEY")
     if not PRIVATE_KEY:
-         PRIVATE_KEY = "0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80"
+         return {"status": "disconnected", "network": "Unknown", "error": "DEPLOYER_PRIVATE_KEY not set"}
     
     account = w3.eth.account.from_key(PRIVATE_KEY)
     
@@ -401,7 +410,7 @@ async def get_anchor_status():
 
     return {
         "status": "connected",
-        "network": "Sepolia Testnet",
+        "network": os.getenv("BLOCKCHAIN_NETWORK", "Sepolia Testnet"),
         "wallet_address": account.address,
         "contract_address": CONTRACT_ADDRESS,
         "balance_eth": balance_eth
@@ -412,13 +421,13 @@ async def anchor_hash(req: AnchorRequest):
     """
     Anchors the hash triplet to the registry.
     """
+    w3 = get_web3()
     if not w3.is_connected():
          raise HTTPException(status_code=503, detail="Blockchain node not connected")
     
-    # Hardcoded Hardhat Account #0
     PRIVATE_KEY = os.getenv("DEPLOYER_PRIVATE_KEY")
     if not PRIVATE_KEY:
-         PRIVATE_KEY = "0xac0974bec39a17e36ba4a6b4d238ff944bacb478cbed5efcae784d7bf4f2ff80"
+         raise HTTPException(status_code=503, detail="DEPLOYER_PRIVATE_KEY not configured")
          
     account = w3.eth.account.from_key(PRIVATE_KEY)
     
@@ -455,6 +464,7 @@ async def anchor_hash(req: AnchorRequest):
 
 @router.get("/verify/{result_hash}")
 async def verify_on_chain(result_hash: str):
+    w3 = get_web3()
     if not w3.is_connected():
          raise HTTPException(status_code=503, detail="Blockchain node not connected")
     

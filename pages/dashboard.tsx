@@ -481,7 +481,7 @@ export default function Dashboard() {
                                         </div>
                                     </div>
 
-                                    {!verifyStatus?.verified ? (
+                                    {!txHash ? (
                                         <button onClick={() => handleAnchor()} disabled={anchoring} className="w-full py-2 bg-gradient-to-r from-blue-600 to-indigo-600 hover:from-blue-500 hover:to-indigo-500 rounded-lg text-[10px] font-bold text-white transition-all shadow-lg shadow-blue-900/20">
                                             {anchoring ? 'Anchoring...' : 'Anchor Proof to Sepolia'}
                                         </button>

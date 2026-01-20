@@ -18,6 +18,10 @@ services:
         value: https://rpc.sepolia.org
       - key: DEPLOYER_PRIVATE_KEY
         sync: false
+      - key: STORAGE_TYPE
+        value: pinata
+      - key: PINATA_JWT
+        sync: false
 
 databases:
   - name: poec-db

@@ -6,7 +6,12 @@ from sqlalchemy.orm import sessionmaker
 # Default to Docker DB if not set
 # Default to SQLite for zero-config deployment if DATABASE_URL is not set
 SQLALCHEMY_DATABASE_URL = os.getenv("DATABASE_URL", "sqlite:///./poec.db")
-print(f"DEBUG: Using Database URL -> {SQLALCHEMY_DATABASE_URL}")
+
+# FIX: Render uses postgres:// but SQLAlchemy requires postgresql://
+if SQLALCHEMY_DATABASE_URL.startswith("postgres://"):
+    SQLALCHEMY_DATABASE_URL = SQLALCHEMY_DATABASE_URL.replace("postgres://", "postgresql://", 1)
+
+print(f"DEBUG: Using Database URL -> {SQLALCHEMY_DATABASE_URL[:30]}...")
 
 # Handle SQLite-specific connect_args
 connect_args = {"check_same_thread": False} if SQLALCHEMY_DATABASE_URL.startswith("sqlite") else {}

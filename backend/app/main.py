@@ -29,6 +29,10 @@ app.add_middleware(
 def read_root():
     return {"message": "PoEC Anomaly Detection Engine Ready"}
 
+@app.get("/health")
+def health_check():
+    return {"status": "healthy"}
+
 from app.api import routes
 app.include_router(routes.router, prefix="/api/v1")
 

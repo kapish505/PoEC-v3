@@ -43,7 +43,9 @@ export default function Dashboard() {
         graphData, setGraphData,
         snapshot, setSnapshot,
         logs, addLog, clearLogs,
-        anchorData, setAnchorData
+        anchorData, setAnchorData,
+        proofBundle, setProofBundle,
+        txHash, blockNumber, setBlockchainTx
     } = useAnalysis();
 
     const [analyzing, setAnalyzing] = useState(false);
@@ -259,6 +261,8 @@ export default function Dashboard() {
                 addLog("Hash collision: Evidence already on-chain.");
             } else {
                 addLog(`Anchored: Block ${json.block_number}`);
+                // Store tx data for Etherscan link
+                setBlockchainTx(json.transaction_hash, json.block_number);
             }
             handleVerify();
         } catch (err: any) {
@@ -482,10 +486,23 @@ export default function Dashboard() {
                                             {anchoring ? 'Anchoring...' : 'Anchor Proof to Sepolia'}
                                         </button>
                                     ) : (
-                                        <div className="text-[9px] text-center text-emerald-500/70 font-mono mt-1">
-                                            <a href={`https://sepolia.etherscan.io/tx/${verifyStatus.on_chain_hash}`} target="_blank" rel="noreferrer" className="underline hover:text-emerald-400">
-                                                Verified • Block {verifyStatus?.timestamp || "Latest"}
-                                            </a>
+                                        <div className="text-[9px] text-center space-y-2">
+                                            <div className="text-emerald-500 font-bold flex items-center justify-center gap-1">
+                                                <Lock size={10} /> On-Chain Verified
+                                            </div>
+                                            {txHash && (
+                                                <a
+                                                    href={`https://sepolia.etherscan.io/tx/${txHash}`}
+                                                    target="_blank"
+                                                    rel="noreferrer"
+                                                    className="block text-blue-400 underline hover:text-blue-300 font-mono"
+                                                >
+                                                    View on Etherscan ↗
+                                                </a>
+                                            )}
+                                            {blockNumber && (
+                                                <div className="text-slate-500">Block #{blockNumber}</div>
+                                            )}
                                         </div>
                                     )}
                                 </div>

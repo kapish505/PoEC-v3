@@ -1,5 +1,19 @@
 import React, { createContext, useContext, useState, ReactNode } from 'react';
 
+interface ProofBundle {
+    task_id: string;
+    merkle_root: string;
+    anomaly_proofs: Array<{
+        anomaly_id: string;
+        leaf_hash: string;
+        proof_path: Array<{ hash: string; position: 'left' | 'right' }>;
+    }>;
+    dataset_hash: string;
+    model_hash: string;
+    timestamp: string;
+    cid?: string;
+}
+
 interface AnalysisState {
     file: File | null;
     anomalies: any[];
@@ -10,6 +24,10 @@ interface AnalysisState {
     resultsHash: string | null;
     modelHash: string | null;
     dataHash: string | null;
+    // Proof and blockchain state
+    proofBundle: ProofBundle | null;
+    txHash: string | null;
+    blockNumber: number | null;
 }
 
 interface AnalysisContextType extends AnalysisState {
@@ -21,6 +39,8 @@ interface AnalysisContextType extends AnalysisState {
     clearLogs: () => void;
     setAnchorData: (data: any) => void;
     setHashes: (data: { resultsHash: string; modelHash: string; dataHash: string }) => void;
+    setProofBundle: (bundle: ProofBundle | null) => void;
+    setBlockchainTx: (txHash: string, blockNumber: number) => void;
     clearAll: () => void;
 }
 
@@ -34,6 +54,9 @@ const defaultState: AnalysisState = {
     resultsHash: null,
     modelHash: null,
     dataHash: null,
+    proofBundle: null,
+    txHash: null,
+    blockNumber: null,
 };
 
 const AnalysisContext = createContext<AnalysisContextType | undefined>(undefined);
@@ -72,6 +95,12 @@ export const AnalysisProvider = ({ children }: { children: ReactNode }) => {
         }));
     };
 
+    const setProofBundle = (proofBundle: ProofBundle | null) => setState(prev => ({ ...prev, proofBundle }));
+
+    const setBlockchainTx = (txHash: string, blockNumber: number) => {
+        setState(prev => ({ ...prev, txHash, blockNumber }));
+    };
+
     const clearAll = () => setState(defaultState);
 
     return (
@@ -85,6 +114,8 @@ export const AnalysisProvider = ({ children }: { children: ReactNode }) => {
             clearLogs,
             setAnchorData,
             setHashes,
+            setProofBundle,
+            setBlockchainTx,
             clearAll,
         }}>
             {children}

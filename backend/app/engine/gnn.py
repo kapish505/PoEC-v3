@@ -212,7 +212,7 @@ class AnomalyDetector:
                 "score": float(score)
             })
             
-            if score > 0.55: # Demo Threshold: 0.55 (Medium Sensitivity)
+            if score > 0.75: # Demo Threshold: 0.75 (High Sensitivity)
                 anomalies.append({
                     "source": src,
                     "target": dst,

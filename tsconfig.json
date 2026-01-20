@@ -33,8 +33,9 @@
         "**/*.tsx",
         ".next/types/**/*.ts"
     ],
-    "node_modules",
-    "agent-runtime",
-    "contracts"
-]
+    "exclude": [
+        "node_modules",
+        "agent-runtime",
+        "contracts"
+    ]
 }

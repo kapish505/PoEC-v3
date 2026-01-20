@@ -338,6 +338,12 @@ export default function Dashboard() {
                             <Table size={12} /> Forensics
                             {transactions.length > 0 && <span className="text-[9px] opacity-50 bg-current px-1 rounded-full text-black">{transactions.length}</span>}
                         </button>
+                        <Link href="/verify" className={`px-4 py-1.5 rounded-lg text-xs font-medium transition-all flex items-center gap-2 text-slate-500 hover:text-slate-400`}>
+                            <Shield size={12} /> Verify
+                        </Link>
+                        <Link href="/agent_sim" className={`px-4 py-1.5 rounded-lg text-xs font-medium transition-all flex items-center gap-2 text-slate-500 hover:text-slate-400`}>
+                            <User size={12} /> Agent Sim
+                        </Link>
                     </nav>
 
                     {/* Action Area */}

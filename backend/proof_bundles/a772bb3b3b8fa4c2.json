@@ -1,0 +1,348 @@
+{
+  "task_id": "a772bb3b3b8fa4c2",
+  "merkle_root": "9f40305eac08e79fb93e30facc7257707945ab777bbec31d70b91df7155e8dba",
+  "dataset_hash": "3560fcc04a55f2912a92e49df83034ff9ca270afbead330c11011775d14fbb4a",
+  "model_hash": "d24ebb20ed610fa6a196b757863b9147e36208732e3ef20608e7d3ba63e52a80",
+  "timestamp": "2026-01-18T13:54:14.517068",
+  "bundle_cid": null,
+  "anomaly_count": 8,
+  "anomaly_proofs": [
+    {
+      "leaf": "8bd27daa60dca05708c4234cf11c1411955cc728db4116481f820c1b07cb90c8",
+      "root": "9f40305eac08e79fb93e30facc7257707945ab777bbec31d70b91df7155e8dba",
+      "path": [
+        {
+          "hash": "fb3d28a4381e7ad22833ff110ee146982d37e5446c35f253705157cd9fead18a",
+          "position": "left"
+        },
+        {
+          "hash": "25875592acc6d155b007c69baa1528dbdb95d238837c3292ce815aced9395b92",
+          "position": "left"
+        },
+        {
+          "hash": "86a54a76ab8d31b7e01e56e8105dd2dd91225d808250857e1f367c0815a43d09",
+          "position": "left"
+        }
+      ],
+      "anomaly": {
+        "anomaly_id": "DETERM-CIRC-2025-12-fbd56f082fcc6a823a7260b2d27b514cbed2fecd2d90f72f9697ded68e29f069",
+        "anomaly_type": "CIRCULAR_TRADING",
+        "severity": 0.9,
+        "entities_involved": [
+          "Entity_B",
+          "Entity_P",
+          "Entity_Y",
+          "Entity_V",
+          "Entity_S",
+          "Entity_J"
+        ],
+        "detection_method": "DETERMINISTIC",
+        "confidence": "Low",
+        "evidence_data": {
+          "cycle_path": [
+            "Entity_B",
+            "Entity_P",
+            "Entity_Y",
+            "Entity_V",
+            "Entity_S",
+            "Entity_J"
+          ],
+          "avg_amount": 7337.958333333333,
+          "slice": "2025-12"
+        },
+        "explanation_metadata": {
+          "metric": "Suspicious Loop",
+          "value": "6 Entities Involved",
+          "context": "Funds returned to origin (Circular Logic)"
+        }
+      }
+    },
+    {
+      "leaf": "fb3d28a4381e7ad22833ff110ee146982d37e5446c35f253705157cd9fead18a",
+      "root": "9f40305eac08e79fb93e30facc7257707945ab777bbec31d70b91df7155e8dba",
+      "path": [
+        {
+          "hash": "8bd27daa60dca05708c4234cf11c1411955cc728db4116481f820c1b07cb90c8",
+          "position": "right"
+        },
+        {
+          "hash": "25875592acc6d155b007c69baa1528dbdb95d238837c3292ce815aced9395b92",
+          "position": "left"
+        },
+        {
+          "hash": "86a54a76ab8d31b7e01e56e8105dd2dd91225d808250857e1f367c0815a43d09",
+          "position": "left"
+        }
+      ],
+      "anomaly": {
+        "anomaly_id": "DETERM-CIRC-2025-12-816f8619468ec835c52c94eabdb4a493d05454b78d64412a86cf1a773df28fe1",
+        "anomaly_type": "CIRCULAR_TRADING",
+        "severity": 0.9,
+        "entities_involved": [
+          "Entity_A",
+          "Entity_B",
+          "Entity_C"
+        ],
+        "detection_method": "DETERMINISTIC",
+        "confidence": "Low",
+        "evidence_data": {
+          "cycle_path": [
+            "Entity_A",
+            "Entity_B",
+            "Entity_C"
+          ],
+          "avg_amount": 49500.0,
+          "slice": "2025-12"
+        },
+        "explanation_metadata": {
+          "metric": "Suspicious Loop",
+          "value": "3 Entities Involved",
+          "context": "Funds returned to origin (Circular Logic)"
+        }
+      }
+    },
+    {
+      "leaf": "e4acdf03f8a9a8e1e0d055c96fca64968742c2220a76f2db04526e06118627be",
+      "root": "9f40305eac08e79fb93e30facc7257707945ab777bbec31d70b91df7155e8dba",
+      "path": [
+        {
+          "hash": "e4b0c1cab962f1257470999ca5f9176f8391c767898eb5e7495bd44267fcdf73",
+          "position": "left"
+        },
+        {
+          "hash": "c0b2ff4d0a0e86311034b8bb1e34ecf947d32fa2e4c31fa74224c42b139b2d97",
+          "position": "right"
+        },
+        {
+          "hash": "86a54a76ab8d31b7e01e56e8105dd2dd91225d808250857e1f367c0815a43d09",
+          "position": "left"
+        }
+      ],
+      "anomaly": {
+        "anomaly_id": "DETERM-CIRC-2025-12-c3268c62320034dd42343d5125a5b520bc177f59d4242a44168270db061c4ec3",
+        "anomaly_type": "CIRCULAR_TRADING",
+        "severity": 0.9,
+        "entities_involved": [
+          "Entity_B",
+          "Entity_X",
+          "Entity_N"
+        ],
+        "detection_method": "DETERMINISTIC",
+        "confidence": "Low",
+        "evidence_data": {
+          "cycle_path": [
+            "Entity_B",
+            "Entity_X",
+            "Entity_N"
+          ],
+          "avg_amount": 7095.666666666667,
+          "slice": "2025-12"
+        },
+        "explanation_metadata": {
+          "metric": "Suspicious Loop",
+          "value": "3 Entities Involved",
+          "context": "Funds returned to origin (Circular Logic)"
+        }
+      }
+    },
+    {
+      "leaf": "e4b0c1cab962f1257470999ca5f9176f8391c767898eb5e7495bd44267fcdf73",
+      "root": "9f40305eac08e79fb93e30facc7257707945ab777bbec31d70b91df7155e8dba",
+      "path": [
+        {
+          "hash": "e4acdf03f8a9a8e1e0d055c96fca64968742c2220a76f2db04526e06118627be",
+          "position": "right"
+        },
+        {
+          "hash": "c0b2ff4d0a0e86311034b8bb1e34ecf947d32fa2e4c31fa74224c42b139b2d97",
+          "position": "right"
+        },
+        {
+          "hash": "86a54a76ab8d31b7e01e56e8105dd2dd91225d808250857e1f367c0815a43d09",
+          "position": "left"
+        }
+      ],
+      "anomaly": {
+        "anomaly_id": "DETERM-WASH-2025-12-9363.46",
+        "anomaly_type": "WASH_TRADING",
+        "severity": 0.85,
+        "entities_involved": [
+          "Entity_G",
+          "Entity_G"
+        ],
+        "detection_method": "DETERMINISTIC",
+        "confidence": "Low",
+        "evidence_data": {
+          "total_volume": 9363.46,
+          "net_flow": 0.0,
+          "slice": "2025-12"
+        },
+        "explanation_metadata": {
+          "metric": "Fake Volume Ratio",
+          "value": "100%",
+          "context": "High Volume with Zero Net Transfer"
+        }
+      }
+    },
+    {
+      "leaf": "a2ee72e255bd7bca8ac1c5f1af2becc047bb90b15fc75dd2edbbff8cb763f277",
+      "root": "9f40305eac08e79fb93e30facc7257707945ab777bbec31d70b91df7155e8dba",
+      "path": [
+        {
+          "hash": "60caf0b5b0e67c6c8f12c54e3d50c68f6976a0014ebca7dbfd1d3dc4ac7f6593",
+          "position": "left"
+        },
+        {
+          "hash": "ef57c44e9e75043aec18fb50a9a57ac206daf099092f0b6a8b3f76332f983b6a",
+          "position": "left"
+        },
+        {
+          "hash": "05b41cf2d6eb22fc0e124245c7958cfefcd6430631e18157306e038eb80d0d7c",
+          "position": "right"
+        }
+      ],
+      "anomaly": {
+        "anomaly_id": "DETERM-WASH-2025-12-5567.58",
+        "anomaly_type": "WASH_TRADING",
+        "severity": 0.85,
+        "entities_involved": [
+          "Entity_I",
+          "Entity_I"
+        ],
+        "detection_method": "DETERMINISTIC",
+        "confidence": "Low",
+        "evidence_data": {
+          "total_volume": 5567.58,
+          "net_flow": 0.0,
+          "slice": "2025-12"
+        },
+        "explanation_metadata": {
+          "metric": "Fake Volume Ratio",
+          "value": "100%",
+          "context": "High Volume with Zero Net Transfer"
+        }
+      }
+    },
+    {
+      "leaf": "60caf0b5b0e67c6c8f12c54e3d50c68f6976a0014ebca7dbfd1d3dc4ac7f6593",
+      "root": "9f40305eac08e79fb93e30facc7257707945ab777bbec31d70b91df7155e8dba",
+      "path": [
+        {
+          "hash": "a2ee72e255bd7bca8ac1c5f1af2becc047bb90b15fc75dd2edbbff8cb763f277",
+          "position": "right"
+        },
+        {
+          "hash": "ef57c44e9e75043aec18fb50a9a57ac206daf099092f0b6a8b3f76332f983b6a",
+          "position": "left"
+        },
+        {
+          "hash": "05b41cf2d6eb22fc0e124245c7958cfefcd6430631e18157306e038eb80d0d7c",
+          "position": "right"
+        }
+      ],
+      "anomaly": {
+        "anomaly_id": "DETERM-WASH-2025-12-23396.64",
+        "anomaly_type": "WASH_TRADING",
+        "severity": 0.85,
+        "entities_involved": [
+          "Entity_P",
+          "Entity_P"
+        ],
+        "detection_method": "DETERMINISTIC",
+        "confidence": "Low",
+        "evidence_data": {
+          "total_volume": 23396.64,
+          "net_flow": 0.0,
+          "slice": "2025-12"
+        },
+        "explanation_metadata": {
+          "metric": "Fake Volume Ratio",
+          "value": "100%",
+          "context": "High Volume with Zero Net Transfer"
+        }
+      }
+    },
+    {
+      "leaf": "b5214dd5aa00569d132b1c261313ddb7bd64bb5f6618715db872209659a0b8d1",
+      "root": "9f40305eac08e79fb93e30facc7257707945ab777bbec31d70b91df7155e8dba",
+      "path": [
+        {
+          "hash": "6cdbf188e2cd4cf2bf0b40eb10bd8e6b28768e878cd9567b9a263cc9b2c6f8ee",
+          "position": "left"
+        },
+        {
+          "hash": "ff3fdc5746f3b0d8e8e4c8ccf3fbc9977de45053cbbcc74dcfdd733684938baf",
+          "position": "right"
+        },
+        {
+          "hash": "05b41cf2d6eb22fc0e124245c7958cfefcd6430631e18157306e038eb80d0d7c",
+          "position": "right"
+        }
+      ],
+      "anomaly": {
+        "anomaly_id": "DETERM-WASH-2025-12-7745.44",
+        "anomaly_type": "WASH_TRADING",
+        "severity": 0.85,
+        "entities_involved": [
+          "Entity_R",
+          "Entity_R"
+        ],
+        "detection_method": "DETERMINISTIC",
+        "confidence": "Low",
+        "evidence_data": {
+          "total_volume": 7745.44,
+          "net_flow": 0.0,
+          "slice": "2025-12"
+        },
+        "explanation_metadata": {
+          "metric": "Fake Volume Ratio",
+          "value": "100%",
+          "context": "High Volume with Zero Net Transfer"
+        }
+      }
+    },
+    {
+      "leaf": "6cdbf188e2cd4cf2bf0b40eb10bd8e6b28768e878cd9567b9a263cc9b2c6f8ee",
+      "root": "9f40305eac08e79fb93e30facc7257707945ab777bbec31d70b91df7155e8dba",
+      "path": [
+        {
+          "hash": "b5214dd5aa00569d132b1c261313ddb7bd64bb5f6618715db872209659a0b8d1",
+          "position": "right"
+        },
+        {
+          "hash": "ff3fdc5746f3b0d8e8e4c8ccf3fbc9977de45053cbbcc74dcfdd733684938baf",
+          "position": "right"
+        },
+        {
+          "hash": "05b41cf2d6eb22fc0e124245c7958cfefcd6430631e18157306e038eb80d0d7c",
+          "position": "right"
+        }
+      ],
+      "anomaly": {
+        "anomaly_id": "DETERM-WASH-2025-12-7813.5",
+        "anomaly_type": "WASH_TRADING",
+        "severity": 0.85,
+        "entities_involved": [
+          "Entity_Q",
+          "Entity_Q"
+        ],
+        "detection_method": "DETERMINISTIC",
+        "confidence": "Low",
+        "evidence_data": {
+          "total_volume": 7813.5,
+          "net_flow": 0.0,
+          "slice": "2025-12"
+        },
+        "explanation_metadata": {
+          "metric": "Fake Volume Ratio",
+          "value": "100%",
+          "context": "High Volume with Zero Net Transfer"
+        }
+      }
+    }
+  ],
+  "metadata": {
+    "total_anomalies": 8,
+    "builder_version": "1.0.0"
+  }
+}

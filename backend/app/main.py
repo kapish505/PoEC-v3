@@ -31,3 +31,7 @@ def read_root():
 
 from app.api import routes
 app.include_router(routes.router, prefix="/api/v1")
+
+# PoEC v2 Routes (NEW - Proof Building & Verification)
+from app.api import routes_v2
+app.include_router(routes_v2.router, prefix="/api/v2")

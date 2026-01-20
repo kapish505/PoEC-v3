@@ -72,6 +72,150 @@
       "artifacts": [
         "PoECRegistry"
       ]
+    },
+    "/Users/kapish/Work/PoEC_x402/PoEC/contracts/contracts/PoECRegistry.sol": {
+      "lastModificationDate": 1768690920395,
+      "contentHash": "d9e389347c1eb5b11e8177e76b5403b1",
+      "sourceName": "contracts/PoECRegistry.sol",
+      "solcConfig": {
+        "version": "0.8.20",
+        "settings": {
+          "evmVersion": "paris",
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        "^0.8.0"
+      ],
+      "artifacts": [
+        "PoECRegistry"
+      ]
+    },
+    "/Users/kapish/Work/PoEC_x402/PoEC/contracts/contracts/ProofAnchor.sol": {
+      "lastModificationDate": 1768690920395,
+      "contentHash": "df5d75e3b13de2ef360902fa3b9a5994",
+      "sourceName": "contracts/ProofAnchor.sol",
+      "solcConfig": {
+        "version": "0.8.20",
+        "settings": {
+          "evmVersion": "paris",
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        "^0.8.20"
+      ],
+      "artifacts": [
+        "ProofAnchor"
+      ]
+    },
+    "/Users/kapish/Work/PoEC_x402/PoEC/contracts/contracts/ResultAnchor.sol": {
+      "lastModificationDate": 1768702981370,
+      "contentHash": "f015fbd07a00282ff634dee2c4fcfa01",
+      "sourceName": "contracts/ResultAnchor.sol",
+      "solcConfig": {
+        "version": "0.8.20",
+        "settings": {
+          "evmVersion": "paris",
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        "^0.8.20"
+      ],
+      "artifacts": [
+        "ResultAnchor"
+      ]
+    },
+    "/Users/kapish/Work/PoEC_x402/PoEC/contracts/contracts/AgentRegistry.sol": {
+      "lastModificationDate": 1768703819216,
+      "contentHash": "83bf5e3f7805f8a3cfcc425ff6597fb0",
+      "sourceName": "contracts/AgentRegistry.sol",
+      "solcConfig": {
+        "version": "0.8.20",
+        "settings": {
+          "evmVersion": "paris",
+          "optimizer": {
+            "enabled": false,
+            "runs": 200
+          },
+          "outputSelection": {
+            "*": {
+              "*": [
+                "abi",
+                "evm.bytecode",
+                "evm.deployedBytecode",
+                "evm.methodIdentifiers",
+                "metadata"
+              ],
+              "": [
+                "ast"
+              ]
+            }
+          }
+        }
+      },
+      "imports": [],
+      "versionPragmas": [
+        "^0.8.20"
+      ],
+      "artifacts": [
+        "AgentRegistry"
+      ]
     }
   }
 }

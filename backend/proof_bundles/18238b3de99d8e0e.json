@@ -1,0 +1,2047 @@
+{
+  "task_id": "18238b3de99d8e0e",
+  "merkle_root": "a1e2e479cf8ec73346267c415c22eda766a4ff1de529363b1246003239956c4b",
+  "dataset_hash": "0c8c0aae7d5172432e92949c526ab0b2aea5d8023f5f81a964101df3c67355b1",
+  "model_hash": "d24ebb20ed610fa6a196b757863b9147e36208732e3ef20608e7d3ba63e52a80",
+  "timestamp": "2026-01-19T21:24:28.310455",
+  "bundle_cid": null,
+  "anomaly_count": 31,
+  "anomaly_proofs": [
+    {
+      "leaf": "d9ef10ae526408f4a42822aa8529e499ab3898a7cb6c394c4fe19e538865e00c",
+      "root": "a1e2e479cf8ec73346267c415c22eda766a4ff1de529363b1246003239956c4b",
+      "path": [
+        {
+          "hash": "a4576896b2de1ae2d449b0419cef5b65cfefe92237753b97c2eb3f62c7d3d891",
+          "position": "left"
+        },
+        {
+          "hash": "b7f707657ae0b92efb5faae7087f93ebe1b4bea3a20a208146cdc2e4aed44bfb",
+          "position": "left"
+        },
+        {
+          "hash": "9bf25f5880306f3c3474986f92cf5486912cbcdc858a1d00d5b106c426b60210",
+          "position": "left"
+        },
+        {
+          "hash": "c994e49b8ae5105abb172c4e178081c05b1f2d352ada2a7d1138dcbe8178455f",
+          "position": "left"
+        },
+        {
+          "hash": "a8c7dc7118c893368545a2b492402d1d9c64e61ac2df907324b6f778bad98dfc",
+          "position": "left"
+        }
+      ],
+      "anomaly": {
+        "anomaly_id": "DETERM-CIRC-2024-07-8961fa4863107f6a671f90fdd4f875885b5d55a0ba8073eb025dd1582467b94f",
+        "anomaly_type": "CIRCULAR_TRADING",
+        "severity": 0.9,
+        "entities_involved": [
+          "Trader_18",
+          "Trader_7",
+          "Trader_2",
+          "Trader_57",
+          "Trader_52"
+        ],
+        "detection_method": "DETERMINISTIC",
+        "confidence": "Low",
+        "evidence_data": {
+          "cycle_path": [
+            "Trader_18",
+            "Trader_7",
+            "Trader_2",
+            "Trader_57",
+            "Trader_52"
+          ],
+          "avg_amount": 3875.1639999999998,
+          "slice": "2024-07"
+        },
+        "explanation_metadata": {
+          "metric": "Suspicious Loop",
+          "value": "5 Entities Involved",
+          "context": "Funds returned to origin (Circular Logic)"
+        }
+      }
+    },
+    {
+      "leaf": "a4576896b2de1ae2d449b0419cef5b65cfefe92237753b97c2eb3f62c7d3d891",
+      "root": "a1e2e479cf8ec73346267c415c22eda766a4ff1de529363b1246003239956c4b",
+      "path": [
+        {
+          "hash": "d9ef10ae526408f4a42822aa8529e499ab3898a7cb6c394c4fe19e538865e00c",
+          "position": "right"
+        },
+        {
+          "hash": "b7f707657ae0b92efb5faae7087f93ebe1b4bea3a20a208146cdc2e4aed44bfb",
+          "position": "left"
+        },
+        {
+          "hash": "9bf25f5880306f3c3474986f92cf5486912cbcdc858a1d00d5b106c426b60210",
+          "position": "left"
+        },
+        {
+          "hash": "c994e49b8ae5105abb172c4e178081c05b1f2d352ada2a7d1138dcbe8178455f",
+          "position": "left"
+        },
+        {
+          "hash": "a8c7dc7118c893368545a2b492402d1d9c64e61ac2df907324b6f778bad98dfc",
+          "position": "left"
+        }
+      ],
+      "anomaly": {
+        "anomaly_id": "DETERM-STRUCT-2024-07-2102475967603606028",
+        "anomaly_type": "STRUCTURING (Fan-In)",
+        "severity": 0.95,
+        "entities_involved": [
+          "Trader_74",
+          "Trader_64",
+          "Trader_28",
+          "Trader_90",
+          "Trader_6",
+          "Trader_77"
+        ],
+        "detection_method": "DETERMINISTIC",
+        "confidence": "Low",
+        "evidence_data": {
+          "pattern": "Fan-In",
+          "avg_amount": 4134.278,
+          "std_dev": 399.7144037134513,
+          "slice": "2024-07"
+        },
+        "explanation_metadata": {
+          "metric": "Split-Transactions",
+          "value": "Count: ?",
+          "context": "Repeated payments just below reporting limit"
+        }
+      }
+    },
+    {
+      "leaf": "f4b51dcc1ef83ca451bf1f105e78d49ce104f520f935d2e41d80b3407175ea8d",
+      "root": "a1e2e479cf8ec73346267c415c22eda766a4ff1de529363b1246003239956c4b",
+      "path": [
+        {
+          "hash": "96c42d916f397cc86819d379f33be827658c23d8a1b1a19897e2bd6bf0f8745e",
+          "position": "left"
+        },
+        {
+          "hash": "04a46c3cef84de5b4e27016b28251a6f79daef33b2ab6380f18744f9e334c26c",
+          "position": "right"
+        },
+        {
+          "hash": "9bf25f5880306f3c3474986f92cf5486912cbcdc858a1d00d5b106c426b60210",
+          "position": "left"
+        },
+        {
+          "hash": "c994e49b8ae5105abb172c4e178081c05b1f2d352ada2a7d1138dcbe8178455f",
+          "position": "left"
+        },
+        {
+          "hash": "a8c7dc7118c893368545a2b492402d1d9c64e61ac2df907324b6f778bad98dfc",
+          "position": "left"
+        }
+      ],
+      "anomaly": {
+        "anomaly_id": "GNN-2024-07-Trader_76-Trader_22",
+        "anomaly_type": "WATCHLIST (Possible Anomaly)",
+        "severity": 0.8639051914215088,
+        "entities_involved": [
+          "Trader_76",
+          "Trader_22"
+        ],
+        "detection_method": "LEARNED",
+        "confidence": "Low",
+        "evidence_data": {
+          "score": 0.8639051914215088,
+          "slice": "2024-07",
+          "tag": "Existence Verification Failed"
+        },
+        "explanation_metadata": {
+          "factors": [
+            {
+              "name": "Probability of Fraud",
+              "value": "86.4%"
+            },
+            {
+              "name": "Model Decision",
+              "value": "Structurally Impossible"
+            },
+            {
+              "name": "Reality Check",
+              "value": "Link Exists (Deviation)"
+            },
+            {
+              "name": "Source Activity",
+              "value": "15 connections"
+            },
+            {
+              "name": "Target Activity",
+              "value": "5 connections"
+            }
+          ],
+          "corroboration": "Violates Economic & Graph Logic"
+        }
+      }
+    },
+    {
+      "leaf": "96c42d916f397cc86819d379f33be827658c23d8a1b1a19897e2bd6bf0f8745e",
+      "root": "a1e2e479cf8ec73346267c415c22eda766a4ff1de529363b1246003239956c4b",
+      "path": [
+        {
+          "hash": "f4b51dcc1ef83ca451bf1f105e78d49ce104f520f935d2e41d80b3407175ea8d",
+          "position": "right"
+        },
+        {
+          "hash": "04a46c3cef84de5b4e27016b28251a6f79daef33b2ab6380f18744f9e334c26c",
+          "position": "right"
+        },
+        {
+          "hash": "9bf25f5880306f3c3474986f92cf5486912cbcdc858a1d00d5b106c426b60210",
+          "position": "left"
+        },
+        {
+          "hash": "c994e49b8ae5105abb172c4e178081c05b1f2d352ada2a7d1138dcbe8178455f",
+          "position": "left"
+        },
+        {
+          "hash": "a8c7dc7118c893368545a2b492402d1d9c64e61ac2df907324b6f778bad98dfc",
+          "position": "left"
+        }
+      ],
+      "anomaly": {
+        "anomaly_id": "GNN-2024-07-Trader_63-Trader_83",
+        "anomaly_type": "WATCHLIST (Possible Anomaly)",
+        "severity": 0.7776699662208557,
+        "entities_involved": [
+          "Trader_63",
+          "Trader_83"
+        ],
+        "detection_method": "LEARNED",
+        "confidence": "Low",
+        "evidence_data": {
+          "score": 0.7776699662208557,
+          "slice": "2024-07",
+          "tag": "Existence Verification Failed"
+        },
+        "explanation_metadata": {
+          "factors": [
+            {
+              "name": "Probability of Fraud",
+              "value": "77.8%"
+            },
+            {
+              "name": "Model Decision",
+              "value": "Structurally Impossible"
+            },
+            {
+              "name": "Reality Check",
+              "value": "Link Exists (Deviation)"
+            },
+            {
+              "name": "Source Activity",
+              "value": "12 connections"
+            },
+            {
+              "name": "Target Activity",
+              "value": "8 connections"
+            }
+          ],
+          "corroboration": "Violates Economic & Graph Logic"
+        }
+      }
+    },
+    {
+      "leaf": "130c9684e55fd95087521e98a6515937fa62e7bd0aeb95cb8cc676d49928ce6b",
+      "root": "a1e2e479cf8ec73346267c415c22eda766a4ff1de529363b1246003239956c4b",
+      "path": [
+        {
+          "hash": "da4a45e2dbf2fb9157036df10e063f2e2566da53f26950b2fc1ecc9fde6fbff6",
+          "position": "left"
+        },
+        {
+          "hash": "945673deaedbbd680868f554d395f32e23c13cd089f69c70817f700d6d901b33",
+          "position": "left"
+        },
+        {
+          "hash": "d36f1d409d685df1a24420a90bdc900f1cfee29b85e249bc4ab055cc5366a8d4",
+          "position": "right"
+        },
+        {
+          "hash": "c994e49b8ae5105abb172c4e178081c05b1f2d352ada2a7d1138dcbe8178455f",
+          "position": "left"
+        },
+        {
+          "hash": "a8c7dc7118c893368545a2b492402d1d9c64e61ac2df907324b6f778bad98dfc",
+          "position": "left"
+        }
+      ],
+      "anomaly": {
+        "anomaly_id": "GNN-2024-07-Trader_61-Trader_37",
+        "anomaly_type": "WATCHLIST (Possible Anomaly)",
+        "severity": 0.8210672736167908,
+        "entities_involved": [
+          "Trader_61",
+          "Trader_37"
+        ],
+        "detection_method": "LEARNED",
+        "confidence": "Low",
+        "evidence_data": {
+          "score": 0.8210672736167908,
+          "slice": "2024-07",
+          "tag": "Existence Verification Failed"
+        },
+        "explanation_metadata": {
+          "factors": [
+            {
+              "name": "Probability of Fraud",
+              "value": "82.1%"
+            },
+            {
+              "name": "Model Decision",
+              "value": "Structurally Impossible"
+            },
+            {
+              "name": "Reality Check",
+              "value": "Link Exists (Deviation)"
+            },
+            {
+              "name": "Source Activity",
+              "value": "9 connections"
+            },
+            {
+              "name": "Target Activity",
+              "value": "10 connections"
+            }
+          ],
+          "corroboration": "Violates Economic & Graph Logic"
+        }
+      }
+    },
+    {
+      "leaf": "da4a45e2dbf2fb9157036df10e063f2e2566da53f26950b2fc1ecc9fde6fbff6",
+      "root": "a1e2e479cf8ec73346267c415c22eda766a4ff1de529363b1246003239956c4b",
+      "path": [
+        {
+          "hash": "130c9684e55fd95087521e98a6515937fa62e7bd0aeb95cb8cc676d49928ce6b",
+          "position": "right"
+        },
+        {
+          "hash": "945673deaedbbd680868f554d395f32e23c13cd089f69c70817f700d6d901b33",
+          "position": "left"
+        },
+        {
+          "hash": "d36f1d409d685df1a24420a90bdc900f1cfee29b85e249bc4ab055cc5366a8d4",
+          "position": "right"
+        },
+        {
+          "hash": "c994e49b8ae5105abb172c4e178081c05b1f2d352ada2a7d1138dcbe8178455f",
+          "position": "left"
+        },
+        {
+          "hash": "a8c7dc7118c893368545a2b492402d1d9c64e61ac2df907324b6f778bad98dfc",
+          "position": "left"
+        }
+      ],
+      "anomaly": {
+        "anomaly_id": "GNN-2024-07-Trader_82-Trader_81",
+        "anomaly_type": "WATCHLIST (Possible Anomaly)",
+        "severity": 0.8109679222106934,
+        "entities_involved": [
+          "Trader_82",
+          "Trader_81"
+        ],
+        "detection_method": "LEARNED",
+        "confidence": "Low",
+        "evidence_data": {
+          "score": 0.8109679222106934,
+          "slice": "2024-07",
+          "tag": "Existence Verification Failed"
+        },
+        "explanation_metadata": {
+          "factors": [
+            {
+              "name": "Probability of Fraud",
+              "value": "81.1%"
+            },
+            {
+              "name": "Model Decision",
+              "value": "Structurally Impossible"
+            },
+            {
+              "name": "Reality Check",
+              "value": "Link Exists (Deviation)"
+            },
+            {
+              "name": "Source Activity",
+              "value": "15 connections"
+            },
+            {
+              "name": "Target Activity",
+              "value": "10 connections"
+            }
+          ],
+          "corroboration": "Violates Economic & Graph Logic"
+        }
+      }
+    },
+    {
+      "leaf": "52238c50131d5cfcf65870dbc622167c1e8e26f51742856aa175feac129b2f74",
+      "root": "a1e2e479cf8ec73346267c415c22eda766a4ff1de529363b1246003239956c4b",
+      "path": [
+        {
+          "hash": "697b3648751a028e9bf3474ada461cc91566b66aa5287277d1e35fb87df89f96",
+          "position": "left"
+        },
+        {
+          "hash": "fdac5debb6250c3e774ef2570c729c2f4ba635323d59195da8c97a1ede2ff69f",
+          "position": "right"
+        },
+        {
+          "hash": "d36f1d409d685df1a24420a90bdc900f1cfee29b85e249bc4ab055cc5366a8d4",
+          "position": "right"
+        },
+        {
+          "hash": "c994e49b8ae5105abb172c4e178081c05b1f2d352ada2a7d1138dcbe8178455f",
+          "position": "left"
+        },
+        {
+          "hash": "a8c7dc7118c893368545a2b492402d1d9c64e61ac2df907324b6f778bad98dfc",
+          "position": "left"
+        }
+      ],
+      "anomaly": {
+        "anomaly_id": "GNN-2024-07-Trader_65-Trader_89",
+        "anomaly_type": "WATCHLIST (Possible Anomaly)",
+        "severity": 0.7699128985404968,
+        "entities_involved": [
+          "Trader_65",
+          "Trader_89"
+        ],
+        "detection_method": "LEARNED",
+        "confidence": "Low",
+        "evidence_data": {
+          "score": 0.7699128985404968,
+          "slice": "2024-07",
+          "tag": "Existence Verification Failed"
+        },
+        "explanation_metadata": {
+          "factors": [
+            {
+              "name": "Probability of Fraud",
+              "value": "77.0%"
+            },
+            {
+              "name": "Model Decision",
+              "value": "Structurally Impossible"
+            },
+            {
+              "name": "Reality Check",
+              "value": "Link Exists (Deviation)"
+            },
+            {
+              "name": "Source Activity",
+              "value": "14 connections"
+            },
+            {
+              "name": "Target Activity",
+              "value": "8 connections"
+            }
+          ],
+          "corroboration": "Violates Economic & Graph Logic"
+        }
+      }
+    },
+    {
+      "leaf": "697b3648751a028e9bf3474ada461cc91566b66aa5287277d1e35fb87df89f96",
+      "root": "a1e2e479cf8ec73346267c415c22eda766a4ff1de529363b1246003239956c4b",
+      "path": [
+        {
+          "hash": "52238c50131d5cfcf65870dbc622167c1e8e26f51742856aa175feac129b2f74",
+          "position": "right"
+        },
+        {
+          "hash": "fdac5debb6250c3e774ef2570c729c2f4ba635323d59195da8c97a1ede2ff69f",
+          "position": "right"
+        },
+        {
+          "hash": "d36f1d409d685df1a24420a90bdc900f1cfee29b85e249bc4ab055cc5366a8d4",
+          "position": "right"
+        },
+        {
+          "hash": "c994e49b8ae5105abb172c4e178081c05b1f2d352ada2a7d1138dcbe8178455f",
+          "position": "left"
+        },
+        {
+          "hash": "a8c7dc7118c893368545a2b492402d1d9c64e61ac2df907324b6f778bad98dfc",
+          "position": "left"
+        }
+      ],
+      "anomaly": {
+        "anomaly_id": "GNN-2024-07-Trader_43-Trader_40",
+        "anomaly_type": "WATCHLIST (Possible Anomaly)",
+        "severity": 0.7550144195556641,
+        "entities_involved": [
+          "Trader_43",
+          "Trader_40"
+        ],
+        "detection_method": "LEARNED",
+        "confidence": "Low",
+        "evidence_data": {
+          "score": 0.7550144195556641,
+          "slice": "2024-07",
+          "tag": "Existence Verification Failed"
+        },
+        "explanation_metadata": {
+          "factors": [
+            {
+              "name": "Probability of Fraud",
+              "value": "75.5%"
+            },
+            {
+              "name": "Model Decision",
+              "value": "Structurally Impossible"
+            },
+            {
+              "name": "Reality Check",
+              "value": "Link Exists (Deviation)"
+            },
+            {
+              "name": "Source Activity",
+              "value": "13 connections"
+            },
+            {
+              "name": "Target Activity",
+              "value": "9 connections"
+            }
+          ],
+          "corroboration": "Violates Economic & Graph Logic"
+        }
+      }
+    },
+    {
+      "leaf": "70d708e23e361af01c6c1035f0ca76654308d29a11d3e9357474351d17abf0c4",
+      "root": "a1e2e479cf8ec73346267c415c22eda766a4ff1de529363b1246003239956c4b",
+      "path": [
+        {
+          "hash": "f8156f5d81de9c020ad4b2a5129dcb68bd38d18ea10325438996db419912869b",
+          "position": "left"
+        },
+        {
+          "hash": "df3c0f626591806e3d039e2b3b6ed7395c809615b38ad2748371490de6c867c3",
+          "position": "left"
+        },
+        {
+          "hash": "85167848184f35bc50c90912112d773f3b799f4fcf9efafab772893a382237fb",
+          "position": "left"
+        },
+        {
+          "hash": "40f44d2cb0a51c722a3b93465f8b1f738f572f148adc5e25dc2d39f3d191dcbc",
+          "position": "right"
+        },
+        {
+          "hash": "a8c7dc7118c893368545a2b492402d1d9c64e61ac2df907324b6f778bad98dfc",
+          "position": "left"
+        }
+      ],
+      "anomaly": {
+        "anomaly_id": "GNN-2024-07-Trader_85-Trader_67",
+        "anomaly_type": "WATCHLIST (Possible Anomaly)",
+        "severity": 0.7658674120903015,
+        "entities_involved": [
+          "Trader_85",
+          "Trader_67"
+        ],
+        "detection_method": "LEARNED",
+        "confidence": "Low",
+        "evidence_data": {
+          "score": 0.7658674120903015,
+          "slice": "2024-07",
+          "tag": "Existence Verification Failed"
+        },
+        "explanation_metadata": {
+          "factors": [
+            {
+              "name": "Probability of Fraud",
+              "value": "76.6%"
+            },
+            {
+              "name": "Model Decision",
+              "value": "Structurally Impossible"
+            },
+            {
+              "name": "Reality Check",
+              "value": "Link Exists (Deviation)"
+            },
+            {
+              "name": "Source Activity",
+              "value": "11 connections"
+            },
+            {
+              "name": "Target Activity",
+              "value": "9 connections"
+            }
+          ],
+          "corroboration": "Violates Economic & Graph Logic"
+        }
+      }
+    },
+    {
+      "leaf": "f8156f5d81de9c020ad4b2a5129dcb68bd38d18ea10325438996db419912869b",
+      "root": "a1e2e479cf8ec73346267c415c22eda766a4ff1de529363b1246003239956c4b",
+      "path": [
+        {
+          "hash": "70d708e23e361af01c6c1035f0ca76654308d29a11d3e9357474351d17abf0c4",
+          "position": "right"
+        },
+        {
+          "hash": "df3c0f626591806e3d039e2b3b6ed7395c809615b38ad2748371490de6c867c3",
+          "position": "left"
+        },
+        {
+          "hash": "85167848184f35bc50c90912112d773f3b799f4fcf9efafab772893a382237fb",
+          "position": "left"
+        },
+        {
+          "hash": "40f44d2cb0a51c722a3b93465f8b1f738f572f148adc5e25dc2d39f3d191dcbc",
+          "position": "right"
+        },
+        {
+          "hash": "a8c7dc7118c893368545a2b492402d1d9c64e61ac2df907324b6f778bad98dfc",
+          "position": "left"
+        }
+      ],
+      "anomaly": {
+        "anomaly_id": "GNN-2024-07-Trader_8-Trader_33",
+        "anomaly_type": "WATCHLIST (Possible Anomaly)",
+        "severity": 0.8464015126228333,
+        "entities_involved": [
+          "Trader_8",
+          "Trader_33"
+        ],
+        "detection_method": "LEARNED",
+        "confidence": "Low",
+        "evidence_data": {
+          "score": 0.8464015126228333,
+          "slice": "2024-07",
+          "tag": "Existence Verification Failed"
+        },
+        "explanation_metadata": {
+          "factors": [
+            {
+              "name": "Probability of Fraud",
+              "value": "84.6%"
+            },
+            {
+              "name": "Model Decision",
+              "value": "Structurally Impossible"
+            },
+            {
+              "name": "Reality Check",
+              "value": "Link Exists (Deviation)"
+            },
+            {
+              "name": "Source Activity",
+              "value": "12 connections"
+            },
+            {
+              "name": "Target Activity",
+              "value": "7 connections"
+            }
+          ],
+          "corroboration": "Violates Economic & Graph Logic"
+        }
+      }
+    },
+    {
+      "leaf": "b3a83b6c99edc599130beab3afa97fcf9dfdd9fc5bde5b12065acb0882d74ef5",
+      "root": "a1e2e479cf8ec73346267c415c22eda766a4ff1de529363b1246003239956c4b",
+      "path": [
+        {
+          "hash": "5e060835a32cd9513f3f24bde7e93685a6cccbdcabf9b0831436d4abc06e8b9e",
+          "position": "left"
+        },
+        {
+          "hash": "50557d3534ebb5968932ff334339ffde4d8721296c79d5dced5a1f2b62b53a55",
+          "position": "right"
+        },
+        {
+          "hash": "85167848184f35bc50c90912112d773f3b799f4fcf9efafab772893a382237fb",
+          "position": "left"
+        },
+        {
+          "hash": "40f44d2cb0a51c722a3b93465f8b1f738f572f148adc5e25dc2d39f3d191dcbc",
+          "position": "right"
+        },
+        {
+          "hash": "a8c7dc7118c893368545a2b492402d1d9c64e61ac2df907324b6f778bad98dfc",
+          "position": "left"
+        }
+      ],
+      "anomaly": {
+        "anomaly_id": "GNN-2024-07-Trader_94-Trader_14",
+        "anomaly_type": "WATCHLIST (Possible Anomaly)",
+        "severity": 0.7509182691574097,
+        "entities_involved": [
+          "Trader_94",
+          "Trader_14"
+        ],
+        "detection_method": "LEARNED",
+        "confidence": "Low",
+        "evidence_data": {
+          "score": 0.7509182691574097,
+          "slice": "2024-07",
+          "tag": "Existence Verification Failed"
+        },
+        "explanation_metadata": {
+          "factors": [
+            {
+              "name": "Probability of Fraud",
+              "value": "75.1%"
+            },
+            {
+              "name": "Model Decision",
+              "value": "Structurally Impossible"
+            },
+            {
+              "name": "Reality Check",
+              "value": "Link Exists (Deviation)"
+            },
+            {
+              "name": "Source Activity",
+              "value": "12 connections"
+            },
+            {
+              "name": "Target Activity",
+              "value": "10 connections"
+            }
+          ],
+          "corroboration": "Violates Economic & Graph Logic"
+        }
+      }
+    },
+    {
+      "leaf": "5e060835a32cd9513f3f24bde7e93685a6cccbdcabf9b0831436d4abc06e8b9e",
+      "root": "a1e2e479cf8ec73346267c415c22eda766a4ff1de529363b1246003239956c4b",
+      "path": [
+        {
+          "hash": "b3a83b6c99edc599130beab3afa97fcf9dfdd9fc5bde5b12065acb0882d74ef5",
+          "position": "right"
+        },
+        {
+          "hash": "50557d3534ebb5968932ff334339ffde4d8721296c79d5dced5a1f2b62b53a55",
+          "position": "right"
+        },
+        {
+          "hash": "85167848184f35bc50c90912112d773f3b799f4fcf9efafab772893a382237fb",
+          "position": "left"
+        },
+        {
+          "hash": "40f44d2cb0a51c722a3b93465f8b1f738f572f148adc5e25dc2d39f3d191dcbc",
+          "position": "right"
+        },
+        {
+          "hash": "a8c7dc7118c893368545a2b492402d1d9c64e61ac2df907324b6f778bad98dfc",
+          "position": "left"
+        }
+      ],
+      "anomaly": {
+        "anomaly_id": "GNN-2024-07-Trader_94-Trader_40",
+        "anomaly_type": "WATCHLIST (Possible Anomaly)",
+        "severity": 0.7796943187713623,
+        "entities_involved": [
+          "Trader_94",
+          "Trader_40"
+        ],
+        "detection_method": "LEARNED",
+        "confidence": "Low",
+        "evidence_data": {
+          "score": 0.7796943187713623,
+          "slice": "2024-07",
+          "tag": "Existence Verification Failed"
+        },
+        "explanation_metadata": {
+          "factors": [
+            {
+              "name": "Probability of Fraud",
+              "value": "78.0%"
+            },
+            {
+              "name": "Model Decision",
+              "value": "Structurally Impossible"
+            },
+            {
+              "name": "Reality Check",
+              "value": "Link Exists (Deviation)"
+            },
+            {
+              "name": "Source Activity",
+              "value": "12 connections"
+            },
+            {
+              "name": "Target Activity",
+              "value": "9 connections"
+            }
+          ],
+          "corroboration": "Violates Economic & Graph Logic"
+        }
+      }
+    },
+    {
+      "leaf": "df832dd737df31fd638c9db4f9f3124d36bd55e0b12900636822fc7db843bf16",
+      "root": "a1e2e479cf8ec73346267c415c22eda766a4ff1de529363b1246003239956c4b",
+      "path": [
+        {
+          "hash": "92d24344e360eaba2ee023d573f6b8f91694b29d00afbd01afd9d2724cf3558c",
+          "position": "left"
+        },
+        {
+          "hash": "f92974fcaa650e8a1ece5930016dd1d9a5e6bc967f39466f7d334fdb1307d6e3",
+          "position": "left"
+        },
+        {
+          "hash": "48ac01df188ec32938a2ca410dab948c1be883b4b9bccc72ff4eaaead8f6a55d",
+          "position": "right"
+        },
+        {
+          "hash": "40f44d2cb0a51c722a3b93465f8b1f738f572f148adc5e25dc2d39f3d191dcbc",
+          "position": "right"
+        },
+        {
+          "hash": "a8c7dc7118c893368545a2b492402d1d9c64e61ac2df907324b6f778bad98dfc",
+          "position": "left"
+        }
+      ],
+      "anomaly": {
+        "anomaly_id": "GNN-2024-07-Trader_52-Trader_50",
+        "anomaly_type": "WATCHLIST (Possible Anomaly)",
+        "severity": 0.8215459585189819,
+        "entities_involved": [
+          "Trader_52",
+          "Trader_50"
+        ],
+        "detection_method": "LEARNED",
+        "confidence": "Low",
+        "evidence_data": {
+          "score": 0.8215459585189819,
+          "slice": "2024-07",
+          "tag": "Existence Verification Failed"
+        },
+        "explanation_metadata": {
+          "factors": [
+            {
+              "name": "Probability of Fraud",
+              "value": "82.2%"
+            },
+            {
+              "name": "Model Decision",
+              "value": "Structurally Impossible"
+            },
+            {
+              "name": "Reality Check",
+              "value": "Link Exists (Deviation)"
+            },
+            {
+              "name": "Source Activity",
+              "value": "7 connections"
+            },
+            {
+              "name": "Target Activity",
+              "value": "5 connections"
+            }
+          ],
+          "corroboration": "Violates Economic & Graph Logic"
+        }
+      }
+    },
+    {
+      "leaf": "92d24344e360eaba2ee023d573f6b8f91694b29d00afbd01afd9d2724cf3558c",
+      "root": "a1e2e479cf8ec73346267c415c22eda766a4ff1de529363b1246003239956c4b",
+      "path": [
+        {
+          "hash": "df832dd737df31fd638c9db4f9f3124d36bd55e0b12900636822fc7db843bf16",
+          "position": "right"
+        },
+        {
+          "hash": "f92974fcaa650e8a1ece5930016dd1d9a5e6bc967f39466f7d334fdb1307d6e3",
+          "position": "left"
+        },
+        {
+          "hash": "48ac01df188ec32938a2ca410dab948c1be883b4b9bccc72ff4eaaead8f6a55d",
+          "position": "right"
+        },
+        {
+          "hash": "40f44d2cb0a51c722a3b93465f8b1f738f572f148adc5e25dc2d39f3d191dcbc",
+          "position": "right"
+        },
+        {
+          "hash": "a8c7dc7118c893368545a2b492402d1d9c64e61ac2df907324b6f778bad98dfc",
+          "position": "left"
+        }
+      ],
+      "anomaly": {
+        "anomaly_id": "DETERM-STRUCT-2024-08-4219103380066872126",
+        "anomaly_type": "STRUCTURING (Fan-In)",
+        "severity": 0.95,
+        "entities_involved": [
+          "Trader_7",
+          "Trader_37",
+          "Trader_78",
+          "Trader_17",
+          "Trader_82",
+          "Trader_66",
+          "Trader_16"
+        ],
+        "detection_method": "DETERMINISTIC",
+        "confidence": "Low",
+        "evidence_data": {
+          "pattern": "Fan-In",
+          "avg_amount": 4483.118333333333,
+          "std_dev": 299.5858841476941,
+          "slice": "2024-08"
+        },
+        "explanation_metadata": {
+          "metric": "Split-Transactions",
+          "value": "Count: ?",
+          "context": "Repeated payments just below reporting limit"
+        }
+      }
+    },
+    {
+      "leaf": "cdc1d933b875dc4e88bf8715459754452f94a5789c9736e89c69493a8a27a15c",
+      "root": "a1e2e479cf8ec73346267c415c22eda766a4ff1de529363b1246003239956c4b",
+      "path": [
+        {
+          "hash": "9a377036a73f2db5ae9bbe8272dd239efaff1f34cd783581def66224f8668513",
+          "position": "left"
+        },
+        {
+          "hash": "d5cd0ddfb27d6cf679e14dd2ad4d40184826307e330054128ab3e5225f98b84c",
+          "position": "right"
+        },
+        {
+          "hash": "48ac01df188ec32938a2ca410dab948c1be883b4b9bccc72ff4eaaead8f6a55d",
+          "position": "right"
+        },
+        {
+          "hash": "40f44d2cb0a51c722a3b93465f8b1f738f572f148adc5e25dc2d39f3d191dcbc",
+          "position": "right"
+        },
+        {
+          "hash": "a8c7dc7118c893368545a2b492402d1d9c64e61ac2df907324b6f778bad98dfc",
+          "position": "left"
+        }
+      ],
+      "anomaly": {
+        "anomaly_id": "DETERM-STRUCT-2024-08--8908940884722906318",
+        "anomaly_type": "STRUCTURING (Fan-In)",
+        "severity": 0.95,
+        "entities_involved": [
+          "Pump_Admin",
+          "Trader_50",
+          "Trader_51",
+          "Trader_52",
+          "Trader_53",
+          "Trader_54",
+          "Trader_55",
+          "Trader_56",
+          "Trader_57",
+          "Trader_58",
+          "Trader_59",
+          "Trader_60",
+          "Trader_61",
+          "Trader_62",
+          "Trader_63",
+          "Trader_64"
+        ],
+        "detection_method": "DETERMINISTIC",
+        "confidence": "Low",
+        "evidence_data": {
+          "pattern": "Fan-In",
+          "avg_amount": 2000.0,
+          "std_dev": 0.0,
+          "slice": "2024-08"
+        },
+        "explanation_metadata": {
+          "metric": "Split-Transactions",
+          "value": "Count: ?",
+          "context": "Repeated payments just below reporting limit"
+        }
+      }
+    },
+    {
+      "leaf": "9a377036a73f2db5ae9bbe8272dd239efaff1f34cd783581def66224f8668513",
+      "root": "a1e2e479cf8ec73346267c415c22eda766a4ff1de529363b1246003239956c4b",
+      "path": [
+        {
+          "hash": "cdc1d933b875dc4e88bf8715459754452f94a5789c9736e89c69493a8a27a15c",
+          "position": "right"
+        },
+        {
+          "hash": "d5cd0ddfb27d6cf679e14dd2ad4d40184826307e330054128ab3e5225f98b84c",
+          "position": "right"
+        },
+        {
+          "hash": "48ac01df188ec32938a2ca410dab948c1be883b4b9bccc72ff4eaaead8f6a55d",
+          "position": "right"
+        },
+        {
+          "hash": "40f44d2cb0a51c722a3b93465f8b1f738f572f148adc5e25dc2d39f3d191dcbc",
+          "position": "right"
+        },
+        {
+          "hash": "a8c7dc7118c893368545a2b492402d1d9c64e61ac2df907324b6f778bad98dfc",
+          "position": "left"
+        }
+      ],
+      "anomaly": {
+        "anomaly_id": "GNN-2024-08-Trader_75-Trader_54",
+        "anomaly_type": "WATCHLIST (Possible Anomaly)",
+        "severity": 0.8024405241012573,
+        "entities_involved": [
+          "Trader_75",
+          "Trader_54"
+        ],
+        "detection_method": "LEARNED",
+        "confidence": "Low",
+        "evidence_data": {
+          "score": 0.8024405241012573,
+          "slice": "2024-08",
+          "tag": "Existence Verification Failed"
+        },
+        "explanation_metadata": {
+          "factors": [
+            {
+              "name": "Probability of Fraud",
+              "value": "80.2%"
+            },
+            {
+              "name": "Model Decision",
+              "value": "Structurally Impossible"
+            },
+            {
+              "name": "Reality Check",
+              "value": "Link Exists (Deviation)"
+            },
+            {
+              "name": "Source Activity",
+              "value": "12 connections"
+            },
+            {
+              "name": "Target Activity",
+              "value": "10 connections"
+            }
+          ],
+          "corroboration": "Violates Economic & Graph Logic"
+        }
+      }
+    },
+    {
+      "leaf": "f45ff2114c6f20c8574585b5693f4a56638935604552d932d2373c2464de7cc1",
+      "root": "a1e2e479cf8ec73346267c415c22eda766a4ff1de529363b1246003239956c4b",
+      "path": [
+        {
+          "hash": "83e1d37f08219f7de38c62b9cf7c513e8a78b8144ee5266883cc38bc54d14352",
+          "position": "left"
+        },
+        {
+          "hash": "e289af92726781e9750779c33f94776394741abede9d380959bdd47c51d4bb7c",
+          "position": "left"
+        },
+        {
+          "hash": "6e6952a5dc03e667cbd4230978547f936b6a50994bd8e3f85e427fbadecc2b46",
+          "position": "left"
+        },
+        {
+          "hash": "f1d5474647da01a5fcd8a1a050be4adcb2045d982b039b3bae29926a4b216bc8",
+          "position": "left"
+        },
+        {
+          "hash": "af07e1f1a187843ca1df871cb3f70ea994c2e3edc880b2374bcccee472016815",
+          "position": "right"
+        }
+      ],
+      "anomaly": {
+        "anomaly_id": "GNN-2024-08-Trader_76-Trader_10",
+        "anomaly_type": "WATCHLIST (Possible Anomaly)",
+        "severity": 0.7671095132827759,
+        "entities_involved": [
+          "Trader_76",
+          "Trader_10"
+        ],
+        "detection_method": "LEARNED",
+        "confidence": "Low",
+        "evidence_data": {
+          "score": 0.7671095132827759,
+          "slice": "2024-08",
+          "tag": "Existence Verification Failed"
+        },
+        "explanation_metadata": {
+          "factors": [
+            {
+              "name": "Probability of Fraud",
+              "value": "76.7%"
+            },
+            {
+              "name": "Model Decision",
+              "value": "Structurally Impossible"
+            },
+            {
+              "name": "Reality Check",
+              "value": "Link Exists (Deviation)"
+            },
+            {
+              "name": "Source Activity",
+              "value": "14 connections"
+            },
+            {
+              "name": "Target Activity",
+              "value": "11 connections"
+            }
+          ],
+          "corroboration": "Violates Economic & Graph Logic"
+        }
+      }
+    },
+    {
+      "leaf": "83e1d37f08219f7de38c62b9cf7c513e8a78b8144ee5266883cc38bc54d14352",
+      "root": "a1e2e479cf8ec73346267c415c22eda766a4ff1de529363b1246003239956c4b",
+      "path": [
+        {
+          "hash": "f45ff2114c6f20c8574585b5693f4a56638935604552d932d2373c2464de7cc1",
+          "position": "right"
+        },
+        {
+          "hash": "e289af92726781e9750779c33f94776394741abede9d380959bdd47c51d4bb7c",
+          "position": "left"
+        },
+        {
+          "hash": "6e6952a5dc03e667cbd4230978547f936b6a50994bd8e3f85e427fbadecc2b46",
+          "position": "left"
+        },
+        {
+          "hash": "f1d5474647da01a5fcd8a1a050be4adcb2045d982b039b3bae29926a4b216bc8",
+          "position": "left"
+        },
+        {
+          "hash": "af07e1f1a187843ca1df871cb3f70ea994c2e3edc880b2374bcccee472016815",
+          "position": "right"
+        }
+      ],
+      "anomaly": {
+        "anomaly_id": "GNN-2024-08-Trader_27-Trader_90",
+        "anomaly_type": "WATCHLIST (Possible Anomaly)",
+        "severity": 0.758185863494873,
+        "entities_involved": [
+          "Trader_27",
+          "Trader_90"
+        ],
+        "detection_method": "LEARNED",
+        "confidence": "Low",
+        "evidence_data": {
+          "score": 0.758185863494873,
+          "slice": "2024-08",
+          "tag": "Existence Verification Failed"
+        },
+        "explanation_metadata": {
+          "factors": [
+            {
+              "name": "Probability of Fraud",
+              "value": "75.8%"
+            },
+            {
+              "name": "Model Decision",
+              "value": "Structurally Impossible"
+            },
+            {
+              "name": "Reality Check",
+              "value": "Link Exists (Deviation)"
+            },
+            {
+              "name": "Source Activity",
+              "value": "9 connections"
+            },
+            {
+              "name": "Target Activity",
+              "value": "5 connections"
+            }
+          ],
+          "corroboration": "Violates Economic & Graph Logic"
+        }
+      }
+    },
+    {
+      "leaf": "f713ba3ec071258a5c53a931768905442f9ef78d863fc03a009d383cd1dc69f3",
+      "root": "a1e2e479cf8ec73346267c415c22eda766a4ff1de529363b1246003239956c4b",
+      "path": [
+        {
+          "hash": "d09eba7f71a281d1a670618041b74221d6ff1762d943c6497eb6c82cccc3550a",
+          "position": "left"
+        },
+        {
+          "hash": "00515f2696455c1aeb46c02216616154416accbf72aecade715f2304734cf905",
+          "position": "right"
+        },
+        {
+          "hash": "6e6952a5dc03e667cbd4230978547f936b6a50994bd8e3f85e427fbadecc2b46",
+          "position": "left"
+        },
+        {
+          "hash": "f1d5474647da01a5fcd8a1a050be4adcb2045d982b039b3bae29926a4b216bc8",
+          "position": "left"
+        },
+        {
+          "hash": "af07e1f1a187843ca1df871cb3f70ea994c2e3edc880b2374bcccee472016815",
+          "position": "right"
+        }
+      ],
+      "anomaly": {
+        "anomaly_id": "GNN-2024-08-Trader_11-Trader_93",
+        "anomaly_type": "WATCHLIST (Possible Anomaly)",
+        "severity": 0.8527666330337524,
+        "entities_involved": [
+          "Trader_11",
+          "Trader_93"
+        ],
+        "detection_method": "LEARNED",
+        "confidence": "Low",
+        "evidence_data": {
+          "score": 0.8527666330337524,
+          "slice": "2024-08",
+          "tag": "Existence Verification Failed"
+        },
+        "explanation_metadata": {
+          "factors": [
+            {
+              "name": "Probability of Fraud",
+              "value": "85.3%"
+            },
+            {
+              "name": "Model Decision",
+              "value": "Structurally Impossible"
+            },
+            {
+              "name": "Reality Check",
+              "value": "Link Exists (Deviation)"
+            },
+            {
+              "name": "Source Activity",
+              "value": "16 connections"
+            },
+            {
+              "name": "Target Activity",
+              "value": "5 connections"
+            }
+          ],
+          "corroboration": "Violates Economic & Graph Logic"
+        }
+      }
+    },
+    {
+      "leaf": "d09eba7f71a281d1a670618041b74221d6ff1762d943c6497eb6c82cccc3550a",
+      "root": "a1e2e479cf8ec73346267c415c22eda766a4ff1de529363b1246003239956c4b",
+      "path": [
+        {
+          "hash": "f713ba3ec071258a5c53a931768905442f9ef78d863fc03a009d383cd1dc69f3",
+          "position": "right"
+        },
+        {
+          "hash": "00515f2696455c1aeb46c02216616154416accbf72aecade715f2304734cf905",
+          "position": "right"
+        },
+        {
+          "hash": "6e6952a5dc03e667cbd4230978547f936b6a50994bd8e3f85e427fbadecc2b46",
+          "position": "left"
+        },
+        {
+          "hash": "f1d5474647da01a5fcd8a1a050be4adcb2045d982b039b3bae29926a4b216bc8",
+          "position": "left"
+        },
+        {
+          "hash": "af07e1f1a187843ca1df871cb3f70ea994c2e3edc880b2374bcccee472016815",
+          "position": "right"
+        }
+      ],
+      "anomaly": {
+        "anomaly_id": "GNN-2024-08-Trader_1-Trader_93",
+        "anomaly_type": "WATCHLIST (Possible Anomaly)",
+        "severity": 0.8283209800720215,
+        "entities_involved": [
+          "Trader_1",
+          "Trader_93"
+        ],
+        "detection_method": "LEARNED",
+        "confidence": "Low",
+        "evidence_data": {
+          "score": 0.8283209800720215,
+          "slice": "2024-08",
+          "tag": "Existence Verification Failed"
+        },
+        "explanation_metadata": {
+          "factors": [
+            {
+              "name": "Probability of Fraud",
+              "value": "82.8%"
+            },
+            {
+              "name": "Model Decision",
+              "value": "Structurally Impossible"
+            },
+            {
+              "name": "Reality Check",
+              "value": "Link Exists (Deviation)"
+            },
+            {
+              "name": "Source Activity",
+              "value": "16 connections"
+            },
+            {
+              "name": "Target Activity",
+              "value": "5 connections"
+            }
+          ],
+          "corroboration": "Violates Economic & Graph Logic"
+        }
+      }
+    },
+    {
+      "leaf": "cfea3f8958dbc29167b80f1e40fbf079313ea65f74a4d814419b012d1b50a6e9",
+      "root": "a1e2e479cf8ec73346267c415c22eda766a4ff1de529363b1246003239956c4b",
+      "path": [
+        {
+          "hash": "5885decbbc2ec95ba4348c0ed9d890c488dddd37acfdfd13fa196f185a184001",
+          "position": "left"
+        },
+        {
+          "hash": "fd5f0d1f96cdc6fe33a3755e6f0d885064400c83fa1bee637964ed724f8bb7b3",
+          "position": "left"
+        },
+        {
+          "hash": "058950220678ffcb80460082fc17229a5a658f5fdd226c52494cb7a39735e2a8",
+          "position": "right"
+        },
+        {
+          "hash": "f1d5474647da01a5fcd8a1a050be4adcb2045d982b039b3bae29926a4b216bc8",
+          "position": "left"
+        },
+        {
+          "hash": "af07e1f1a187843ca1df871cb3f70ea994c2e3edc880b2374bcccee472016815",
+          "position": "right"
+        }
+      ],
+      "anomaly": {
+        "anomaly_id": "GNN-2024-08-Trader_92-Trader_73",
+        "anomaly_type": "WATCHLIST (Possible Anomaly)",
+        "severity": 0.7528270483016968,
+        "entities_involved": [
+          "Trader_92",
+          "Trader_73"
+        ],
+        "detection_method": "LEARNED",
+        "confidence": "Low",
+        "evidence_data": {
+          "score": 0.7528270483016968,
+          "slice": "2024-08",
+          "tag": "Existence Verification Failed"
+        },
+        "explanation_metadata": {
+          "factors": [
+            {
+              "name": "Probability of Fraud",
+              "value": "75.3%"
+            },
+            {
+              "name": "Model Decision",
+              "value": "Structurally Impossible"
+            },
+            {
+              "name": "Reality Check",
+              "value": "Link Exists (Deviation)"
+            },
+            {
+              "name": "Source Activity",
+              "value": "12 connections"
+            },
+            {
+              "name": "Target Activity",
+              "value": "7 connections"
+            }
+          ],
+          "corroboration": "Violates Economic & Graph Logic"
+        }
+      }
+    },
+    {
+      "leaf": "5885decbbc2ec95ba4348c0ed9d890c488dddd37acfdfd13fa196f185a184001",
+      "root": "a1e2e479cf8ec73346267c415c22eda766a4ff1de529363b1246003239956c4b",
+      "path": [
+        {
+          "hash": "cfea3f8958dbc29167b80f1e40fbf079313ea65f74a4d814419b012d1b50a6e9",
+          "position": "right"
+        },
+        {
+          "hash": "fd5f0d1f96cdc6fe33a3755e6f0d885064400c83fa1bee637964ed724f8bb7b3",
+          "position": "left"
+        },
+        {
+          "hash": "058950220678ffcb80460082fc17229a5a658f5fdd226c52494cb7a39735e2a8",
+          "position": "right"
+        },
+        {
+          "hash": "f1d5474647da01a5fcd8a1a050be4adcb2045d982b039b3bae29926a4b216bc8",
+          "position": "left"
+        },
+        {
+          "hash": "af07e1f1a187843ca1df871cb3f70ea994c2e3edc880b2374bcccee472016815",
+          "position": "right"
+        }
+      ],
+      "anomaly": {
+        "anomaly_id": "GNN-2024-08-Trader_37-Trader_33",
+        "anomaly_type": "WATCHLIST (Possible Anomaly)",
+        "severity": 0.7657709121704102,
+        "entities_involved": [
+          "Trader_37",
+          "Trader_33"
+        ],
+        "detection_method": "LEARNED",
+        "confidence": "Low",
+        "evidence_data": {
+          "score": 0.7657709121704102,
+          "slice": "2024-08",
+          "tag": "Existence Verification Failed"
+        },
+        "explanation_metadata": {
+          "factors": [
+            {
+              "name": "Probability of Fraud",
+              "value": "76.6%"
+            },
+            {
+              "name": "Model Decision",
+              "value": "Structurally Impossible"
+            },
+            {
+              "name": "Reality Check",
+              "value": "Link Exists (Deviation)"
+            },
+            {
+              "name": "Source Activity",
+              "value": "10 connections"
+            },
+            {
+              "name": "Target Activity",
+              "value": "6 connections"
+            }
+          ],
+          "corroboration": "Violates Economic & Graph Logic"
+        }
+      }
+    },
+    {
+      "leaf": "c3bd9452fc6b7e923ff8448e07178f6dffd957e504efdac5c98c985f99b6c135",
+      "root": "a1e2e479cf8ec73346267c415c22eda766a4ff1de529363b1246003239956c4b",
+      "path": [
+        {
+          "hash": "119b61843f231267b97e5efb6f7576bede5ecf666f4e9a6e5995e5b01e458f27",
+          "position": "left"
+        },
+        {
+          "hash": "ae705a524b63c0247db862e0f1f7c55c9e6ad9b4df9b0ace7d84d39935633432",
+          "position": "right"
+        },
+        {
+          "hash": "058950220678ffcb80460082fc17229a5a658f5fdd226c52494cb7a39735e2a8",
+          "position": "right"
+        },
+        {
+          "hash": "f1d5474647da01a5fcd8a1a050be4adcb2045d982b039b3bae29926a4b216bc8",
+          "position": "left"
+        },
+        {
+          "hash": "af07e1f1a187843ca1df871cb3f70ea994c2e3edc880b2374bcccee472016815",
+          "position": "right"
+        }
+      ],
+      "anomaly": {
+        "anomaly_id": "GNN-2024-08-Trader_95-Trader_13",
+        "anomaly_type": "WATCHLIST (Possible Anomaly)",
+        "severity": 0.864980161190033,
+        "entities_involved": [
+          "Trader_95",
+          "Trader_13"
+        ],
+        "detection_method": "LEARNED",
+        "confidence": "Low",
+        "evidence_data": {
+          "score": 0.864980161190033,
+          "slice": "2024-08",
+          "tag": "Existence Verification Failed"
+        },
+        "explanation_metadata": {
+          "factors": [
+            {
+              "name": "Probability of Fraud",
+              "value": "86.5%"
+            },
+            {
+              "name": "Model Decision",
+              "value": "Structurally Impossible"
+            },
+            {
+              "name": "Reality Check",
+              "value": "Link Exists (Deviation)"
+            },
+            {
+              "name": "Source Activity",
+              "value": "13 connections"
+            },
+            {
+              "name": "Target Activity",
+              "value": "7 connections"
+            }
+          ],
+          "corroboration": "Violates Economic & Graph Logic"
+        }
+      }
+    },
+    {
+      "leaf": "119b61843f231267b97e5efb6f7576bede5ecf666f4e9a6e5995e5b01e458f27",
+      "root": "a1e2e479cf8ec73346267c415c22eda766a4ff1de529363b1246003239956c4b",
+      "path": [
+        {
+          "hash": "c3bd9452fc6b7e923ff8448e07178f6dffd957e504efdac5c98c985f99b6c135",
+          "position": "right"
+        },
+        {
+          "hash": "ae705a524b63c0247db862e0f1f7c55c9e6ad9b4df9b0ace7d84d39935633432",
+          "position": "right"
+        },
+        {
+          "hash": "058950220678ffcb80460082fc17229a5a658f5fdd226c52494cb7a39735e2a8",
+          "position": "right"
+        },
+        {
+          "hash": "f1d5474647da01a5fcd8a1a050be4adcb2045d982b039b3bae29926a4b216bc8",
+          "position": "left"
+        },
+        {
+          "hash": "af07e1f1a187843ca1df871cb3f70ea994c2e3edc880b2374bcccee472016815",
+          "position": "right"
+        }
+      ],
+      "anomaly": {
+        "anomaly_id": "GNN-2024-08-Trader_32-Trader_90",
+        "anomaly_type": "WATCHLIST (Possible Anomaly)",
+        "severity": 0.8594181537628174,
+        "entities_involved": [
+          "Trader_32",
+          "Trader_90"
+        ],
+        "detection_method": "LEARNED",
+        "confidence": "Low",
+        "evidence_data": {
+          "score": 0.8594181537628174,
+          "slice": "2024-08",
+          "tag": "Existence Verification Failed"
+        },
+        "explanation_metadata": {
+          "factors": [
+            {
+              "name": "Probability of Fraud",
+              "value": "85.9%"
+            },
+            {
+              "name": "Model Decision",
+              "value": "Structurally Impossible"
+            },
+            {
+              "name": "Reality Check",
+              "value": "Link Exists (Deviation)"
+            },
+            {
+              "name": "Source Activity",
+              "value": "13 connections"
+            },
+            {
+              "name": "Target Activity",
+              "value": "5 connections"
+            }
+          ],
+          "corroboration": "Violates Economic & Graph Logic"
+        }
+      }
+    },
+    {
+      "leaf": "f52c4ff344408b41a254af0a46f45ef7e6532b92d4bc7da8e0e19f95e8bc9974",
+      "root": "a1e2e479cf8ec73346267c415c22eda766a4ff1de529363b1246003239956c4b",
+      "path": [
+        {
+          "hash": "211422549db53f9b0771249af30afe9637babe34e088bbeab73c6b3ec2b8fb8b",
+          "position": "left"
+        },
+        {
+          "hash": "4063cc05d976107d079ab3d4637a26d11c22f18710a729686416aa5ae6011648",
+          "position": "left"
+        },
+        {
+          "hash": "c656c5087afd714f0a1d5412c4152fa931b346cb740ed06f9d1a32371bbf840e",
+          "position": "left"
+        },
+        {
+          "hash": "209ebd0d19e733bb5bf4585a2ea5704f4cbbc9dfbfbbc700fd7bf903d69a307e",
+          "position": "right"
+        },
+        {
+          "hash": "af07e1f1a187843ca1df871cb3f70ea994c2e3edc880b2374bcccee472016815",
+          "position": "right"
+        }
+      ],
+      "anomaly": {
+        "anomaly_id": "GNN-2024-08-Trader_24-Trader_84",
+        "anomaly_type": "WATCHLIST (Possible Anomaly)",
+        "severity": 0.7581708431243896,
+        "entities_involved": [
+          "Trader_24",
+          "Trader_84"
+        ],
+        "detection_method": "LEARNED",
+        "confidence": "Low",
+        "evidence_data": {
+          "score": 0.7581708431243896,
+          "slice": "2024-08",
+          "tag": "Existence Verification Failed"
+        },
+        "explanation_metadata": {
+          "factors": [
+            {
+              "name": "Probability of Fraud",
+              "value": "75.8%"
+            },
+            {
+              "name": "Model Decision",
+              "value": "Structurally Impossible"
+            },
+            {
+              "name": "Reality Check",
+              "value": "Link Exists (Deviation)"
+            },
+            {
+              "name": "Source Activity",
+              "value": "16 connections"
+            },
+            {
+              "name": "Target Activity",
+              "value": "12 connections"
+            }
+          ],
+          "corroboration": "Violates Economic & Graph Logic"
+        }
+      }
+    },
+    {
+      "leaf": "211422549db53f9b0771249af30afe9637babe34e088bbeab73c6b3ec2b8fb8b",
+      "root": "a1e2e479cf8ec73346267c415c22eda766a4ff1de529363b1246003239956c4b",
+      "path": [
+        {
+          "hash": "f52c4ff344408b41a254af0a46f45ef7e6532b92d4bc7da8e0e19f95e8bc9974",
+          "position": "right"
+        },
+        {
+          "hash": "4063cc05d976107d079ab3d4637a26d11c22f18710a729686416aa5ae6011648",
+          "position": "left"
+        },
+        {
+          "hash": "c656c5087afd714f0a1d5412c4152fa931b346cb740ed06f9d1a32371bbf840e",
+          "position": "left"
+        },
+        {
+          "hash": "209ebd0d19e733bb5bf4585a2ea5704f4cbbc9dfbfbbc700fd7bf903d69a307e",
+          "position": "right"
+        },
+        {
+          "hash": "af07e1f1a187843ca1df871cb3f70ea994c2e3edc880b2374bcccee472016815",
+          "position": "right"
+        }
+      ],
+      "anomaly": {
+        "anomaly_id": "GNN-2024-08-Trader_5-Trader_34",
+        "anomaly_type": "WATCHLIST (Possible Anomaly)",
+        "severity": 0.8457586765289307,
+        "entities_involved": [
+          "Trader_5",
+          "Trader_34"
+        ],
+        "detection_method": "LEARNED",
+        "confidence": "Low",
+        "evidence_data": {
+          "score": 0.8457586765289307,
+          "slice": "2024-08",
+          "tag": "Existence Verification Failed"
+        },
+        "explanation_metadata": {
+          "factors": [
+            {
+              "name": "Probability of Fraud",
+              "value": "84.6%"
+            },
+            {
+              "name": "Model Decision",
+              "value": "Structurally Impossible"
+            },
+            {
+              "name": "Reality Check",
+              "value": "Link Exists (Deviation)"
+            },
+            {
+              "name": "Source Activity",
+              "value": "11 connections"
+            },
+            {
+              "name": "Target Activity",
+              "value": "5 connections"
+            }
+          ],
+          "corroboration": "Violates Economic & Graph Logic"
+        }
+      }
+    },
+    {
+      "leaf": "a23eb562bdfb648c2de93a8a3b18b544dd1665c4750e1582c82f4e3e3a21696a",
+      "root": "a1e2e479cf8ec73346267c415c22eda766a4ff1de529363b1246003239956c4b",
+      "path": [
+        {
+          "hash": "48197c2129085ef9c4144d5c74cdb9c80b4b6613dffc01712fc5d48a34bdbb96",
+          "position": "left"
+        },
+        {
+          "hash": "0448a3c7c4493725f36a100210678613f78085fc25abaebe9445ef5606f769f6",
+          "position": "right"
+        },
+        {
+          "hash": "c656c5087afd714f0a1d5412c4152fa931b346cb740ed06f9d1a32371bbf840e",
+          "position": "left"
+        },
+        {
+          "hash": "209ebd0d19e733bb5bf4585a2ea5704f4cbbc9dfbfbbc700fd7bf903d69a307e",
+          "position": "right"
+        },
+        {
+          "hash": "af07e1f1a187843ca1df871cb3f70ea994c2e3edc880b2374bcccee472016815",
+          "position": "right"
+        }
+      ],
+      "anomaly": {
+        "anomaly_id": "GNN-2024-08-Trader_66-Trader_54",
+        "anomaly_type": "WATCHLIST (Possible Anomaly)",
+        "severity": 0.7772374153137207,
+        "entities_involved": [
+          "Trader_66",
+          "Trader_54"
+        ],
+        "detection_method": "LEARNED",
+        "confidence": "Low",
+        "evidence_data": {
+          "score": 0.7772374153137207,
+          "slice": "2024-08",
+          "tag": "Existence Verification Failed"
+        },
+        "explanation_metadata": {
+          "factors": [
+            {
+              "name": "Probability of Fraud",
+              "value": "77.7%"
+            },
+            {
+              "name": "Model Decision",
+              "value": "Structurally Impossible"
+            },
+            {
+              "name": "Reality Check",
+              "value": "Link Exists (Deviation)"
+            },
+            {
+              "name": "Source Activity",
+              "value": "14 connections"
+            },
+            {
+              "name": "Target Activity",
+              "value": "10 connections"
+            }
+          ],
+          "corroboration": "Violates Economic & Graph Logic"
+        }
+      }
+    },
+    {
+      "leaf": "48197c2129085ef9c4144d5c74cdb9c80b4b6613dffc01712fc5d48a34bdbb96",
+      "root": "a1e2e479cf8ec73346267c415c22eda766a4ff1de529363b1246003239956c4b",
+      "path": [
+        {
+          "hash": "a23eb562bdfb648c2de93a8a3b18b544dd1665c4750e1582c82f4e3e3a21696a",
+          "position": "right"
+        },
+        {
+          "hash": "0448a3c7c4493725f36a100210678613f78085fc25abaebe9445ef5606f769f6",
+          "position": "right"
+        },
+        {
+          "hash": "c656c5087afd714f0a1d5412c4152fa931b346cb740ed06f9d1a32371bbf840e",
+          "position": "left"
+        },
+        {
+          "hash": "209ebd0d19e733bb5bf4585a2ea5704f4cbbc9dfbfbbc700fd7bf903d69a307e",
+          "position": "right"
+        },
+        {
+          "hash": "af07e1f1a187843ca1df871cb3f70ea994c2e3edc880b2374bcccee472016815",
+          "position": "right"
+        }
+      ],
+      "anomaly": {
+        "anomaly_id": "GNN-2024-08-Trader_66-Trader_2",
+        "anomaly_type": "WATCHLIST (Possible Anomaly)",
+        "severity": 0.7911316752433777,
+        "entities_involved": [
+          "Trader_66",
+          "Trader_2"
+        ],
+        "detection_method": "LEARNED",
+        "confidence": "Low",
+        "evidence_data": {
+          "score": 0.7911316752433777,
+          "slice": "2024-08",
+          "tag": "Existence Verification Failed"
+        },
+        "explanation_metadata": {
+          "factors": [
+            {
+              "name": "Probability of Fraud",
+              "value": "79.1%"
+            },
+            {
+              "name": "Model Decision",
+              "value": "Structurally Impossible"
+            },
+            {
+              "name": "Reality Check",
+              "value": "Link Exists (Deviation)"
+            },
+            {
+              "name": "Source Activity",
+              "value": "14 connections"
+            },
+            {
+              "name": "Target Activity",
+              "value": "10 connections"
+            }
+          ],
+          "corroboration": "Violates Economic & Graph Logic"
+        }
+      }
+    },
+    {
+      "leaf": "6447ff1e5ca2d7c566bc50f88bf40ec74d00aad463a5eb71e282126686cea4d0",
+      "root": "a1e2e479cf8ec73346267c415c22eda766a4ff1de529363b1246003239956c4b",
+      "path": [
+        {
+          "hash": "12a88ece85eec150c7a707a16a8dbc9877d71c587f101cb7574a8f5deea5ed96",
+          "position": "left"
+        },
+        {
+          "hash": "677fb80825251a8e14b34c758d9dfe58681c23ce3e48875e41c9ca3c7a36aaae",
+          "position": "left"
+        },
+        {
+          "hash": "9f57bd0c45914d3ec49ea795fb6b67623f02fccc248d825af36a74ff2a97df37",
+          "position": "right"
+        },
+        {
+          "hash": "209ebd0d19e733bb5bf4585a2ea5704f4cbbc9dfbfbbc700fd7bf903d69a307e",
+          "position": "right"
+        },
+        {
+          "hash": "af07e1f1a187843ca1df871cb3f70ea994c2e3edc880b2374bcccee472016815",
+          "position": "right"
+        }
+      ],
+      "anomaly": {
+        "anomaly_id": "GNN-2024-08-Trader_66-Trader_21",
+        "anomaly_type": "WATCHLIST (Possible Anomaly)",
+        "severity": 0.7943957448005676,
+        "entities_involved": [
+          "Trader_66",
+          "Trader_21"
+        ],
+        "detection_method": "LEARNED",
+        "confidence": "Low",
+        "evidence_data": {
+          "score": 0.7943957448005676,
+          "slice": "2024-08",
+          "tag": "Existence Verification Failed"
+        },
+        "explanation_metadata": {
+          "factors": [
+            {
+              "name": "Probability of Fraud",
+              "value": "79.4%"
+            },
+            {
+              "name": "Model Decision",
+              "value": "Structurally Impossible"
+            },
+            {
+              "name": "Reality Check",
+              "value": "Link Exists (Deviation)"
+            },
+            {
+              "name": "Source Activity",
+              "value": "14 connections"
+            },
+            {
+              "name": "Target Activity",
+              "value": "11 connections"
+            }
+          ],
+          "corroboration": "Violates Economic & Graph Logic"
+        }
+      }
+    },
+    {
+      "leaf": "12a88ece85eec150c7a707a16a8dbc9877d71c587f101cb7574a8f5deea5ed96",
+      "root": "a1e2e479cf8ec73346267c415c22eda766a4ff1de529363b1246003239956c4b",
+      "path": [
+        {
+          "hash": "6447ff1e5ca2d7c566bc50f88bf40ec74d00aad463a5eb71e282126686cea4d0",
+          "position": "right"
+        },
+        {
+          "hash": "677fb80825251a8e14b34c758d9dfe58681c23ce3e48875e41c9ca3c7a36aaae",
+          "position": "left"
+        },
+        {
+          "hash": "9f57bd0c45914d3ec49ea795fb6b67623f02fccc248d825af36a74ff2a97df37",
+          "position": "right"
+        },
+        {
+          "hash": "209ebd0d19e733bb5bf4585a2ea5704f4cbbc9dfbfbbc700fd7bf903d69a307e",
+          "position": "right"
+        },
+        {
+          "hash": "af07e1f1a187843ca1df871cb3f70ea994c2e3edc880b2374bcccee472016815",
+          "position": "right"
+        }
+      ],
+      "anomaly": {
+        "anomaly_id": "GNN-2024-08-Trader_7-Trader_68",
+        "anomaly_type": "WATCHLIST (Possible Anomaly)",
+        "severity": 0.809914767742157,
+        "entities_involved": [
+          "Trader_7",
+          "Trader_68"
+        ],
+        "detection_method": "LEARNED",
+        "confidence": "Low",
+        "evidence_data": {
+          "score": 0.809914767742157,
+          "slice": "2024-08",
+          "tag": "Existence Verification Failed"
+        },
+        "explanation_metadata": {
+          "factors": [
+            {
+              "name": "Probability of Fraud",
+              "value": "81.0%"
+            },
+            {
+              "name": "Model Decision",
+              "value": "Structurally Impossible"
+            },
+            {
+              "name": "Reality Check",
+              "value": "Link Exists (Deviation)"
+            },
+            {
+              "name": "Source Activity",
+              "value": "9 connections"
+            },
+            {
+              "name": "Target Activity",
+              "value": "8 connections"
+            }
+          ],
+          "corroboration": "Violates Economic & Graph Logic"
+        }
+      }
+    },
+    {
+      "leaf": "ce00529ae8509523e24b82d0362eb3b0869c8e2429c7a1ff3b21bb529b9bcf53",
+      "root": "a1e2e479cf8ec73346267c415c22eda766a4ff1de529363b1246003239956c4b",
+      "path": [
+        {
+          "hash": "ce00529ae8509523e24b82d0362eb3b0869c8e2429c7a1ff3b21bb529b9bcf53",
+          "position": "left"
+        },
+        {
+          "hash": "3e8387fb833369852a431dd7e1d1cf8a8d5e6357ee2eb780fe88e650b8d45de6",
+          "position": "right"
+        },
+        {
+          "hash": "9f57bd0c45914d3ec49ea795fb6b67623f02fccc248d825af36a74ff2a97df37",
+          "position": "right"
+        },
+        {
+          "hash": "209ebd0d19e733bb5bf4585a2ea5704f4cbbc9dfbfbbc700fd7bf903d69a307e",
+          "position": "right"
+        },
+        {
+          "hash": "af07e1f1a187843ca1df871cb3f70ea994c2e3edc880b2374bcccee472016815",
+          "position": "right"
+        }
+      ],
+      "anomaly": {
+        "anomaly_id": "GNN-2024-08-Trader_98-Trader_96",
+        "anomaly_type": "WATCHLIST (Possible Anomaly)",
+        "severity": 0.7699985504150391,
+        "entities_involved": [
+          "Trader_98",
+          "Trader_96"
+        ],
+        "detection_method": "LEARNED",
+        "confidence": "Low",
+        "evidence_data": {
+          "score": 0.7699985504150391,
+          "slice": "2024-08",
+          "tag": "Existence Verification Failed"
+        },
+        "explanation_metadata": {
+          "factors": [
+            {
+              "name": "Probability of Fraud",
+              "value": "77.0%"
+            },
+            {
+              "name": "Model Decision",
+              "value": "Structurally Impossible"
+            },
+            {
+              "name": "Reality Check",
+              "value": "Link Exists (Deviation)"
+            },
+            {
+              "name": "Source Activity",
+              "value": "14 connections"
+            },
+            {
+              "name": "Target Activity",
+              "value": "11 connections"
+            }
+          ],
+          "corroboration": "Violates Economic & Graph Logic"
+        }
+      }
+    }
+  ],
+  "metadata": {
+    "total_anomalies": 31,
+    "builder_version": "1.0.0"
+  }
+}

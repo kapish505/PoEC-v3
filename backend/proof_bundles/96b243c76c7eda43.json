@@ -1,0 +1,184 @@
+{
+  "task_id": "96b243c76c7eda43",
+  "merkle_root": "53a0962688c11ff01e3eb4264a8fee89de83b6dd750d6ab599951c665a0e3a57",
+  "dataset_hash": "d8bc912256e3d552198e3b3d567c2d34c2c27b00dc0f381c910586e231ab8456",
+  "model_hash": "d24ebb20ed610fa6a196b757863b9147e36208732e3ef20608e7d3ba63e52a80",
+  "timestamp": "2026-01-18T14:28:52.038092",
+  "bundle_cid": null,
+  "anomaly_count": 4,
+  "anomaly_proofs": [
+    {
+      "leaf": "8c7219534de3bdf042f99e14adbcd40ff13d00a00fea8a3491e15ab58e461088",
+      "root": "53a0962688c11ff01e3eb4264a8fee89de83b6dd750d6ab599951c665a0e3a57",
+      "path": [
+        {
+          "hash": "9d7ef923ffa5cfe1c36827e403686902e1ead4f3136f711f4e743a8cafff1509",
+          "position": "left"
+        },
+        {
+          "hash": "09e766af4e31877492a5d04479576d5b1f5578435c19fa57fda46dbc17a6b47f",
+          "position": "left"
+        }
+      ],
+      "anomaly": {
+        "anomaly_id": "DETERM-CIRC-2024-06-e5550016ba766bd65ac619151991657886715aae2e7deee44335340ec67be994",
+        "anomaly_type": "CIRCULAR_TRADING",
+        "severity": 0.9,
+        "entities_involved": [
+          "Citizen_13",
+          "Citizen_2",
+          "Citizen_25",
+          "Citizen_3",
+          "Citizen_7"
+        ],
+        "detection_method": "DETERMINISTIC",
+        "confidence": "Low",
+        "evidence_data": {
+          "cycle_path": [
+            "Citizen_13",
+            "Citizen_2",
+            "Citizen_25",
+            "Citizen_3",
+            "Citizen_7"
+          ],
+          "avg_amount": 2370.348,
+          "slice": "2024-06"
+        },
+        "explanation_metadata": {
+          "metric": "Suspicious Loop",
+          "value": "5 Entities Involved",
+          "context": "Funds returned to origin (Circular Logic)"
+        }
+      }
+    },
+    {
+      "leaf": "9d7ef923ffa5cfe1c36827e403686902e1ead4f3136f711f4e743a8cafff1509",
+      "root": "53a0962688c11ff01e3eb4264a8fee89de83b6dd750d6ab599951c665a0e3a57",
+      "path": [
+        {
+          "hash": "8c7219534de3bdf042f99e14adbcd40ff13d00a00fea8a3491e15ab58e461088",
+          "position": "right"
+        },
+        {
+          "hash": "09e766af4e31877492a5d04479576d5b1f5578435c19fa57fda46dbc17a6b47f",
+          "position": "left"
+        }
+      ],
+      "anomaly": {
+        "anomaly_id": "DETERM-WASH-2024-06-7512.64",
+        "anomaly_type": "WASH_TRADING",
+        "severity": 0.85,
+        "entities_involved": [
+          "Citizen_15",
+          "Citizen_27"
+        ],
+        "detection_method": "DETERMINISTIC",
+        "confidence": "Low",
+        "evidence_data": {
+          "total_volume": 7512.64,
+          "net_flow": 312.96000000000004,
+          "slice": "2024-06"
+        },
+        "explanation_metadata": {
+          "metric": "Fake Volume Ratio",
+          "value": "96%",
+          "context": "High Volume with Zero Net Transfer"
+        }
+      }
+    },
+    {
+      "leaf": "862b26dc2a391817824c6d5fbd2d9dbfdb59ae9b969aaf09b38f884f221636ac",
+      "root": "53a0962688c11ff01e3eb4264a8fee89de83b6dd750d6ab599951c665a0e3a57",
+      "path": [
+        {
+          "hash": "6f15fd85c4ac45ce0e423ade5c8e642e0c6fa7a98d7fa42ab479f8c971000a73",
+          "position": "left"
+        },
+        {
+          "hash": "51fb6b3c943b0e0a98035f87d8a3dd06de621a6e37fbe6f08fd57c4b45eb10a7",
+          "position": "right"
+        }
+      ],
+      "anomaly": {
+        "anomaly_id": "DETERM-STRUCT-2024-06-6435053144203516939",
+        "anomaly_type": "STRUCTURING (Fan-Out)",
+        "severity": 0.95,
+        "entities_involved": [
+          "Kingpin_X",
+          "Mule_1",
+          "Mule_2",
+          "Mule_3",
+          "Mule_4",
+          "Mule_5",
+          "Mule_6",
+          "Mule_7",
+          "Mule_8",
+          "Mule_9",
+          "Mule_10"
+        ],
+        "detection_method": "DETERMINISTIC",
+        "confidence": "Low",
+        "evidence_data": {
+          "pattern": "Fan-Out",
+          "avg_amount": 10000.0,
+          "std_dev": 0.0,
+          "slice": "2024-06"
+        },
+        "explanation_metadata": {
+          "metric": "Split-Transactions",
+          "value": "Count: ?",
+          "context": "Repeated payments just below reporting limit"
+        }
+      }
+    },
+    {
+      "leaf": "6f15fd85c4ac45ce0e423ade5c8e642e0c6fa7a98d7fa42ab479f8c971000a73",
+      "root": "53a0962688c11ff01e3eb4264a8fee89de83b6dd750d6ab599951c665a0e3a57",
+      "path": [
+        {
+          "hash": "862b26dc2a391817824c6d5fbd2d9dbfdb59ae9b969aaf09b38f884f221636ac",
+          "position": "right"
+        },
+        {
+          "hash": "51fb6b3c943b0e0a98035f87d8a3dd06de621a6e37fbe6f08fd57c4b45eb10a7",
+          "position": "right"
+        }
+      ],
+      "anomaly": {
+        "anomaly_id": "DETERM-STRUCT-2024-06--6090573954222840855",
+        "anomaly_type": "STRUCTURING (Fan-In)",
+        "severity": 0.95,
+        "entities_involved": [
+          "Safe_Haven_Y",
+          "Mule_1",
+          "Mule_2",
+          "Mule_3",
+          "Mule_4",
+          "Mule_5",
+          "Mule_6",
+          "Mule_7",
+          "Mule_8",
+          "Mule_9",
+          "Mule_10"
+        ],
+        "detection_method": "DETERMINISTIC",
+        "confidence": "Low",
+        "evidence_data": {
+          "pattern": "Fan-In",
+          "avg_amount": 9500.0,
+          "std_dev": 0.0,
+          "slice": "2024-06"
+        },
+        "explanation_metadata": {
+          "metric": "Split-Transactions",
+          "value": "Count: ?",
+          "context": "Repeated payments just below reporting limit"
+        }
+      }
+    }
+  ],
+  "metadata": {
+    "total_anomalies": 4,
+    "builder_version": "1.0.0"
+  }
+}

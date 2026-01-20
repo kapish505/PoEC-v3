@@ -1,0 +1,32 @@
+{
+    "networks": {
+        "hardhat": {
+            "rpc_url": "http://localhost:8545",
+            "chain_id": 31337,
+            "result_anchor_address": "0x5FbDB2315678afecb367f032d93F642f64180aa3",
+            "deployer_key_env": "DEPLOYER_PRIVATE_KEY",
+            "gas_limit": 2000000,
+            "confirmations": 1
+        },
+        "sepolia": {
+            "rpc_url": "https://sepolia.infura.io/v3/${INFURA_PROJECT_ID}",
+            "chain_id": 11155111,
+            "result_anchor_address": "",
+            "deployer_key_env": "SEPOLIA_DEPLOYER_KEY",
+            "gas_limit": 500000,
+            "confirmations": 2
+        },
+        "mainnet": {
+            "rpc_url": "https://mainnet.infura.io/v3/${INFURA_PROJECT_ID}",
+            "chain_id": 1,
+            "result_anchor_address": "",
+            "deployer_key_env": "MAINNET_DEPLOYER_KEY",
+            "gas_limit": 300000,
+            "confirmations": 3
+        }
+    },
+    "default_network": "hardhat",
+    "fallback_network": "hardhat",
+    "enable_anchoring": true,
+    "auto_anchor_on_analysis": false
+}

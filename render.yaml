@@ -2,11 +2,16 @@ services:
   - type: web
     name: poec-backend
     env: docker
-    region: ohio
+    dockerContext: backend
     plan: free
-    dockerContext: ./backend
-    dockerfilePath: ./backend/Dockerfile
-    healthCheckPath: /docs
     envVars:
-      - key: PORT
-        value: 8000
+      - key: POEC_ENV
+        value: production
+      - key: ANCHOR_CONTRACT_ADDRESS
+        sync: false
+      - key: ETHEREUM_NODE_URL
+        value: https://rpc.sepolia.org
+      - key: DEPLOYER_PRIVATE_KEY
+        sync: false
+    startCommand: "uvicorn app.main:app --host 0.0.0.0 --port 80"
+    healthCheckPath: /health

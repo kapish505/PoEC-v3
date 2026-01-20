@@ -210,7 +210,7 @@ async def run_analysis(db: Session = Depends(database.get_db)):
         # 2. Real AI (GNN)
         print("DEBUG: running GNN inference")
         try:
-            if sub_G.number_of_edges() > 10: # Tuned for Demo: Min 10 edges to trigger AI
+            if sub_G.number_of_edges() > 10: # Min 10 edges to trigger GNN
                 detector = gnn.AnomalyDetector()
                 detector.train_baseline(sub_G, epochs=100) # Keep high epochs for quality
                 gnn_output = detector.detect(sub_G)
@@ -263,8 +263,16 @@ async def run_analysis(db: Session = Depends(database.get_db)):
         signature_counts[sig] += 1
         
     final_anomalies = []
+    processed_sigs = set()
+
     for a in raw_anomalies:
         sig = (a.anomaly_type, frozenset(a.entities_involved))
+        
+        # DEDUPLICATION: Only process each signature once (the first one encountered)
+        if sig in processed_sigs:
+            continue
+        processed_sigs.add(sig)
+        
         count = signature_counts[sig]
         
         # Confidence Evolution

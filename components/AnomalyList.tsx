@@ -68,8 +68,8 @@ export default function AnomalyList({ anomalies, onSelect, onFocus, theme = 'lig
                     <div className="flex flex-wrap items-center gap-1.5 mb-3">
                         {/* Type Badge */}
                         <span className={`text-[9px] font-bold px-1.5 py-0.5 rounded border uppercase tracking-wider ${anomaly.detection_method === 'LEARNED'
-                                ? 'bg-purple-500/10 text-purple-500 border-purple-500/20'
-                                : 'bg-amber-500/10 text-amber-500 border-amber-500/20'
+                            ? 'bg-purple-500/10 text-purple-500 border-purple-500/20'
+                            : 'bg-amber-500/10 text-amber-500 border-amber-500/20'
                             }`}>
                             {anomaly.detection_method || 'UNKNOWN'}
                         </span>
@@ -77,7 +77,7 @@ export default function AnomalyList({ anomalies, onSelect, onFocus, theme = 'lig
                         {/* Confidence */}
                         {anomaly.confidence && (
                             <span className={`text-[9px] font-bold px-1.5 py-0.5 rounded border ${anomaly.confidence === 'High' ? 'bg-red-500/10 text-red-500 border-red-500/20' :
-                                    'bg-slate-500/10 text-slate-500 border-slate-500/20'
+                                'bg-slate-500/10 text-slate-500 border-slate-500/20'
                                 }`}>
                                 {anomaly.confidence} Conf.
                             </span>

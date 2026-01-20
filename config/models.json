@@ -1,0 +1,42 @@
+{
+    "gnn_model": {
+        "name": "PoEC_GNN_GraphAutoEncoder",
+        "version": "1.0.0",
+        "architecture": "GCN-based Autoencoder",
+        "input_dim": 5,
+        "hidden_channels": 16,
+        "output_channels": 8,
+        "training_epochs_default": 100,
+        "framework": "PyTorch + PyTorch Geometric",
+        "hash_algorithm": "SHA-256",
+        "model_hash": "computed_at_runtime",
+        "deterministic_seed": 42
+    },
+    "detectors": {
+        "circular_trading": {
+            "enabled": true,
+            "max_cycle_length": 6,
+            "min_cycle_value": 1000
+        },
+        "dense_clusters": {
+            "enabled": true,
+            "density_threshold_multiplier": 2.0,
+            "min_cluster_size": 3
+        },
+        "wash_trading": {
+            "enabled": true,
+            "min_reciprocal_transactions": 3,
+            "volume_to_netflow_ratio": 0.8
+        },
+        "structuring": {
+            "enabled": true,
+            "min_split_transactions": 5,
+            "similarity_threshold": 0.15
+        }
+    },
+    "gnn_inference": {
+        "min_edges_for_training": 10,
+        "anomaly_score_threshold": 0.7,
+        "edge_reconstruction_threshold": 0.5
+    }
+}

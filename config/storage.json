@@ -1,0 +1,32 @@
+{
+    "default_adapter": "local",
+    "adapters": {
+        "ipfs": {
+            "enabled": false,
+            "node_url": "http://localhost:5001",
+            "gateway_url": "https://ipfs.io/ipfs/",
+            "timeout_seconds": 30,
+            "pin_on_upload": true
+        },
+        "local": {
+            "enabled": true,
+            "storage_path": "./proof_bundles",
+            "max_bundle_size_mb": 10,
+            "retention_days": 30
+        },
+        "s3": {
+            "enabled": false,
+            "bucket_name": "poec-proof-bundles",
+            "region": "us-east-1",
+            "access_key_env": "AWS_ACCESS_KEY_ID",
+            "secret_key_env": "AWS_SECRET_ACCESS_KEY",
+            "public_read": false
+        }
+    },
+    "bundle_format": {
+        "compression": "none",
+        "encoding": "json",
+        "include_raw_data": false,
+        "include_graph_snapshot": false
+    }
+}

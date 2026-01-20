@@ -1,0 +1,47 @@
+{
+    "country": "India",
+    "tax_system": "GST",
+    "profile_id": "india_gst",
+    "thresholds": {
+        "input_tax_credit_anomaly_threshold": 0.15,
+        "reverse_charge_threshold": 5000,
+        "circular_trading_suspicion_multiplier": 1.5
+    },
+    "entity_size_categories": {
+        "small": {
+            "label": "Small Enterprise",
+            "annual_turnover_max": 4000000,
+            "typical_transaction_range": [
+                1000,
+                50000
+            ]
+        },
+        "medium": {
+            "label": "Medium Enterprise",
+            "annual_turnover_max": 40000000,
+            "typical_transaction_range": [
+                10000,
+                500000
+            ]
+        },
+        "large": {
+            "label": "Large Enterprise",
+            "annual_turnover_max": null,
+            "typical_transaction_range": [
+                100000,
+                10000000
+            ]
+        }
+    },
+    "tax_rates": {
+        "standard": 0.18,
+        "reduced": 0.05,
+        "zero": 0.0,
+        "luxury": 0.28
+    },
+    "compliance_rules": {
+        "require_tax_type_on_transactions": false,
+        "enforce_itc_matching": true,
+        "flag_missing_tax_data": false
+    }
+}

@@ -5,7 +5,7 @@ import { Activity, CheckCircle, XCircle, Loader2, Minimize2, Maximize2 } from 'l
 import { motion, AnimatePresence } from 'framer-motion';
 
 export default function GlobalStatus() {
-    const { status } = useBackend();
+    const { status, reconnect } = useBackend();
     const [isExpanded, setIsExpanded] = useState(false);
 
     // Don't show anything if we haven't even started checking (should be rare)
@@ -38,7 +38,7 @@ export default function GlobalStatus() {
                             <div className="flex items-center justify-between text-xs">
                                 <span className="text-slate-400">Status</span>
                                 <span className={`font-mono font-bold ${status === 'online' ? 'text-emerald-400' :
-                                        status === 'checking' ? 'text-yellow-400' : 'text-red-400'
+                                    status === 'checking' ? 'text-yellow-400' : 'text-red-400'
                                     }`}>
                                     {status.toUpperCase()}
                                 </span>
@@ -47,7 +47,17 @@ export default function GlobalStatus() {
                             <p className="text-xs text-slate-500 leading-relaxed">
                                 {status === 'online' && "The backend analysis engine is active and ready to process transaction graphs."}
                                 {status === 'checking' && "Waking up the Render node. This may take 30-50 seconds for a cold start."}
-                                {status === 'offline' && "Unable to connect to the backend. Please check your internet connection or try refreshing."}
+                                {status === 'offline' && (
+                                    <span className="flex flex-col gap-2">
+                                        <span>Connection lost. The server may be sleeping.</span>
+                                        <button
+                                            onClick={() => reconnect()}
+                                            className="px-3 py-1.5 bg-red-500/10 hover:bg-red-500/20 text-red-500 rounded-lg text-xs font-bold transition-colors w-full"
+                                        >
+                                            RETRY CONNECTION
+                                        </button>
+                                    </span>
+                                )}
                             </p>
 
                             {status === 'checking' && (

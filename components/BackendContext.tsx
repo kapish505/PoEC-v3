@@ -6,6 +6,7 @@ type BackendStatus = 'checking' | 'online' | 'offline';
 interface BackendContextType {
     status: BackendStatus;
     checkStatus: () => Promise<void>;
+    reconnect: () => void;
 }
 
 const BackendContext = createContext<BackendContextType | undefined>(undefined);
@@ -27,7 +28,7 @@ export const BackendProvider = ({ children }: { children: ReactNode }) => {
     const checkStatus = useCallback(async () => {
         try {
             const controller = new AbortController();
-            const timeoutId = setTimeout(() => controller.abort(), 5000); // 5s ping timeout
+            const timeoutId = setTimeout(() => controller.abort(), 8000); // 8s ping timeout
 
             const res = await fetch(`${API_URL}/health`, { signal: controller.signal });
             clearTimeout(timeoutId);
@@ -59,14 +60,20 @@ export const BackendProvider = ({ children }: { children: ReactNode }) => {
     useEffect(() => {
         let timer: NodeJS.Timeout;
         if (status === 'checking' && attempts < 20) {
-            // Poll every 5 seconds
-            timer = setTimeout(checkStatus, 5000);
+            // Adaptive Polling: Burst mode (1s) for first 5 tries, then 5s
+            const interval = attempts < 5 ? 1000 : 5000;
+            timer = setTimeout(checkStatus, interval);
         }
         return () => clearTimeout(timer);
     }, [status, attempts, checkStatus]);
 
+    const reconnect = useCallback(() => {
+        setAttempts(0);
+        setStatus('checking');
+    }, []);
+
     return (
-        <BackendContext.Provider value={{ status, checkStatus }}>
+        <BackendContext.Provider value={{ status, checkStatus, reconnect }}>
             {children}
         </BackendContext.Provider>
     );

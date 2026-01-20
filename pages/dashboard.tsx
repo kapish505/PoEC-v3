@@ -20,6 +20,7 @@ const GraphViz = dynamic(() => import('../components/GraphViz'), {
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
 
 import { useBackend } from '../components/BackendContext';
+import { useAnalysis } from '../components/AnalysisContext';
 
 
 export default function Dashboard() {
@@ -35,15 +36,19 @@ export default function Dashboard() {
     const [contexts, setContexts] = useState<any>({});
     const [activeContext, setActiveContext] = useState("global");
 
-    // --- Data State ---
-    const [file, setFile] = useState<File | null>(null);
+    // --- Data State (from Context for persistence) ---
+    const {
+        file, setFile,
+        anomalies, setAnomalies,
+        graphData, setGraphData,
+        snapshot, setSnapshot,
+        logs, addLog, clearLogs,
+        anchorData, setAnchorData
+    } = useAnalysis();
+
     const [analyzing, setAnalyzing] = useState(false);
     const [ingestStatus, setIngestStatus] = useState<string | null>(null);
-    const [anomalies, setAnomalies] = useState<any[]>([]);
-    const [graphData, setGraphData] = useState<any>(null);
-    const [snapshot, setSnapshot] = useState<any>(null);
     const [transactions, setTransactions] = useState<any[]>([]); // For Forensics
-    const [logs, setLogs] = useState<string[]>([]);
 
     // --- Interaction State ---
     const [selectedAnomaly, setSelectedAnomaly] = useState<any | null>(null);
@@ -56,7 +61,6 @@ export default function Dashboard() {
 
     // --- Anchor State ---
     const [anchoring, setAnchoring] = useState(false);
-    const [anchorData, setAnchorData] = useState<any | null>(null);
     const [verifyStatus, setVerifyStatus] = useState<any | null>(null);
 
     // --- Forensics State ---
@@ -80,9 +84,7 @@ export default function Dashboard() {
         else document.documentElement.classList.remove('dark');
     }, [isDarkMode]);
 
-    const addLog = (msg: string) => {
-        setLogs(prev => [...prev, `[${new Date().toLocaleTimeString()}] ${msg}`]);
-    };
+    // addLog is now from context - no need for local function
 
     // Fetch Contexts on Load
     useEffect(() => {
@@ -188,7 +190,7 @@ export default function Dashboard() {
         setAnalyzing(true);
         setAnomalies([]);
         setGraphData(null);
-        setLogs([]);
+        clearLogs();
         setAnchorData(null);
         setVerifyStatus(null);
         setTransactions([]);

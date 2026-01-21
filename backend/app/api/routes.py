@@ -458,8 +458,13 @@ async def anchor_hash(req: AnchorRequest):
         tx_hash = w3.eth.send_raw_transaction(signed_txn.raw_transaction)
         receipt = w3.eth.wait_for_transaction_receipt(tx_hash)
         
+        # Ensure tx hash has 0x prefix
+        tx_hash_hex = receipt['transactionHash'].hex()
+        if not tx_hash_hex.startswith('0x'):
+            tx_hash_hex = '0x' + tx_hash_hex
+        
         return {
-            "transaction_hash": receipt['transactionHash'].hex(),
+            "transaction_hash": tx_hash_hex,
             "block_number": receipt['blockNumber'],
             "status": "confirmed"
         }

@@ -414,9 +414,20 @@ export default function Dashboard() {
                                 <div className="absolute inset-x-0 top-0 h-1 bg-gradient-to-r from-blue-500 to-purple-500 opacity-50" />
                                 <h3 className="text-xs font-bold uppercase tracking-widest text-slate-500 mb-4 flex items-center justify-between">
                                     Data Source
-                                    <button onClick={() => setIsHelpOpen(true)} className="text-slate-400 hover:text-blue-500 transition-colors" title="CSV Format Guide">
-                                        <HelpCircle size={14} />
-                                    </button>
+                                    <div className="flex items-center gap-2">
+                                        <a
+                                            href="https://drive.google.com/drive/folders/15AJ_1RmY4DF61d1lQ0Mk17sT37_V4OwY?usp=drive_link"
+                                            target="_blank"
+                                            rel="noreferrer"
+                                            className="text-slate-400 hover:text-emerald-500 transition-colors flex items-center gap-1"
+                                            title="Download Demo CSV Files"
+                                        >
+                                            <Download size={14} />
+                                        </a>
+                                        <button onClick={() => setIsHelpOpen(true)} className="text-slate-400 hover:text-blue-500 transition-colors" title="CSV Format Guide">
+                                            <HelpCircle size={14} />
+                                        </button>
+                                    </div>
                                 </h3>
 
                                 <label className={`flex flex-col items-center justify-center h-24 rounded-xl border-2 border-dashed transition-all cursor-pointer mb-4

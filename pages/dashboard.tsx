@@ -225,7 +225,8 @@ export default function Dashboard() {
             setAnchorData({
                 data_hash: analyzeJson.snapshot.data_hash,
                 model_hash: analyzeJson.model_hash,
-                result_hash: analyzeJson.results_hash
+                result_hash: analyzeJson.results_hash,
+                ipfs_cid: "" // Will be set after proof bundle is stored
             });
 
             addLog("Acquiring forensic ledger...");
@@ -247,7 +248,7 @@ export default function Dashboard() {
     const handleAnchor = async (data = anchorData) => {
         if (!data) return;
         setAnchoring(true);
-        addLog("Syncing with Ethereum Mainnet...");
+        addLog("Syncing with Sepolia Testnet...");
         try {
             const res = await fetch(`${API_URL}/api/v1/anchor`, {
                 method: "POST",

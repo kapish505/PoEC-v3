@@ -428,6 +428,12 @@ async def anchor_hash(req: AnchorRequest):
     PRIVATE_KEY = os.getenv("DEPLOYER_PRIVATE_KEY")
     if not PRIVATE_KEY:
          raise HTTPException(status_code=503, detail="DEPLOYER_PRIVATE_KEY not configured")
+    
+    # Normalize private key - remove 0x prefix if present (web3.py handles both)
+    if PRIVATE_KEY.startswith("0x"):
+        PRIVATE_KEY = PRIVATE_KEY[2:]
+    
+    print(f"DEBUG anchor: Contract={CONTRACT_ADDRESS}, Key length={len(PRIVATE_KEY)}")
          
     account = w3.eth.account.from_key(PRIVATE_KEY)
     

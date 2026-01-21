@@ -22,7 +22,23 @@ export default function VerifyPage() {
         setVerificationResult(null);
 
         try {
-            const proof = JSON.parse(proofJSON);
+            // Validate input is valid JSON
+            if (!proofJSON.trim().startsWith('{')) {
+                throw new Error('Invalid format: Expected JSON object starting with {. Please paste a properly formatted Merkle proof like: {"leaf": "0x...", "root": "0x...", "path": [...]}');
+            }
+
+            let proof;
+            try {
+                proof = JSON.parse(proofJSON);
+            } catch (parseErr) {
+                throw new Error('Invalid JSON format. Expected: {"leaf": "0x...", "root": "0x...", "path": [...]}');
+            }
+
+            // Validate required fields
+            if (!proof.leaf || !proof.root || !proof.path) {
+                throw new Error('Missing required fields. Proof must contain: leaf, root, and path');
+            }
+
             const res = await fetch(`${API_URL}/api/v2/verify/merkle`, {
                 method: 'POST',
                 headers: { 'Content-Type': 'application/json' },

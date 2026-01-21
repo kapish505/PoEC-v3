@@ -355,8 +355,82 @@ export default function Home() {
                 </div>
             </section>
 
+            {/* REAL-WORLD APPLICATIONS */}
+            <section className="py-24 bg-[#0a0a0a] relative overflow-hidden">
+                <div className="absolute left-0 bottom-0 w-[500px] h-[500px] bg-indigo-900/10 blur-[120px] rounded-full pointer-events-none z-0"></div>
+                <div className="max-w-7xl mx-auto px-6 relative z-10">
+                    <motion.div
+                        initial={{ opacity: 0, y: 20 }}
+                        whileInView={{ opacity: 1, y: 0 }}
+                        viewport={{ once: false, amount: 0.3 }}
+                        className="text-center mb-16"
+                    >
+                        <span className="text-indigo-400 font-mono text-sm tracking-widest uppercase mb-4 block">Real-World Impact</span>
+                        <h2 className="text-4xl md:text-5xl font-bold mb-6">Where PoEC Can Be Deployed</h2>
+                    </motion.div>
+
+                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                        <motion.div
+                            initial={{ opacity: 0, y: 30 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            viewport={{ once: false, amount: 0.3 }}
+                            transition={{ delay: 0 }}
+                            className="p-6 bg-[#111] border border-white/10 rounded-2xl hover:border-indigo-500/50 transition-colors"
+                        >
+                            <div className="text-3xl mb-4">🏛️</div>
+                            <h3 className="text-lg font-bold text-white mb-2">Government Tax Audit</h3>
+                            <p className="text-slate-400 text-sm leading-relaxed">
+                                Detect GST/VAT circular trading, fake invoicing, and input tax credit fraud with court-admissible proofs.
+                            </p>
+                        </motion.div>
+
+                        <motion.div
+                            initial={{ opacity: 0, y: 30 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            viewport={{ once: false, amount: 0.3 }}
+                            transition={{ delay: 0.1 }}
+                            className="p-6 bg-[#111] border border-white/10 rounded-2xl hover:border-indigo-500/50 transition-colors"
+                        >
+                            <div className="text-3xl mb-4">💰</div>
+                            <h3 className="text-lg font-bold text-white mb-2">DeFi Security</h3>
+                            <p className="text-slate-400 text-sm leading-relaxed">
+                                Monitor on-chain graphs to detect flash loan attacks, front-running, and wash trading in real-time.
+                            </p>
+                        </motion.div>
+
+                        <motion.div
+                            initial={{ opacity: 0, y: 30 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            viewport={{ once: false, amount: 0.3 }}
+                            transition={{ delay: 0.2 }}
+                            className="p-6 bg-[#111] border border-white/10 rounded-2xl hover:border-indigo-500/50 transition-colors"
+                        >
+                            <div className="text-3xl mb-4">🏦</div>
+                            <h3 className="text-lg font-bold text-white mb-2">Bank AML Compliance</h3>
+                            <p className="text-slate-400 text-sm leading-relaxed">
+                                Detect money laundering patterns like smurfing and layering that evade traditional rule-based systems.
+                            </p>
+                        </motion.div>
+
+                        <motion.div
+                            initial={{ opacity: 0, y: 30 }}
+                            whileInView={{ opacity: 1, y: 0 }}
+                            viewport={{ once: false, amount: 0.3 }}
+                            transition={{ delay: 0.3 }}
+                            className="p-6 bg-[#111] border border-white/10 rounded-2xl hover:border-indigo-500/50 transition-colors"
+                        >
+                            <div className="text-3xl mb-4">📦</div>
+                            <h3 className="text-lg font-bold text-white mb-2">Supply Chain Integrity</h3>
+                            <p className="text-slate-400 text-sm leading-relaxed">
+                                Verify transaction authenticity, detect phantom vendors and circular procurement fraud.
+                            </p>
+                        </motion.div>
+                    </div>
+                </div>
+            </section>
+
             {/* Tech Specs Marquee / Grid */}
-            <section className="py-20 border-y border-white/10 bg-[#0a0a0a]">
+            <section className="py-20 border-y border-white/10 bg-[#0F0F0F]">
                 <div className="max-w-7xl mx-auto px-6">
                     <div className="text-center mb-10">
                         <span className="text-slate-500 font-mono text-xs tracking-widest uppercase">Technology Stack</span>

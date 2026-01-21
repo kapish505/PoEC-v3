@@ -68,7 +68,7 @@ export default function VerifyPage() {
             const res = await fetch(`${API_URL}/api/v1/verify/${anchorData.result_hash}`);
             const json = await res.json();
             setVerificationResult({
-                valid: json.exists,
+                valid: json.verified,  // Backend returns 'verified' not 'exists'
                 timestamp: json.timestamp,
                 ipfs_cid: json.ipfs_cid,
                 on_chain: true

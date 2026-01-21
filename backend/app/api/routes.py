@@ -12,6 +12,7 @@ import os
 import json
 from app.core.context import context_manager
 from app.engine.overlays import TaxOverlay
+from proof_builder.storage import get_storage_adapter
 
 router = APIRouter()
 
@@ -451,9 +452,27 @@ async def anchor_hash(req: AnchorRequest):
         merkle_root = r_hash  # Use result_hash as merkle root for now
         dataset_hash = d_hash
         model_hash = m_hash
-        bundle_cid = req.ipfs_cid or ""
         
-        print(f"DEBUG anchor: taskId={task_id[:18]}... calling anchorProof")
+        # Build and store proof bundle to IPFS/Pinata
+        bundle_cid = req.ipfs_cid or ""
+        try:
+            storage = get_storage_adapter()
+            proof_bundle = {
+                "task_id": r_hash,
+                "merkle_root": r_hash,
+                "dataset_hash": d_hash,
+                "model_hash": m_hash,
+                "gnn_model": "PoEC GNN v1.0 (PyTorch Geometric)",
+                "timestamp": int(__import__('time').time()),
+                "proof_type": "anomaly_detection"
+            }
+            bundle_cid = storage.store(proof_bundle)
+            print(f"DEBUG anchor: Proof bundle stored to IPFS: {bundle_cid}")
+        except Exception as storage_err:
+            print(f"DEBUG anchor: Storage failed (continuing with empty CID): {storage_err}")
+            bundle_cid = ""
+        
+        print(f"DEBUG anchor: taskId={task_id[:18]}... bundle_cid={bundle_cid[:20] if bundle_cid else 'empty'} calling anchorProof")
         
         anchoring_txn = contract.functions.anchorProof(
             task_id, merkle_root, dataset_hash, model_hash, bundle_cid
@@ -476,6 +495,7 @@ async def anchor_hash(req: AnchorRequest):
         return {
             "transaction_hash": tx_hash_hex,
             "block_number": receipt['blockNumber'],
+            "bundle_cid": bundle_cid,
             "status": "confirmed"
         }
     except Exception as e:

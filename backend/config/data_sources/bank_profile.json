@@ -1,0 +1,90 @@
+{
+    "entities": {
+        "individuals": [
+            "Entity_A",
+            "Entity_B",
+            "Entity_C",
+            "Entity_D",
+            "Entity_E",
+            "Entity_F",
+            "Entity_G",
+            "Entity_H",
+            "Entity_I",
+            "Entity_J"
+        ],
+        "businesses": [
+            "Corp_Alpha",
+            "Corp_Beta",
+            "Corp_Delta",
+            "Corp_Gamma",
+            "Trading_Ltd",
+            "Finance_Inc",
+            "Shell_Corp_1",
+            "Shell_Corp_2",
+            "Vendor_X",
+            "Vendor_Y"
+        ],
+        "banks": [
+            "Bank_Main",
+            "Bank_Offshore",
+            "Bank_Regional"
+        ]
+    },
+    "amounts": {
+        "min": 100,
+        "max": 50000,
+        "structuring_threshold": 10000,
+        "structuring_split_range": [
+            2500,
+            4500
+        ]
+    },
+    "patterns": {
+        "circular_trading": {
+            "enabled": true,
+            "probability": 0.15,
+            "chain_length": [
+                3,
+                5
+            ]
+        },
+        "wash_trading": {
+            "enabled": true,
+            "probability": 0.10
+        },
+        "fan_in": {
+            "enabled": true,
+            "probability": 0.12,
+            "sources_range": [
+                3,
+                6
+            ]
+        },
+        "fan_out": {
+            "enabled": true,
+            "probability": 0.12,
+            "targets_range": [
+                3,
+                6
+            ]
+        },
+        "structuring": {
+            "enabled": true,
+            "probability": 0.08
+        },
+        "shell_company": {
+            "enabled": true,
+            "probability": 0.05
+        }
+    },
+    "timestamp": {
+        "start_date": "2024-01-01",
+        "end_date": "2024-03-31",
+        "business_hours_only": false
+    },
+    "transaction_count": {
+        "default": 50,
+        "min": 20,
+        "max": 200
+    }
+}

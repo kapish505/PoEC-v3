@@ -26,6 +26,11 @@ export default function AgentSimulator() {
     const [finalResult, setFinalResult] = useState<any>(null);
     const [isDarkMode, setIsDarkMode] = useState(true);
 
+    // Data Source Selection State
+    const [dataSource, setDataSource] = useState<'csv' | 'bank_api' | 'stream'>('csv');
+    const [simulatedData, setSimulatedData] = useState<any[] | null>(null);
+    const [fetchingData, setFetchingData] = useState(false);
+
     const updateStep = (index: number, status: WorkflowStep['status'], message?: string, data?: any) => {
         setSteps(prev => prev.map((step, i) =>
             i === index ? { ...step, status, message, data } : step
@@ -171,27 +176,137 @@ export default function AgentSimulator() {
                         </p>
                     </div>
 
-                    {/* Upload Section */}
+                    {/* Data Source Section */}
                     <div className={`p-6 rounded-2xl border ${isDarkMode ? 'bg-[#111] border-white/10' : 'bg-white border-slate-200'}`}>
                         <h2 className="text-sm font-bold uppercase tracking-wider text-slate-500 mb-4 flex items-center gap-2">
                             <Upload size={14} />
                             Data Source
                         </h2>
 
-                        <label className={`flex flex-col items-center justify-center h-32 rounded-xl border-2 border-dashed transition-all cursor-pointer ${file
-                            ? (isDarkMode ? 'border-emerald-500/50 bg-emerald-500/5' : 'border-emerald-500 bg-emerald-50')
-                            : (isDarkMode ? 'border-white/10 hover:border-blue-500/50 hover:bg-white/5' : 'border-slate-300 hover:border-blue-400 hover:bg-slate-50')
-                            }`}>
-                            <input
-                                type="file"
-                                accept=".csv"
-                                onChange={(e) => e.target.files && setFile(e.target.files[0])}
-                                className="hidden"
-                                disabled={running}
-                            />
-                            {file ? <CheckCircle className="text-emerald-500" size={24} /> : <Upload className="text-slate-400" size={24} />}
-                            <span className="text-sm font-medium mt-2">{file ? file.name : 'Upload CSV'}</span>
-                        </label>
+                        {/* Source Type Selector */}
+                        <div className="mb-4">
+                            <div className="flex gap-2 p-1 bg-black/30 rounded-lg">
+                                {(['csv', 'bank_api', 'stream'] as const).map((source) => (
+                                    <button
+                                        key={source}
+                                        onClick={() => {
+                                            setDataSource(source);
+                                            setFile(null);
+                                            setSimulatedData(null);
+                                        }}
+                                        disabled={running}
+                                        className={`flex-1 py-2 px-3 rounded-md text-xs font-bold uppercase tracking-wide transition-all ${dataSource === source
+                                            ? 'bg-blue-600 text-white'
+                                            : 'text-slate-400 hover:text-white hover:bg-white/10'
+                                            }`}
+                                    >
+                                        {source === 'csv' && '📁 CSV Upload'}
+                                        {source === 'bank_api' && '🏦 Bank API'}
+                                        {source === 'stream' && '📡 Live Stream'}
+                                    </button>
+                                ))}
+                            </div>
+                        </div>
+
+                        {/* CSV Upload Mode */}
+                        {dataSource === 'csv' && (
+                            <label className={`flex flex-col items-center justify-center h-32 rounded-xl border-2 border-dashed transition-all cursor-pointer ${file
+                                ? (isDarkMode ? 'border-emerald-500/50 bg-emerald-500/5' : 'border-emerald-500 bg-emerald-50')
+                                : (isDarkMode ? 'border-white/10 hover:border-blue-500/50 hover:bg-white/5' : 'border-slate-300 hover:border-blue-400 hover:bg-slate-50')
+                                }`}>
+                                <input
+                                    type="file"
+                                    accept=".csv"
+                                    onChange={(e) => e.target.files && setFile(e.target.files[0])}
+                                    className="hidden"
+                                    disabled={running}
+                                />
+                                {file ? <CheckCircle className="text-emerald-500" size={24} /> : <Upload className="text-slate-400" size={24} />}
+                                <span className="text-sm font-medium mt-2">{file ? file.name : 'Upload CSV'}</span>
+                            </label>
+                        )}
+
+                        {/* Bank API Mode */}
+                        {dataSource === 'bank_api' && (
+                            <div className="space-y-3">
+                                <div className={`p-4 rounded-xl border ${isDarkMode ? 'border-amber-500/20 bg-amber-500/5' : 'border-amber-200 bg-amber-50'}`}>
+                                    <p className="text-xs text-slate-400 mb-2">
+                                        Simulates a bank API response with realistic transactions including fraud patterns (circular trading, wash trading, structuring).
+                                    </p>
+                                </div>
+                                <button
+                                    onClick={async () => {
+                                        setFetchingData(true);
+                                        try {
+                                            const res = await fetch(`${API_URL}/api/v2/bank/simulate`);
+                                            const data = await res.json();
+                                            setSimulatedData(data.transactions);
+                                            // Convert to CSV blob
+                                            const csvContent = 'source,target,amount,timestamp\n' +
+                                                data.transactions.map((t: any) => `${t.source},${t.target},${t.amount},${t.timestamp}`).join('\n');
+                                            const blob = new Blob([csvContent], { type: 'text/csv' });
+                                            const csvFile = new File([blob], 'bank_simulated.csv', { type: 'text/csv' });
+                                            setFile(csvFile);
+                                        } catch (err) {
+                                            console.error('Bank API fetch failed:', err);
+                                        } finally {
+                                            setFetchingData(false);
+                                        }
+                                    }}
+                                    disabled={running || fetchingData}
+                                    className="w-full py-3 rounded-lg bg-amber-600 hover:bg-amber-500 text-white font-bold text-sm uppercase tracking-wide flex items-center justify-center gap-2 transition-all"
+                                >
+                                    {fetchingData ? <Loader size={16} className="animate-spin" /> : '🏦'}
+                                    {fetchingData ? 'Fetching...' : 'Fetch Simulated Bank Transactions'}
+                                </button>
+                                {simulatedData && (
+                                    <div className="text-xs text-emerald-400 font-mono">
+                                        ✓ {simulatedData.length} transactions loaded
+                                    </div>
+                                )}
+                            </div>
+                        )}
+
+                        {/* Live Stream Mode */}
+                        {dataSource === 'stream' && (
+                            <div className="space-y-3">
+                                <div className={`p-4 rounded-xl border ${isDarkMode ? 'border-purple-500/20 bg-purple-500/5' : 'border-purple-200 bg-purple-50'}`}>
+                                    <p className="text-xs text-slate-400 mb-2">
+                                        Simulates a live transaction stream with timestamped events. Includes rapid movement and circular patterns.
+                                    </p>
+                                </div>
+                                <button
+                                    onClick={async () => {
+                                        setFetchingData(true);
+                                        try {
+                                            const res = await fetch(`${API_URL}/api/v2/bank/stream?events=20`);
+                                            const data = await res.json();
+                                            setSimulatedData(data.events);
+                                            // Convert to CSV blob
+                                            const csvContent = 'source,target,amount,timestamp\n' +
+                                                data.events.map((t: any) => `${t.source},${t.target},${t.amount},${t.timestamp}`).join('\n');
+                                            const blob = new Blob([csvContent], { type: 'text/csv' });
+                                            const csvFile = new File([blob], 'stream_events.csv', { type: 'text/csv' });
+                                            setFile(csvFile);
+                                        } catch (err) {
+                                            console.error('Stream fetch failed:', err);
+                                        } finally {
+                                            setFetchingData(false);
+                                        }
+                                    }}
+                                    disabled={running || fetchingData}
+                                    className="w-full py-3 rounded-lg bg-purple-600 hover:bg-purple-500 text-white font-bold text-sm uppercase tracking-wide flex items-center justify-center gap-2 transition-all"
+                                >
+                                    {fetchingData ? <Loader size={16} className="animate-spin" /> : '📡'}
+                                    {fetchingData ? 'Streaming...' : 'Start Stream (20 events)'}
+                                </button>
+                                {simulatedData && (
+                                    <div className="text-xs text-emerald-400 font-mono">
+                                        ✓ {simulatedData.length} stream events captured
+                                    </div>
+                                )}
+                            </div>
+                        )}
 
                         <button
                             onClick={runAgentWorkflow}

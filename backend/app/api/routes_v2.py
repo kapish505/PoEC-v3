@@ -215,3 +215,231 @@ async def get_limits():
         "timeout_seconds": limits_config.get("timeout_seconds", 0),
         "environment": config_loader.get_limits()
     }
+
+
+# ============================================================================
+# Data Source Simulation Endpoints (ADD-ONLY)
+# ============================================================================
+
+import json
+import random
+from pathlib import Path
+from datetime import datetime, timedelta
+
+def load_data_source_config(config_name: str) -> dict:
+    """Load data source configuration file."""
+    config_path = Path(__file__).parent.parent.parent.parent / "config" / "data_sources" / config_name
+    if config_path.exists():
+        with open(config_path, 'r') as f:
+            return json.load(f)
+    return {}
+
+
+@router.get("/bank/simulate")
+async def simulate_bank_transactions(count: int = None):
+    """
+    Generate simulated bank transactions with fraud patterns.
+    
+    Uses config/data_sources/bank_profile.json for config-driven generation.
+    Returns JSON that can be converted to CSV for analysis.
+    """
+    config = load_data_source_config("bank_profile.json")
+    
+    # Get entity pools
+    entities = config.get("entities", {})
+    all_entities = (
+        entities.get("individuals", []) + 
+        entities.get("businesses", []) + 
+        entities.get("banks", [])
+    )
+    if not all_entities:
+        all_entities = ["Entity_A", "Entity_B", "Entity_C", "Entity_D", "Entity_E"]
+    
+    # Get amount ranges
+    amounts = config.get("amounts", {})
+    min_amount = amounts.get("min", 100)
+    max_amount = amounts.get("max", 50000)
+    
+    # Get transaction count
+    tx_config = config.get("transaction_count", {})
+    tx_count = count if count else tx_config.get("default", 50)
+    tx_count = max(tx_config.get("min", 20), min(tx_count, tx_config.get("max", 200)))
+    
+    # Get patterns config
+    patterns = config.get("patterns", {})
+    
+    # Get timestamp config
+    ts_config = config.get("timestamp", {})
+    start_date = datetime.strptime(ts_config.get("start_date", "2024-01-01"), "%Y-%m-%d")
+    end_date = datetime.strptime(ts_config.get("end_date", "2024-03-31"), "%Y-%m-%d")
+    
+    transactions = []
+    current_date = start_date
+    
+    for i in range(tx_count):
+        # Decide if this should be a pattern
+        roll = random.random()
+        
+        # Circular trading pattern
+        if patterns.get("circular_trading", {}).get("enabled") and roll < patterns["circular_trading"].get("probability", 0):
+            chain_len = random.randint(*patterns["circular_trading"].get("chain_length", [3, 5]))
+            chain = random.sample(all_entities, min(chain_len, len(all_entities)))
+            base_amount = random.randint(min_amount, max_amount)
+            for j in range(len(chain)):
+                transactions.append({
+                    "source": chain[j],
+                    "target": chain[(j + 1) % len(chain)],
+                    "amount": base_amount + random.randint(-100, 100),
+                    "timestamp": (current_date + timedelta(hours=j)).strftime("%Y-%m-%d %H:%M:%S")
+                })
+        
+        # Wash trading pattern
+        elif patterns.get("wash_trading", {}).get("enabled") and roll < patterns.get("wash_trading", {}).get("probability", 0) + 0.1:
+            entity = random.choice(all_entities)
+            intermediary = random.choice([e for e in all_entities if e != entity])
+            amount = random.randint(min_amount, max_amount)
+            transactions.append({
+                "source": entity,
+                "target": intermediary,
+                "amount": amount,
+                "timestamp": current_date.strftime("%Y-%m-%d %H:%M:%S")
+            })
+            transactions.append({
+                "source": intermediary,
+                "target": entity,
+                "amount": amount,
+                "timestamp": (current_date + timedelta(minutes=30)).strftime("%Y-%m-%d %H:%M:%S")
+            })
+        
+        # Fan-out pattern (structuring)
+        elif patterns.get("fan_out", {}).get("enabled") and roll < patterns.get("fan_out", {}).get("probability", 0) + 0.2:
+            source = random.choice(all_entities)
+            targets = random.sample([e for e in all_entities if e != source], min(patterns.get("fan_out", {}).get("targets_range", [3, 6])[0], len(all_entities) - 1))
+            large_amount = random.randint(max_amount // 2, max_amount)
+            split_amount = large_amount // len(targets)
+            for target in targets:
+                transactions.append({
+                    "source": source,
+                    "target": target,
+                    "amount": split_amount + random.randint(-50, 50),
+                    "timestamp": (current_date + timedelta(minutes=random.randint(5, 60))).strftime("%Y-%m-%d %H:%M:%S")
+                })
+        
+        # Normal transaction
+        else:
+            source = random.choice(all_entities)
+            target = random.choice([e for e in all_entities if e != source])
+            transactions.append({
+                "source": source,
+                "target": target,
+                "amount": random.randint(min_amount, max_amount),
+                "timestamp": current_date.strftime("%Y-%m-%d %H:%M:%S")
+            })
+        
+        # Advance date
+        current_date += timedelta(hours=random.randint(1, 24))
+        if current_date > end_date:
+            current_date = start_date
+    
+    return {
+        "source": "simulated_bank_api",
+        "transactions": transactions,
+        "count": len(transactions),
+        "config_used": "bank_profile.json"
+    }
+
+
+@router.get("/bank/stream")
+async def stream_bank_transactions(events: int = 10):
+    """
+    Simulate a live transaction stream.
+    
+    Uses config/data_sources/stream_profile.json for config-driven generation.
+    Returns N timestamped events like a real-time ledger feed.
+    """
+    config = load_data_source_config("stream_profile.json")
+    
+    # Get stream config
+    stream_config = config.get("stream", {})
+    events = max(stream_config.get("min_events", 5), min(events, stream_config.get("max_events", 100)))
+    
+    # Get entities
+    entities_config = config.get("entities", {})
+    entities = entities_config.get("pool", ["Stream_A", "Stream_B", "Stream_C", "Stream_D", "Stream_E"])
+    
+    # Get amounts
+    amounts_config = config.get("amounts", {})
+    base_min = amounts_config.get("base_min", 500)
+    base_max = amounts_config.get("base_max", 25000)
+    noise_factor = amounts_config.get("noise_factor", 0.15)
+    
+    # Get timing
+    timing_config = config.get("timing", {})
+    interval_min = timing_config.get("interval_seconds_min", 1)
+    interval_max = timing_config.get("interval_seconds_max", 30)
+    
+    # Get patterns
+    patterns = config.get("patterns", {})
+    
+    transactions = []
+    current_time = datetime.now()
+    
+    i = 0
+    while i < events:
+        roll = random.random()
+        
+        # Rapid movement pattern
+        if patterns.get("rapid_movement", {}).get("enabled") and roll < patterns["rapid_movement"].get("probability", 0):
+            # Chain of quick transactions
+            chain = random.sample(entities, min(4, len(entities)))
+            base_amount = random.randint(base_min, base_max)
+            for j in range(len(chain) - 1):
+                if i >= events:
+                    break
+                transactions.append({
+                    "event_id": f"evt_{i:04d}",
+                    "source": chain[j],
+                    "target": chain[j + 1],
+                    "amount": int(base_amount * (1 + random.uniform(-noise_factor, noise_factor))),
+                    "timestamp": current_time.strftime("%Y-%m-%d %H:%M:%S.%f")[:-3]
+                })
+                current_time += timedelta(seconds=random.randint(1, 5))
+                i += 1
+        
+        # Circular trading in stream
+        elif patterns.get("circular", {}).get("enabled") and roll < patterns.get("circular", {}).get("probability", 0) + 0.15:
+            ring = random.sample(entities, min(3, len(entities)))
+            amount = random.randint(base_min, base_max)
+            for j in range(len(ring)):
+                if i >= events:
+                    break
+                transactions.append({
+                    "event_id": f"evt_{i:04d}",
+                    "source": ring[j],
+                    "target": ring[(j + 1) % len(ring)],
+                    "amount": amount,
+                    "timestamp": current_time.strftime("%Y-%m-%d %H:%M:%S.%f")[:-3]
+                })
+                current_time += timedelta(seconds=random.randint(2, 10))
+                i += 1
+        
+        # Normal stream event
+        else:
+            source = random.choice(entities)
+            target = random.choice([e for e in entities if e != source])
+            transactions.append({
+                "event_id": f"evt_{i:04d}",
+                "source": source,
+                "target": target,
+                "amount": int(random.randint(base_min, base_max) * (1 + random.uniform(-noise_factor, noise_factor))),
+                "timestamp": current_time.strftime("%Y-%m-%d %H:%M:%S.%f")[:-3]
+            })
+            current_time += timedelta(seconds=random.randint(interval_min, interval_max))
+            i += 1
+    
+    return {
+        "source": "live_transaction_stream",
+        "events": transactions[:events],  # Ensure exact count
+        "count": min(len(transactions), events),
+        "config_used": "stream_profile.json"
+    }

@@ -1,0 +1,50 @@
+{
+    "stream": {
+        "default_events": 10,
+        "min_events": 5,
+        "max_events": 100
+    },
+    "entities": {
+        "pool": [
+            "Stream_A",
+            "Stream_B",
+            "Stream_C",
+            "Stream_D",
+            "Stream_E",
+            "Stream_F",
+            "Rapid_Mover_1",
+            "Rapid_Mover_2",
+            "Hot_Wallet",
+            "Cold_Wallet"
+        ],
+        "churn_probability": 0.1
+    },
+    "amounts": {
+        "base_min": 500,
+        "base_max": 25000,
+        "noise_factor": 0.15
+    },
+    "timing": {
+        "interval_seconds_min": 1,
+        "interval_seconds_max": 30,
+        "burst_probability": 0.2,
+        "burst_count": [
+            3,
+            7
+        ]
+    },
+    "patterns": {
+        "rapid_movement": {
+            "enabled": true,
+            "probability": 0.20
+        },
+        "circular": {
+            "enabled": true,
+            "probability": 0.15
+        },
+        "wash_trading": {
+            "enabled": true,
+            "probability": 0.10
+        }
+    }
+}

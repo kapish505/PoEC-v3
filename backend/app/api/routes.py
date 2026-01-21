@@ -449,9 +449,9 @@ async def anchor_hash(req: AnchorRequest):
             d_hash, m_hash, r_hash, req.ipfs_cid
         ).build_transaction({
             'from': account.address,
-            'nonce': w3.eth.get_transaction_count(account.address),
-            'gas': 2000000,
-            'gasPrice': w3.eth.gas_price
+            'nonce': w3.eth.get_transaction_count(account.address, 'pending'),  # Use pending to avoid conflicts
+            'gas': 200000,  # Reduced - 2M was excessive
+            'gasPrice': int(w3.eth.gas_price * 1.5)  # 1.5x multiplier to avoid underpriced
         })
         
         signed_txn = w3.eth.account.sign_transaction(anchoring_txn, private_key=PRIVATE_KEY)

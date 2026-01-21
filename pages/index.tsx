@@ -290,7 +290,113 @@ export default function Home() {
                 </div>
             </section>
 
-            {/* KEY DIFFERENTIATORS */}
+            {/* x402 INTEGRATION */}
+            <section className="py-24 bg-black relative overflow-hidden border-b border-white/5">
+                <div className="absolute inset-0 bg-green-500/5 z-0"></div>
+                <div className="max-w-7xl mx-auto px-6 relative z-10">
+                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+                        <motion.div
+                            initial={{ opacity: 0, x: -30 }}
+                            whileInView={{ opacity: 1, x: 0 }}
+                            viewport={{ once: false, amount: 0.3 }}
+                        >
+                            <div className="flex items-center gap-3 mb-6">
+                                <div className="px-3 py-1 rounded bg-green-500/10 border border-green-500/20 text-green-400 text-xs font-mono font-bold tracking-widest uppercase">
+                                    Powered by x402
+                                </div>
+                            </div>
+                            <h2 className="text-4xl font-bold text-white mb-6">
+                                Fully Autonomous <br />
+                                <span className="text-transparent bg-clip-text bg-gradient-to-r from-green-400 to-emerald-600">Agent Runtime</span>
+                            </h2>
+                            <p className="text-slate-400 text-lg leading-relaxed mb-8">
+                                PoEC isn't just a dashboard — it's an <strong>autonomous financial security agent</strong> built on the x402 standard. It runs 24/7 in the background, ingesting transaction streams, detecting threats, and anchoring proofs without human intervention.
+                            </p>
+
+                            <ul className="space-y-4">
+                                {[
+                                    "Continuous monitoring of bank APIs & mempools",
+                                    "Self-executing GNN inference pipelines",
+                                    "Automated Merkle proof generation & signing",
+                                    "Wallet-agnostic on-chain interactions"
+                                ].map((item, i) => (
+                                    <li key={i} className="flex items-center gap-3 text-slate-300">
+                                        <div className="w-6 h-6 rounded-full bg-green-500/20 flex items-center justify-center text-green-400">
+                                            <Check size={14} strokeWidth={3} />
+                                        </div>
+                                        {item}
+                                    </li>
+                                ))}
+                            </ul>
+
+                            <div className="mt-10">
+                                <Link href="/agent_sim" className="px-6 py-3 bg-green-600 hover:bg-green-500 text-black font-bold rounded-lg transition-colors flex w-fit items-center gap-2">
+                                    <Zap size={18} />
+                                    Launch Agent Simulator
+                                </Link>
+                            </div>
+                        </motion.div>
+
+                        <motion.div
+                            initial={{ opacity: 0, x: 30 }}
+                            whileInView={{ opacity: 1, x: 0 }}
+                            viewport={{ once: false, amount: 0.3 }}
+                            className="relative"
+                        >
+                            {/* Code/Terminal Visualization */}
+                            <div className="rounded-xl bg-[#050505] border border-white/10 p-4 font-mono text-xs shadow-2xl relative overflow-hidden group">
+                                <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-green-500 to-blue-500"></div>
+                                <div className="flex gap-2 mb-4 opacity-50">
+                                    <div className="w-3 h-3 rounded-full bg-red-500"></div>
+                                    <div className="w-3 h-3 rounded-full bg-yellow-500"></div>
+                                    <div className="w-3 h-3 rounded-full bg-green-500"></div>
+                                </div>
+                                <div className="space-y-2 text-slate-300">
+                                    <div className="flex gap-2">
+                                        <span className="text-green-500">➜</span>
+                                        <span className="text-blue-400">~</span>
+                                        <span>x402-agent start --mode=daemon</span>
+                                    </div>
+                                    <div className="text-slate-500 opacity-0 animate-[fadeIn_0.5s_0.5s_forwards]">
+                                        [INFO] Initializing GNN Neural Core v2.1...
+                                    </div>
+                                    <div className="text-slate-500 opacity-0 animate-[fadeIn_0.5s_1.0s_forwards]">
+                                        [INFO] Connected to Ethereum Sepolia (ChainID: 11155111)
+                                    </div>
+                                    <div className="text-slate-500 opacity-0 animate-[fadeIn_0.5s_1.5s_forwards]">
+                                        [INFO] Listening for transaction events...
+                                    </div>
+                                    <div className="text-emerald-400 opacity-0 animate-[fadeIn_0.5s_2.5s_forwards]">
+                                        [WARN] ANOMALY DETECTED: Batch #8921 (Risk: 98.4%)
+                                    </div>
+                                    <div className="opacity-0 animate-[fadeIn_0.5s_3.0s_forwards]">
+                                        <span className="text-blue-400">➜</span> Generating Merkle Proof...
+                                    </div>
+                                    <div className="opacity-0 animate-[fadeIn_0.5s_4.0s_forwards]">
+                                        <span className="text-blue-400">➜</span> Proof Bundle CID: QmX7...9z2
+                                    </div>
+                                    <div className="text-green-400 opacity-0 animate-[fadeIn_0.5s_5.0s_forwards]">
+                                        [SUCCESS] Anchored to block #4829102 🔒
+                                    </div>
+                                    <div className="animate-pulse opacity-0 animate-[fadeIn_0.5s_6.0s_forwards]">
+                                        _
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* Floating Element */}
+                            <div className="absolute -bottom-6 -right-6 p-6 bg-[#111] border border-white/10 rounded-xl shadow-xl backdrop-blur-md hidden md:block">
+                                <div className="flex items-center gap-3 mb-2">
+                                    <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></div>
+                                    <span className="text-xs font-bold text-slate-300 uppercase">System Status</span>
+                                </div>
+                                <div className="text-2xl font-bold text-white">Online</div>
+                                <div className="text-xs text-slate-500 mt-1">Uptime: 99.98%</div>
+                            </div>
+                        </motion.div>
+                    </div>
+                </div>
+            </section>
             <section className="py-24 bg-[#0F0F0F] relative overflow-hidden">
                 <div className="max-w-7xl mx-auto px-6 relative z-10">
                     <motion.div

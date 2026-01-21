@@ -167,7 +167,7 @@ export default function AgentSimulator() {
                             <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-blue-500 to-purple-600 flex items-center justify-center">
                                 🤖
                             </div>
-                            x402 Agent Workflow Simulator
+                            x402 Autonomous Agent Simulator
                         </h1>
                         <p className="text-sm text-slate-400 leading-relaxed">
                             Simulate the complete autonomous agent workflow: from data acquisition through analysis,
@@ -448,12 +448,13 @@ export default function AgentSimulator() {
 
                     {/* Info Box */}
                     <div className={`p-4 rounded-xl border text-xs ${isDarkMode ? 'bg-indigo-500/5 border-indigo-500/20 text-indigo-300' : 'bg-indigo-50 border-indigo-200 text-indigo-700'}`}>
-                        <strong className="block mb-2">ℹ️ Production Agent Runtime</strong>
+                        <strong className="block mb-2">ℹ️ How x402 Agents Work in Production</strong>
                         <p className="text-slate-400 leading-relaxed">
-                            In production, the TypeScript agent runtime (<code className="bg-black/20 px-1 rounded">agent-runtime/</code>)
-                            runs independently with real private key signing and blockchain anchoring. This UI simulator demonstrates
-                            the workflow visually. Run <code className="bg-black/20 px-1 rounded">npm run agent</code> in the
-                            agent-runtime directory for actual autonomous execution.
+                            This simulator mimics the behavior of the autonomous <strong>x402 Agent Runtime</strong>.
+                            In a live environment, the agent connects directly to bank APIs or blockchain RPC nodes (like the "Simulated Bank API" and "Live Stream" modes above).
+                            It autonomously signs proofs with its secure private key and anchors them to Ethereum without any human interaction.
+                            <br /><br />
+                            To run the actual headless agent daemon: <code className="bg-black/20 px-1 rounded text-purple-400">cd agent-runtime && npm run start:daemon</code>
                         </p>
                     </div>
                 </div>

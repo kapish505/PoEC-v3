@@ -285,32 +285,31 @@ export default function About() {
                         </div>
                     </section>
 
-                    {/* Section 5: Agent Runtime */}
+                    {/* Section 5: Autonomous Agent Runtime */}
                     <section>
                         <div className="flex items-center gap-4 mb-8">
                             <div className="p-3 bg-emerald-500/10 rounded-lg text-emerald-400">
                                 <Share2 size={24} />
                             </div>
-                            <h2 className="text-3xl font-bold text-white">5. Autonomous Agent Runtime</h2>
+                            <h2 className="text-3xl font-bold text-white">5. x402 Autonomous Agent Runtime</h2>
                         </div>
                         <div className="pl-4 border-l-2 border-emerald-500/20 space-y-6">
                             <p className="text-slate-400 leading-7">
-                                PoEC includes an <strong className="text-white">x402-style agent runtime</strong> that automates the entire detection-to-anchoring pipeline without human intervention.
+                                PoEC is more than just a tool—it's an <strong>autonomous financial security agent</strong> built on the <strong className="text-white">x402 standard</strong>. It operates continuously in the background, listening to transaction streams and executing the full forensic pipeline without human intervention.
                             </p>
                             <div className="bg-[#111] p-6 rounded-xl border border-white/10">
-                                <h3 className="text-white font-bold mb-3">Agent Workflow Steps</h3>
+                                <h3 className="text-white font-bold mb-3">Automated x402 Workflow</h3>
                                 <ol className="list-decimal list-inside text-slate-400 space-y-2 ml-4">
-                                    <li>Acquire transaction data from file system or API</li>
-                                    <li>Upload to PoEC backend and trigger GNN analysis</li>
-                                    <li>Receive detected anomalies and build proof bundle</li>
-                                    <li>Store proof bundle to IPFS (Pinata)</li>
-                                    <li>Sign bundle with agent private key</li>
-                                    <li>Anchor Merkle root to Ethereum Sepolia</li>
-                                    <li>Verify on-chain anchoring success</li>
+                                    <li><strong>Listen:</strong> Agent monitors bank APIs or blockchain mempools for new batches.</li>
+                                    <li><strong>Analyze:</strong> Triggers GNN inference locally to score transaction graph topology.</li>
+                                    <li><strong>Prove:</strong> Automatically builds Merkle proofs for high-risk anomalies.</li>
+                                    <li><strong>Sign:</strong> Signs the proof bundle using the agent's secure private key.</li>
+                                    <li><strong>Anchor:</strong> Submits the root hash to the `ResultAnchor` smart contract.</li>
+                                    <li><strong>Audit:</strong> Verifies on-chain finality and logs the transaction hash.</li>
                                 </ol>
                             </div>
                             <p className="text-slate-400 leading-7">
-                                This enables <strong className="text-emerald-400">24/7 continuous monitoring</strong> — agents process new transaction batches, generate proofs, and maintain an immutable audit trail without manual oversight.
+                                This enables <strong className="text-emerald-400">24/7 "Sleep-at-Night" security</strong>. The x402 agent handles the complexity of cryptography and blockchain interactions, leaving investigators with a clean, immutable audit trail of already-proven financial crimes.
                             </p>
                         </div>
                     </section>

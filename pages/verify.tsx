@@ -353,14 +353,53 @@ export default function VerifyPage() {
                                     {/* Proof Details - Only show if valid and we have proof data */}
                                     {verificationResult.valid && verificationResult.proof && (
                                         <>
-                                            {/* GNN Model Info */}
+                                            {/* GNN Model & Architecture */}
                                             <div className={`p-4 rounded-xl border ${isDarkMode ? 'border-purple-500/20 bg-purple-500/5' : 'border-purple-200 bg-purple-50'}`}>
-                                                <h4 className="text-xs font-bold uppercase tracking-wider text-purple-400 mb-2">🧠 GNN Model</h4>
-                                                <div className="text-sm font-mono text-slate-300">
-                                                    PoEC GNN v1.0 (PyTorch Geometric)
+                                                <h4 className="text-xs font-bold uppercase tracking-wider text-purple-400 mb-3">🧠 GNN Architecture & Detection</h4>
+
+                                                {/* Model Name */}
+                                                <div className="text-sm font-bold text-slate-300 mb-3">
+                                                    PoEC GNN v1.0 — PyTorch Geometric
                                                 </div>
-                                                <div className="text-xs text-slate-500 mt-1">
-                                                    Anomaly Detection • Graph Neural Network
+
+                                                {/* Architecture Details */}
+                                                <div className="space-y-2 text-xs">
+                                                    <div className={`p-2 rounded ${isDarkMode ? 'bg-black/30' : 'bg-white/50'}`}>
+                                                        <span className="text-purple-400 font-bold">Architecture:</span>
+                                                        <span className="text-slate-400 ml-2">2× SAGEConv Layers → ReLU → Linear</span>
+                                                    </div>
+
+                                                    <div className={`p-2 rounded ${isDarkMode ? 'bg-black/30' : 'bg-white/50'}`}>
+                                                        <span className="text-blue-400 font-bold">Node Features (5D):</span>
+                                                        <div className="text-slate-400 mt-1 font-mono text-[10px]">
+                                                            [in_degree, out_degree, total_sent, total_recv, tx_count]
+                                                        </div>
+                                                    </div>
+
+                                                    <div className={`p-2 rounded ${isDarkMode ? 'bg-black/30' : 'bg-white/50'}`}>
+                                                        <span className="text-emerald-400 font-bold">Detection Patterns:</span>
+                                                        <div className="text-slate-400 mt-1 grid grid-cols-2 gap-1 text-[10px]">
+                                                            <span>• CIRCULAR_TRADING</span>
+                                                            <span>• WASH_TRADING</span>
+                                                            <span>• STRUCTURING</span>
+                                                            <span>• RAPID_MOVEMENT</span>
+                                                        </div>
+                                                    </div>
+
+                                                    <div className={`p-2 rounded ${isDarkMode ? 'bg-black/30' : 'bg-white/50'}`}>
+                                                        <span className="text-amber-400 font-bold">Mathematical Formula:</span>
+                                                        <div className="text-slate-400 mt-1 font-mono text-[10px]">
+                                                            h<sub>v</sub><sup>(k)</sup> = σ(W·MEAN({'{'}h<sub>u</sub><sup>(k-1)</sup> : u ∈ N(v){'}'}) + B·h<sub>v</sub><sup>(k-1)</sup>)
+                                                        </div>
+                                                        <div className="text-slate-500 mt-1 text-[9px]">
+                                                            GraphSAGE neighbor aggregation with mean pooling
+                                                        </div>
+                                                    </div>
+
+                                                    <div className={`p-2 rounded ${isDarkMode ? 'bg-black/30' : 'bg-white/50'}`}>
+                                                        <span className="text-red-400 font-bold">Anomaly Threshold:</span>
+                                                        <span className="text-slate-400 ml-2 font-mono">score {'>'} μ + 2σ (2 std deviations)</span>
+                                                    </div>
                                                 </div>
                                             </div>
 

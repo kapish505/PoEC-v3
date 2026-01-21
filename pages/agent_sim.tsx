@@ -179,8 +179,8 @@ export default function AgentSimulator() {
                         </h2>
 
                         <label className={`flex flex-col items-center justify-center h-32 rounded-xl border-2 border-dashed transition-all cursor-pointer ${file
-                                ? (isDarkMode ? 'border-emerald-500/50 bg-emerald-500/5' : 'border-emerald-500 bg-emerald-50')
-                                : (isDarkMode ? 'border-white/10 hover:border-blue-500/50 hover:bg-white/5' : 'border-slate-300 hover:border-blue-400 hover:bg-slate-50')
+                            ? (isDarkMode ? 'border-emerald-500/50 bg-emerald-500/5' : 'border-emerald-500 bg-emerald-50')
+                            : (isDarkMode ? 'border-white/10 hover:border-blue-500/50 hover:bg-white/5' : 'border-slate-300 hover:border-blue-400 hover:bg-slate-50')
                             }`}>
                             <input
                                 type="file"
@@ -197,8 +197,8 @@ export default function AgentSimulator() {
                             onClick={runAgentWorkflow}
                             disabled={!file || running}
                             className={`w-full mt-4 py-3 rounded-lg text-sm font-bold uppercase tracking-wide flex items-center justify-center gap-2 transition-all ${!file || running
-                                    ? 'bg-slate-800 text-slate-500 cursor-not-allowed'
-                                    : 'bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 text-white shadow-lg'
+                                ? 'bg-slate-800 text-slate-500 cursor-not-allowed'
+                                : 'bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 text-white shadow-lg'
                                 }`}
                         >
                             {running ? <Loader size={16} className="animate-spin" /> : <Play size={16} />}
@@ -218,12 +218,12 @@ export default function AgentSimulator() {
                                     animate={{ opacity: 1, x: 0 }}
                                     transition={{ delay: index * 0.1 }}
                                     className={`relative p-4 rounded-xl border transition-all ${step.status === 'complete'
-                                            ? (isDarkMode ? 'bg-emerald-500/10 border-emerald-500/20' : 'bg-emerald-50 border-emerald-200')
-                                            : step.status === 'running'
-                                                ? (isDarkMode ? 'bg-blue-500/10 border-blue-500/20' : 'bg-blue-50 border-blue-200')
-                                                : step.status === 'error'
-                                                    ? (isDarkMode ? 'bg-red-500/10 border-red-500/20' : 'bg-red-50 border-red-200')
-                                                    : (isDarkMode ? 'bg-black/20 border-white/5' : 'bg-slate-50 border-slate-200')
+                                        ? (isDarkMode ? 'bg-emerald-500/10 border-emerald-500/20' : 'bg-emerald-50 border-emerald-200')
+                                        : step.status === 'running'
+                                            ? (isDarkMode ? 'bg-blue-500/10 border-blue-500/20' : 'bg-blue-50 border-blue-200')
+                                            : step.status === 'error'
+                                                ? (isDarkMode ? 'bg-red-500/10 border-red-500/20' : 'bg-red-50 border-red-200')
+                                                : (isDarkMode ? 'bg-black/20 border-white/5' : 'bg-slate-50 border-slate-200')
                                         }`}
                                 >
                                     {/* Connector Line */}
@@ -235,12 +235,12 @@ export default function AgentSimulator() {
                                     <div className="flex items-center gap-4">
                                         {/* Status Icon */}
                                         <div className={`w-8 h-8 rounded-lg flex items-center justify-center ${step.status === 'complete'
-                                                ? 'bg-emerald-500'
-                                                : step.status === 'running'
-                                                    ? 'bg-blue-500'
-                                                    : step.status === 'error'
-                                                        ? 'bg-red-500'
-                                                        : 'bg-slate-700'
+                                            ? 'bg-emerald-500'
+                                            : step.status === 'running'
+                                                ? 'bg-blue-500'
+                                                : step.status === 'error'
+                                                    ? 'bg-red-500'
+                                                    : 'bg-slate-700'
                                             }`}>
                                             {step.status === 'complete' && <CheckCircle size={16} className="text-white" />}
                                             {step.status === 'running' && <Loader size={16} className="text-white animate-spin" />}
@@ -303,6 +303,23 @@ export default function AgentSimulator() {
                                 </div>
 
                                 <div className="mt-4 flex gap-2">
+                                    <button
+                                        onClick={() => {
+                                            const proofJson = JSON.stringify({
+                                                leaf: finalResult.merkle_root,
+                                                root: finalResult.merkle_root,
+                                                path: [],
+                                                task_id: finalResult.task_id,
+                                                bundle_cid: finalResult.bundle_cid,
+                                                tx_hash: finalResult.transaction_hash
+                                            }, null, 2);
+                                            navigator.clipboard.writeText(proofJson);
+                                            alert('Proof JSON copied to clipboard!');
+                                        }}
+                                        className="flex-1 py-2 px-4 rounded-lg bg-purple-600 hover:bg-purple-500 text-white text-xs font-bold text-center transition-colors"
+                                    >
+                                        📋 Copy Proof JSON
+                                    </button>
                                     <Link href="/verify" className="flex-1 py-2 px-4 rounded-lg bg-emerald-600 hover:bg-emerald-500 text-white text-xs font-bold text-center transition-colors">
                                         Verify Proof
                                     </Link>

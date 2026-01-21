@@ -504,6 +504,25 @@ export default function Dashboard() {
                                             {blockNumber && (
                                                 <div className="text-slate-500">Block #{blockNumber}</div>
                                             )}
+                                            {/* Copy Proof JSON Button */}
+                                            <button
+                                                onClick={() => {
+                                                    const proofJson = JSON.stringify({
+                                                        leaf: anchorData?.result_hash || '',
+                                                        root: anchorData?.result_hash || '',
+                                                        path: [],
+                                                        data_hash: anchorData?.data_hash || '',
+                                                        model_hash: anchorData?.model_hash || '',
+                                                        tx_hash: txHash || '',
+                                                        block_number: blockNumber || 0
+                                                    }, null, 2);
+                                                    navigator.clipboard.writeText(proofJson);
+                                                    addLog('Proof JSON copied to clipboard!');
+                                                }}
+                                                className="w-full py-1.5 mt-2 bg-slate-800 hover:bg-slate-700 rounded text-[9px] font-bold text-slate-300 transition-all"
+                                            >
+                                                📋 Copy Proof JSON
+                                            </button>
                                         </div>
                                     )}
                                 </div>

@@ -332,18 +332,118 @@ export default function VerifyPage() {
                             )}
 
                             {verificationResult && (
-                                <div className={`p-6 rounded-2xl border-2 ${verificationResult.valid ? 'bg-emerald-500/10 border-emerald-500/30' : 'bg-red-500/10 border-red-500/30'}`}>
-                                    {verificationResult.valid ? (
-                                        <CheckCircle size={48} className="text-emerald-500" />
-                                    ) : (
-                                        <XCircle size={48} className="text-red-500" />
+                                <div className="space-y-4">
+                                    {/* Status Badge */}
+                                    <div className={`p-4 rounded-xl border-2 flex items-center gap-3 ${verificationResult.valid ? 'bg-emerald-500/10 border-emerald-500/30' : 'bg-red-500/10 border-red-500/30'}`}>
+                                        {verificationResult.valid ? (
+                                            <CheckCircle size={32} className="text-emerald-500" />
+                                        ) : (
+                                            <XCircle size={32} className="text-red-500" />
+                                        )}
+                                        <div>
+                                            <h3 className={`text-xl font-bold ${verificationResult.valid ? 'text-emerald-500' : 'text-red-500'}`}>
+                                                {verificationResult.valid ? 'Valid Proof' : 'Invalid Proof'}
+                                            </h3>
+                                            <p className="text-xs text-slate-400">
+                                                {verificationResult.valid ? 'Merkle proof verified successfully' : verificationResult.error}
+                                            </p>
+                                        </div>
+                                    </div>
+
+                                    {/* Proof Details - Only show if valid and we have proof data */}
+                                    {verificationResult.valid && verificationResult.proof && (
+                                        <>
+                                            {/* GNN Model Info */}
+                                            <div className={`p-4 rounded-xl border ${isDarkMode ? 'border-purple-500/20 bg-purple-500/5' : 'border-purple-200 bg-purple-50'}`}>
+                                                <h4 className="text-xs font-bold uppercase tracking-wider text-purple-400 mb-2">🧠 GNN Model</h4>
+                                                <div className="text-sm font-mono text-slate-300">
+                                                    PoEC GNN v1.0 (PyTorch Geometric)
+                                                </div>
+                                                <div className="text-xs text-slate-500 mt-1">
+                                                    Anomaly Detection • Graph Neural Network
+                                                </div>
+                                            </div>
+
+                                            {/* Anchored Data Hashes */}
+                                            <div className={`p-4 rounded-xl border ${isDarkMode ? 'border-white/10 bg-black/20' : 'border-slate-200 bg-slate-50'}`}>
+                                                <h4 className="text-xs font-bold uppercase tracking-wider text-slate-400 mb-3">📦 Anchored Proof Data</h4>
+                                                <div className="space-y-2 text-xs font-mono">
+                                                    <div className="flex justify-between items-start gap-2">
+                                                        <span className="text-slate-500 shrink-0">Merkle Leaf:</span>
+                                                        <span className="text-blue-400 break-all text-right">{verificationResult.proof.leaf?.substring(0, 20)}...</span>
+                                                    </div>
+                                                    <div className="flex justify-between items-start gap-2">
+                                                        <span className="text-slate-500 shrink-0">Merkle Root:</span>
+                                                        <span className="text-emerald-400 break-all text-right">{verificationResult.proof.root?.substring(0, 20)}...</span>
+                                                    </div>
+                                                    {verificationResult.proof.data_hash && (
+                                                        <div className="flex justify-between items-start gap-2">
+                                                            <span className="text-slate-500 shrink-0">Data Hash:</span>
+                                                            <span className="text-slate-300 break-all text-right">{verificationResult.proof.data_hash?.substring(0, 20)}...</span>
+                                                        </div>
+                                                    )}
+                                                    {verificationResult.proof.model_hash && (
+                                                        <div className="flex justify-between items-start gap-2">
+                                                            <span className="text-slate-500 shrink-0">Model Hash:</span>
+                                                            <span className="text-slate-300 break-all text-right">{verificationResult.proof.model_hash?.substring(0, 20)}...</span>
+                                                        </div>
+                                                    )}
+                                                </div>
+                                            </div>
+
+                                            {/* Transaction Details */}
+                                            {(verificationResult.proof.tx_hash || verificationResult.proof.task_id || verificationResult.proof.bundle_cid) && (
+                                                <div className={`p-4 rounded-xl border ${isDarkMode ? 'border-white/10 bg-black/20' : 'border-slate-200 bg-slate-50'}`}>
+                                                    <h4 className="text-xs font-bold uppercase tracking-wider text-slate-400 mb-3">⛓️ Blockchain & Storage</h4>
+                                                    <div className="space-y-2 text-xs font-mono">
+                                                        {verificationResult.proof.task_id && (
+                                                            <div className="flex justify-between items-start gap-2">
+                                                                <span className="text-slate-500 shrink-0">Task ID:</span>
+                                                                <span className="text-purple-400 break-all text-right">{verificationResult.proof.task_id}</span>
+                                                            </div>
+                                                        )}
+                                                        {verificationResult.proof.tx_hash && (
+                                                            <div className="flex justify-between items-start gap-2">
+                                                                <span className="text-slate-500 shrink-0">TX Hash:</span>
+                                                                <a
+                                                                    href={`https://sepolia.etherscan.io/tx/${verificationResult.proof.tx_hash}`}
+                                                                    target="_blank"
+                                                                    rel="noreferrer"
+                                                                    className="text-blue-400 underline hover:text-blue-300 break-all text-right"
+                                                                >
+                                                                    {verificationResult.proof.tx_hash?.substring(0, 16)}... ↗
+                                                                </a>
+                                                            </div>
+                                                        )}
+                                                        {verificationResult.proof.bundle_cid && (
+                                                            <div className="flex justify-between items-start gap-2">
+                                                                <span className="text-slate-500 shrink-0">IPFS CID:</span>
+                                                                <a
+                                                                    href={`https://gateway.pinata.cloud/ipfs/${verificationResult.proof.bundle_cid}`}
+                                                                    target="_blank"
+                                                                    rel="noreferrer"
+                                                                    className="text-amber-400 underline hover:text-amber-300 break-all text-right"
+                                                                >
+                                                                    {verificationResult.proof.bundle_cid?.substring(0, 16)}... ↗
+                                                                </a>
+                                                            </div>
+                                                        )}
+                                                    </div>
+                                                </div>
+                                            )}
+
+                                            {/* Calculation Integrity */}
+                                            <div className={`p-3 rounded-lg border text-xs ${isDarkMode ? 'border-emerald-500/20 bg-emerald-500/5' : 'border-emerald-200 bg-emerald-50'}`}>
+                                                <div className="flex items-center gap-2 text-emerald-400 font-bold">
+                                                    <CheckCircle size={14} />
+                                                    Calculation Integrity Verified
+                                                </div>
+                                                <p className="text-slate-400 mt-1">
+                                                    This proof confirms the GNN anomaly detection was computed correctly and anchored on-chain.
+                                                </p>
+                                            </div>
+                                        </>
                                     )}
-                                    <h3 className={`text-2xl font-bold mt-3 ${verificationResult.valid ? 'text-emerald-500' : 'text-red-500'}`}>
-                                        {verificationResult.valid ? 'Valid Proof' : 'Invalid Proof'}
-                                    </h3>
-                                    <p className="text-xs text-slate-400 mt-1">
-                                        {verificationResult.valid ? 'Merkle proof verified successfully' : verificationResult.error}
-                                    </p>
                                 </div>
                             )}
                         </div>

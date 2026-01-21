@@ -25,38 +25,39 @@ def get_web3():
         print(f"DEBUG: Initializing Web3 with URL: {node_url}")
         _w3_instance = Web3(Web3.HTTPProvider(node_url))
     return _w3_instance
-# Minimal ABI for verifyHash
+# Correct ABI matching ResultAnchor.sol
 CONTRACT_ABI = [
     {
         "inputs": [
-            {"internalType": "bytes32", "name": "_dataHash", "type": "bytes32"},
+            {"internalType": "bytes32", "name": "_taskId", "type": "bytes32"},
+            {"internalType": "bytes32", "name": "_merkleRoot", "type": "bytes32"},
+            {"internalType": "bytes32", "name": "_datasetHash", "type": "bytes32"},
             {"internalType": "bytes32", "name": "_modelHash", "type": "bytes32"},
-            {"internalType": "bytes32", "name": "_resultHash", "type": "bytes32"},
-            {"internalType": "string", "name": "_ipfsCid", "type": "string"}
+            {"internalType": "string", "name": "_bundleCID", "type": "string"}
         ],
-        "name": "anchorAnalysis",
+        "name": "anchorProof",
         "outputs": [],
         "stateMutability": "nonpayable",
         "type": "function"
     },
     {
         "inputs": [
-            {"internalType": "bytes32", "name": "_resultHash", "type": "bytes32"}
+            {"internalType": "bytes32", "name": "_taskId", "type": "bytes32"}
         ],
-        "name": "verifyRecord",
+        "name": "verifyProof",
         "outputs": [
-            {"internalType": "bool", "name": "", "type": "bool"},
-            {"internalType": "uint256", "name": "", "type": "uint256"},
-            {"internalType": "string", "name": "", "type": "string"}
+            {"internalType": "bool", "name": "exists", "type": "bool"},
+            {"internalType": "uint256", "name": "timestamp", "type": "uint256"},
+            {"internalType": "address", "name": "submitter", "type": "address"}
         ],
         "stateMutability": "view",
         "type": "function"
     },
     {
         "inputs": [
-            {"internalType": "bytes32", "name": "_dataHash", "type": "bytes32"},
-            {"internalType": "bytes32", "name": "_modelHash", "type": "bytes32"},
-            {"internalType": "bytes32", "name": "_resultHash", "type": "bytes32"}
+            {"internalType": "bytes32", "name": "_taskId", "type": "bytes32"},
+            {"internalType": "bytes32", "name": "_datasetHash", "type": "bytes32"},
+            {"internalType": "bytes32", "name": "_modelHash", "type": "bytes32"}
         ],
         "name": "verifyIntegrity",
         "outputs": [
@@ -440,18 +441,27 @@ async def anchor_hash(req: AnchorRequest):
     try:
         contract = w3.eth.contract(address=CONTRACT_ADDRESS, abi=CONTRACT_ABI)
         
-        # Ensure 0x prefix
+        # Ensure 0x prefix and pad to bytes32 format
         d_hash = req.data_hash if req.data_hash.startswith("0x") else "0x" + req.data_hash
         m_hash = req.model_hash if req.model_hash.startswith("0x") else "0x" + req.model_hash
         r_hash = req.result_hash if req.result_hash.startswith("0x") else "0x" + req.result_hash
         
-        anchoring_txn = contract.functions.anchorAnalysis(
-            d_hash, m_hash, r_hash, req.ipfs_cid
+        # Generate taskId from result_hash (for uniqueness)
+        task_id = r_hash
+        merkle_root = r_hash  # Use result_hash as merkle root for now
+        dataset_hash = d_hash
+        model_hash = m_hash
+        bundle_cid = req.ipfs_cid or ""
+        
+        print(f"DEBUG anchor: taskId={task_id[:18]}... calling anchorProof")
+        
+        anchoring_txn = contract.functions.anchorProof(
+            task_id, merkle_root, dataset_hash, model_hash, bundle_cid
         ).build_transaction({
             'from': account.address,
-            'nonce': w3.eth.get_transaction_count(account.address, 'pending'),  # Use pending to avoid conflicts
-            'gas': 200000,  # Reduced - 2M was excessive
-            'gasPrice': int(w3.eth.gas_price * 1.5)  # 1.5x multiplier to avoid underpriced
+            'nonce': w3.eth.get_transaction_count(account.address, 'pending'),
+            'gas': 200000,
+            'gasPrice': int(w3.eth.gas_price * 1.5)
         })
         
         signed_txn = w3.eth.account.sign_transaction(anchoring_txn, private_key=PRIVATE_KEY)
@@ -481,16 +491,17 @@ async def verify_on_chain(result_hash: str):
     
     try:
         contract = w3.eth.contract(address=CONTRACT_ADDRESS, abi=CONTRACT_ABI)
-        hash_bytes = result_hash if result_hash.startswith("0x") else "0x" + result_hash
+        # Use result_hash as taskId (same as we used in anchorProof)
+        task_id = result_hash if result_hash.startswith("0x") else "0x" + result_hash
         
-        # Verify existence
-        exists, timestamp, ipfs_cid = contract.functions.verifyRecord(hash_bytes).call()
+        # verifyProof returns (bool exists, uint256 timestamp, address submitter)
+        exists, timestamp, submitter = contract.functions.verifyProof(task_id).call()
         
         return {
             "verified": exists,
             "timestamp": timestamp,
-            "ipfs_cid": ipfs_cid,
-            "on_chain_hash": hash_bytes
+            "submitter": submitter,
+            "task_id": task_id
         }
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))

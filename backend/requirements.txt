@@ -10,8 +10,7 @@ pytest
 sqlalchemy
 psycopg2-binary
 # Torch CPU Only (Critical for Render/Cloud Limit)
---find-links https://download.pytorch.org/whl/torch_stable.html
-torch==2.1.0+cpu
+torch
 torch_geometric
 scikit-learn
 numpy

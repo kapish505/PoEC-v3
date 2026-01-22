@@ -238,9 +238,14 @@ export default function AgentSimulator() {
                                     <button
                                         onClick={async () => {
                                             setFetchingData(true);
+                                            setSimulatedData(null);
                                             try {
+                                                console.log('Fetching from:', `${API_URL}/api/v2/bank/simulate`);
                                                 const res = await fetch(`${API_URL}/api/v2/bank/simulate`);
+                                                if (!res.ok) throw new Error(`HTTP ${res.status}`);
                                                 const data = await res.json();
+                                                console.log('Bank API response:', data);
+                                                if (!data.transactions) throw new Error('No transactions in response');
                                                 setSimulatedData(data.transactions);
                                                 // Convert to CSV blob
                                                 const csvContent = 'source,target,amount,timestamp\n' +
@@ -248,14 +253,15 @@ export default function AgentSimulator() {
                                                 const blob = new Blob([csvContent], { type: 'text/csv' });
                                                 const csvFile = new File([blob], 'bank_simulated.csv', { type: 'text/csv' });
                                                 setFile(csvFile);
-                                            } catch (err) {
+                                            } catch (err: any) {
                                                 console.error('Bank API fetch failed:', err);
+                                                alert(`Failed to fetch bank data: ${err.message}`);
                                             } finally {
                                                 setFetchingData(false);
                                             }
                                         }}
                                         disabled={running || fetchingData}
-                                        className="w-full py-3 rounded-lg bg-amber-600 hover:bg-amber-500 text-white font-bold text-sm uppercase tracking-wide flex items-center justify-center gap-2 transition-all"
+                                        className="w-full py-3 rounded-lg bg-amber-600 hover:bg-amber-500 disabled:bg-slate-700 disabled:cursor-not-allowed text-white font-bold text-sm uppercase tracking-wide flex items-center justify-center gap-2 transition-all"
                                     >
                                         {fetchingData ? <Loader size={16} className="animate-spin" /> : '🏦'}
                                         {fetchingData ? 'Fetching...' : 'Fetch Simulated Bank Transactions'}
@@ -279,9 +285,14 @@ export default function AgentSimulator() {
                                     <button
                                         onClick={async () => {
                                             setFetchingData(true);
+                                            setSimulatedData(null);
                                             try {
+                                                console.log('Fetching from:', `${API_URL}/api/v2/bank/stream?events=20`);
                                                 const res = await fetch(`${API_URL}/api/v2/bank/stream?events=20`);
+                                                if (!res.ok) throw new Error(`HTTP ${res.status}`);
                                                 const data = await res.json();
+                                                console.log('Stream response:', data);
+                                                if (!data.events) throw new Error('No events in response');
                                                 setSimulatedData(data.events);
                                                 // Convert to CSV blob
                                                 const csvContent = 'source,target,amount,timestamp\n' +
@@ -289,14 +300,15 @@ export default function AgentSimulator() {
                                                 const blob = new Blob([csvContent], { type: 'text/csv' });
                                                 const csvFile = new File([blob], 'stream_events.csv', { type: 'text/csv' });
                                                 setFile(csvFile);
-                                            } catch (err) {
+                                            } catch (err: any) {
                                                 console.error('Stream fetch failed:', err);
+                                                alert(`Failed to fetch stream data: ${err.message}`);
                                             } finally {
                                                 setFetchingData(false);
                                             }
                                         }}
                                         disabled={running || fetchingData}
-                                        className="w-full py-3 rounded-lg bg-purple-600 hover:bg-purple-500 text-white font-bold text-sm uppercase tracking-wide flex items-center justify-center gap-2 transition-all"
+                                        className="w-full py-3 rounded-lg bg-purple-600 hover:bg-purple-500 disabled:bg-slate-700 disabled:cursor-not-allowed text-white font-bold text-sm uppercase tracking-wide flex items-center justify-center gap-2 transition-all"
                                     >
                                         {fetchingData ? <Loader size={16} className="animate-spin" /> : '📡'}
                                         {fetchingData ? 'Streaming...' : 'Start Stream (20 events)'}

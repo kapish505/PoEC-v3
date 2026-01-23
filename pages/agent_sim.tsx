@@ -240,6 +240,7 @@ export default function AgentSimulator() {
                                             setFetchingData(true);
                                             setSimulatedData(null);
                                             try {
+                                                console.debug(`[Simulation] Fetching bank data from ${API_URL}`);
                                                 console.log('Fetching from:', `${API_URL}/api/v2/bank/simulate`);
                                                 const res = await fetch(`${API_URL}/api/v2/bank/simulate`);
                                                 if (!res.ok) throw new Error(`HTTP ${res.status}`);

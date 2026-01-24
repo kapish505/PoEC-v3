@@ -179,7 +179,7 @@ export default function Home() {
                             <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
                                 {[
                                     { icon: <Network size={24} className="text-blue-400" />, label: 'Monad RPC', desc: 'Real transaction data' },
-                                    { icon: <span className="text-2xl">🧠</span>, label: 'GNN Analysis', desc: 'AI risk detection' },
+                                    { icon: <span className="text-2xl">🧠</span>, label: 'GNN Analysis', desc: 'Neural risk detection' },
                                     { icon: <Shield size={24} className="text-blue-400" />, label: 'zkVM Proof', desc: 'Verifiable computation' },
                                     { icon: <span className="text-2xl">🌳</span>, label: 'Merkle Tree', desc: 'Data integrity' },
                                     { icon: <Zap size={24} className="text-blue-400" />, label: 'On-Chain', desc: 'Immutable anchor' }

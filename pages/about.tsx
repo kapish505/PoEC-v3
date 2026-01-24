@@ -119,7 +119,7 @@ export default function About() {
                                 <tbody>
                                     {[
                                         { feature: 'Agent Trust Verification', today: 'Manual / None', poec: 'ZK-Verified' },
-                                        { feature: 'Risk Detection', today: 'None', poec: 'GNN AI Analysis' },
+                                        { feature: 'Risk Detection', today: 'None', poec: 'GNN Structural Analysis' },
                                         { feature: 'On-Chain Reputation', today: 'Not Available', poec: 'Anchored Proofs' },
                                         { feature: 'M2M Decision Making', today: 'Trust-Based', poec: 'Verifiable' },
                                         { feature: 'Fraud Prevention', today: 'Reactive', poec: 'Proactive AI' },

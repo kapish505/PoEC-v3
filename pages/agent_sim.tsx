@@ -483,7 +483,7 @@ export default function AgentSimulator() {
                                 <div>
                                     <h4 className="text-xs font-bold text-white mb-2 uppercase tracking-wide">What is x402?</h4>
                                     <p className="text-xs text-slate-400 leading-relaxed">
-                                        x402 is an <strong className="text-white">autonomous agent standard</strong> that enables AI systems to operate independently—monitoring data sources, executing analysis, and anchoring cryptographic proofs to blockchain without human intervention.
+                                        x402 is an <strong className="text-white">autonomous agent standard</strong> that enables automated systems to operate independently—monitoring data sources, executing analysis, and anchoring cryptographic proofs to blockchain without human intervention.
                                     </p>
                                 </div>
 

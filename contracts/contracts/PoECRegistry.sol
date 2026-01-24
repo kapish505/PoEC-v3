@@ -4,7 +4,7 @@ pragma solidity ^0.8.0;
 contract PoECRegistry {
     struct AnalysisRecord {
         bytes32 dataHash;      // SHA-256 of raw CSV
-        bytes32 modelHash;     // SHA-256 of AI model weights
+        bytes32 modelHash;     // SHA-256 of GNN model weights
         bytes32 resultHash;    // SHA-256 of anomaly report
         uint256 timestamp;
         string ipfsCid;        // IPFS link to full report

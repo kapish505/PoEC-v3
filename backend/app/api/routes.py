@@ -234,7 +234,7 @@ async def run_analysis(db: Session = Depends(database.get_db)):
              }
              raw_anomalies.append(s)
         
-        # 2. Real AI (GNN)
+        # 2. Real GNN Inference
         print("DEBUG: running GNN inference")
         try:
             if sub_G.number_of_edges() > 10: # Min 10 edges to trigger GNN
@@ -266,7 +266,7 @@ async def run_analysis(db: Session = Depends(database.get_db)):
                         anomaly_id=f"GNN-{slice_key}-{src}-{tgt}",
                         anomaly_type="STRUCTURAL_ANOMALY",
                         severity=ga['score'],
-                        description=f"EXISTENCE PARADOX: The AI Model predicts with >99% confidence that a transaction link between these entities is topologically invalid / Impossible, yet it exists.",
+                        description=f"EXISTENCE PARADOX: The GNN Model predicts with >99% confidence that a transaction link between these entities is topologically invalid / Impossible, yet it exists.",
                         entities_involved=[src, tgt],
                         evidence_data={"score": ga['score'], "slice": slice_key, "tag": "Existence Verification Failed"},
                         detection_method="LEARNED",

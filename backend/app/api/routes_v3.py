@@ -496,7 +496,7 @@ async def analyze_full(request: FullAnalysisRequest):
     """
     import uuid
     from ..services.graph_builder import build_graph
-    from ...gnn import analyze_graph
+    # AnomalyDetector already imported at top of file
     from ..zk.risc0_prover import get_prover
     
     task_id = f"poec_{uuid.uuid4().hex[:12]}"

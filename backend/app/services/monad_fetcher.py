@@ -85,19 +85,27 @@ class MonadFetcher:
             "id": self._next_id()
         }
         
-        async with aiohttp.ClientSession() as session:
-            async with session.post(
-                self.rpc_url,
-                json=payload,
-                headers={"Content-Type": "application/json"},
-                timeout=aiohttp.ClientTimeout(total=30)
-            ) as response:
-                result = await response.json()
-                
-                if "error" in result:
-                    raise RuntimeError(f"RPC error: {result['error']}")
-                
-                return result.get("result")
+        try:
+            async with aiohttp.ClientSession() as session:
+                async with session.post(
+                    self.rpc_url,
+                    json=payload,
+                    headers={"Content-Type": "application/json"},
+                    timeout=aiohttp.ClientTimeout(total=10)  # Reduced from 30s for faster failure
+                ) as response:
+                    if response.status != 200:
+                        raise RuntimeError(f"RPC HTTP error: {response.status}")
+                    
+                    result = await response.json()
+                    
+                    if "error" in result:
+                        raise RuntimeError(f"RPC error: {result['error']}")
+                    
+                    return result.get("result")
+        except aiohttp.ClientError as e:
+            raise RuntimeError(f"RPC connection failed: {str(e)}")
+        except asyncio.TimeoutError:
+            raise RuntimeError("RPC timeout - Monad node may be congested")
     
     async def _rpc_call_with_retry(
         self, 

@@ -229,7 +229,7 @@ async def get_agent_reputation(
             
             # Run detector
             detector = AnomalyDetector()
-            detector.train_baseline(G, epochs=25)
+            detector.train_baseline(G, epochs=10)
             output = detector.detect(G)
             
             # Explicitly clear memory

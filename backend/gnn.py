@@ -160,7 +160,7 @@ class AnomalyDetector:
         return data, node_map
         
     
-    def train_baseline(self, G: nx.DiGraph, epochs=100): # OPTIMIZED: Increased to 100 for better convergence
+    def train_baseline(self, G: nx.DiGraph, epochs=15): # OPTIMIZED: 15 epochs for free plan speed
         data, _ = self.prepare_data(G)
         self.model.train()
         
@@ -260,7 +260,7 @@ class AnomalyDetector:
             }
         
         # Train baseline on this graph
-        self.train_baseline(G, epochs=50)  # Fewer epochs for live data
+        self.train_baseline(G, epochs=10)  # Reduced for free plan speed
         
         # Detect anomalies
         result = self.detect(G)

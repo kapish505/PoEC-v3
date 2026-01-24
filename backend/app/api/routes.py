@@ -244,7 +244,7 @@ async def run_analysis(db: Session = Depends(database.get_db)):
                 
                 def _exec_gnn_sync(graph_obj):
                     detector = gnn.AnomalyDetector()
-                    detector.train_baseline(graph_obj, epochs=25) 
+                    detector.train_baseline(graph_obj, epochs=10) 
                     return detector.detect(graph_obj)
 
                 gnn_output = await run_in_threadpool(_exec_gnn_sync, sub_G)

@@ -8,7 +8,7 @@ export default function About() {
     return (
         <div className="min-h-screen bg-[#0a0a0a] text-stone-200 font-sans selection:bg-purple-500/30">
             <Head>
-                <title>About PoEC | Technical Architecture & Methodology</title>
+                <title>About PoEC | ZK-Verified GNN Risk Engine for x402</title>
             </Head>
 
             <nav className="fixed top-0 w-full z-50 backdrop-blur-md border-b border-white/10 bg-black/50">
@@ -29,10 +29,10 @@ export default function About() {
                     transition={{ duration: 0.8 }}
                     className="mb-20"
                 >
-                    <span className="text-purple-400 font-mono text-xs uppercase tracking-widest mb-4 block">x402 Hackathon Submission</span>
-                    <h1 className="text-4xl md:text-6xl font-bold mb-8 text-white">Proof of Economic Crime</h1>
+                    <span className="text-purple-400 font-mono text-xs uppercase tracking-widest mb-4 block">x402 Agent Economy</span>
+                    <h1 className="text-4xl md:text-6xl font-bold mb-8 text-white">ZK-Verified GNN Risk Engine</h1>
                     <p className="text-xl text-slate-400 leading-relaxed">
-                        <strong className="text-white">PoEC</strong> is an AI-powered financial forensics platform that combines <span className="text-blue-400">Graph Neural Networks</span> with <span className="text-emerald-400">Blockchain Proof Anchoring</span> to detect financial anomalies and create mathematically verifiable, court-admissible evidence.
+                        <strong className="text-white">PoEC</strong> is a trustless risk verification engine for the x402 agent economy. It combines <span className="text-blue-400">Graph Neural Networks</span> with <span className="text-emerald-400">Zero-Knowledge Proofs</span> to enable autonomous agents to detect economic anomalies, prove their computations, and make M2M decisions — all anchored on <span className="text-purple-400">Monad</span>.
                     </p>
                 </motion.div>
 

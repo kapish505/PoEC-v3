@@ -11,11 +11,13 @@ contract ResultAnchor {
     struct AnalysisProof {
         bytes32 taskId;          // Unique analysis task ID
         bytes32 merkleRoot;      // Merkle root of anomaly tree
-        bytes32 datasetHash;     // SHA-256 of input CSV data
+        bytes32 datasetHash;     // SHA-256 of input data
         bytes32 modelHash;       // SHA-256 of model identifier
         string bundleCID;        // IPFS CID of full proof bundle
         uint256 timestamp;       // Block timestamp
-        address submitter;       // Agent/user who submitted
+        address submitter;       // Agent who submitted
+        bool zkVerified;         // Was this ZK proof verified?
+        bytes32 zkCommitment;    // ZK proof commitment hash
     }
     
     // Mapping: taskId => AnalysisProof

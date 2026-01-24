@@ -17,17 +17,18 @@ export default function AgentSimulator() {
     const [file, setFile] = useState<File | null>(null);
     const [running, setRunning] = useState(false);
     const [steps, setSteps] = useState<WorkflowStep[]>([
-        { name: 'Upload CSV', status: 'pending' },
-        { name: 'Run Analysis', status: 'pending' },
-        { name: 'Build Proof', status: 'pending' },
+        { name: 'Fetch Agent Data', status: 'pending' },
+        { name: 'Run GNN Analysis', status: 'pending' },
+        { name: 'Generate ZK Proof', status: 'pending' },
         { name: 'Sign Bundle', status: 'pending' },
-        { name: 'Anchor On-Chain', status: 'pending' }
+        { name: 'Anchor on Monad', status: 'pending' }
     ]);
     const [finalResult, setFinalResult] = useState<any>(null);
     const [isDarkMode, setIsDarkMode] = useState(true);
 
     // Data Source Selection State
-    const [dataSource, setDataSource] = useState<'csv' | 'bank_api' | 'stream'>('csv');
+    const [dataSource, setDataSource] = useState<'csv' | 'bank_api' | 'stream' | 'address'>('address');
+    const [agentAddress, setAgentAddress] = useState<string>('');
     const [simulatedData, setSimulatedData] = useState<any[] | null>(null);
     const [fetchingData, setFetchingData] = useState(false);
 

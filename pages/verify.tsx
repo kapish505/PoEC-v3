@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import Head from 'next/head';
 import Link from 'next/link';
-import { CheckCircle, XCircle, AlertTriangle, ArrowLeft, Shield, FileJson, Lock, ChevronDown, ChevronUp, ExternalLink } from 'lucide-react';
+import { CheckCircle, XCircle, AlertTriangle, ArrowLeft, Shield, FileJson, Lock, ChevronDown, ChevronUp, ExternalLink, Zap } from 'lucide-react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { useAnalysis } from '../components/AnalysisContext';
 

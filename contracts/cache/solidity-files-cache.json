@@ -74,8 +74,8 @@
       ]
     },
     "/Users/kapish/Work/PoEC_x402/PoEC/contracts/contracts/PoECRegistry.sol": {
-      "lastModificationDate": 1768690920395,
-      "contentHash": "d9e389347c1eb5b11e8177e76b5403b1",
+      "lastModificationDate": 1769273879485,
+      "contentHash": "ca58848866aa3d8dfbbe3c00ada9fbfc",
       "sourceName": "contracts/PoECRegistry.sol",
       "solcConfig": {
         "version": "0.8.20",

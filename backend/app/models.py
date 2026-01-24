@@ -28,6 +28,7 @@ class IngestResponse(BaseModel):
     record_count: int
     content_hash: str
     message: str
+    graph_data: Optional[dict] = None
 
 class Anomaly(BaseModel):
     anomaly_id: str

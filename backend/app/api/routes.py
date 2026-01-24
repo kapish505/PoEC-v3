@@ -99,11 +99,28 @@ async def ingest_data(file: UploadFile = File(...), db: Session = Depends(databa
         db.commit()
         print("DEBUG: commit complete")
         
+        # Build graph for immediate visualization
+        from app.services.graph_builder import build_graph
+        
+        # Convert pydantic txs to graph builder format
+        graph_txs = []
+        for tx in txs_pydantic:
+            graph_txs.append({
+                "source": tx.source_entity,
+                "target": tx.target_entity,
+                "amount": tx.amount,
+                "date": tx.timestamp.isoformat() if tx.timestamp else None,
+                "hash": tx.transaction_id
+            })
+            
+        graph_data = build_graph(graph_txs)
+        
         return IngestResponse(
             batch_id=raw_hash[:8],
             record_count=len(db_objs),
             content_hash=raw_hash,
-            message="Ingestion successful"
+            message="Ingestion successful",
+            graph_data=graph_data
         )
     except HTTPException as he:
         # Re-raise HTTP exceptions (like validation errors from ingest_csv)

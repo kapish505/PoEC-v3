@@ -292,7 +292,29 @@ export default function Dashboard() {
                 const ingestResult = await res.json();
 
                 addLog('CSV', `Ingested ${ingestResult.record_count} transactions`, 'success');
-                setGraphData({ nodes: [], edges: [], centerAddress: '' });
+
+                // Use graph data from backend if available
+                if (ingestResult.graph_data) {
+                    const gd = ingestResult.graph_data;
+                    setGraphData({
+                        nodes: (gd.nodes || []).map((n: any) => ({
+                            id: n.id || n,
+                            label: (n.label || n.id || n).slice(0, 8),
+                            isAnomaly: false
+                        })),
+                        edges: (gd.edges || []).map((e: any) => ({
+                            source: e.source,
+                            target: e.target,
+                            amount: e.amount,
+                            hash: e.hash,
+                            timestamp: e.date
+                        })),
+                        centerAddress: ''
+                    });
+                    addLog('Graph', `Visualizing ${gd.node_count} nodes from CSV`, 'success');
+                } else {
+                    setGraphData({ nodes: [], edges: [], centerAddress: '' });
+                }
 
                 // Run legacy analyze
                 setPipelineStep('analyzing');
@@ -384,7 +406,7 @@ export default function Dashboard() {
 
             <div className="px-6 pb-8">
                 {/* Step Progress Bar */}
-                <div className="max-w-7xl mx-auto mb-6">
+                <div className="max-w-[1900px] mx-auto mb-6">
                     <div className="flex items-center justify-center gap-2 p-4 bg-[#0a0a0a] rounded-2xl border border-white/5">
                         {steps.map((step, i) => {
                             const isActive = pipelineStep === step.key;
@@ -405,7 +427,7 @@ export default function Dashboard() {
                 </div>
 
                 {/* 3-Column Layout */}
-                <div className="max-w-7xl mx-auto grid grid-cols-12 gap-6">
+                <div className="max-w-[1900px] mx-auto grid grid-cols-12 gap-6">
                     {/* Left Column: Controls & Logs */}
                     <div className="col-span-3 space-y-4">
                         {/* Data Source Card */}
@@ -538,7 +560,7 @@ export default function Dashboard() {
 
                     {/* Center Column: Graph Visualization */}
                     <div className="col-span-6">
-                        <div className="bg-[#0a0a0a] border border-white/10 rounded-2xl p-5 h-[600px] flex flex-col">
+                        <div className="bg-[#0a0a0a] border border-white/10 rounded-2xl p-5 h-[800px] flex flex-col">
                             <h2 className="text-sm font-bold mb-4 text-slate-300 uppercase tracking-wider">Transaction Graph</h2>
                             <div className="flex-1 bg-black/30 rounded-xl overflow-hidden">
                                 {graphElements.length > 0 ? (
@@ -562,7 +584,7 @@ export default function Dashboard() {
 
                     {/* Right Column: Anomalies */}
                     <div className="col-span-3">
-                        <div className="bg-[#0a0a0a] border border-white/10 rounded-2xl p-5 h-[600px] flex flex-col">
+                        <div className="bg-[#0a0a0a] border border-white/10 rounded-2xl p-5 h-[800px] flex flex-col">
                             <div className="flex items-center justify-between mb-4">
                                 <h2 className="text-sm font-bold text-slate-300 uppercase tracking-wider">
                                     Anomalies

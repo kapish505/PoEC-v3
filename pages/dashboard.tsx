@@ -167,13 +167,13 @@ export default function Dashboard() {
 
                 const startFetch = Date.now();
 
-                // Call unified endpoint
+                // Call unified endpoint (50 blocks = ~30s of Monad testnet history)
                 const res = await fetch(`${API_URL}/api/v3/analyze/full`, {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
                         address: agentAddress,
-                        block_range: 500,
+                        block_range: 50,  // Reduced from 500 to prevent timeout
                         rpc_url: rpcUrl
                     }),
                     signal

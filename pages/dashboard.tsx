@@ -48,7 +48,29 @@ export default function Dashboard() {
     } = useAnalysis();
 
     const [csvFile, setCsvFile] = useState<File | null>(null);
+    const [agentAddress, setAgentAddress] = useState('0xC38bdC2352A2fBC60a4Fd4FbA4BECACE46B91b4B');
     const [timing, setTiming] = useState<{ [key: string]: number }>({});
+
+    // Abort controller for cancelling requests
+    const abortControllerRef = React.useRef<AbortController | null>(null);
+
+    // Reset stuck pipelineStep on mount (in case of reload during running)
+    React.useEffect(() => {
+        if (pipelineStep !== 'idle' && pipelineStep !== 'complete') {
+            setPipelineStep('idle');
+            addLog('System', 'Pipeline reset due to page reload', 'warning');
+        }
+    }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
+    // Stop pipeline function
+    const stopPipeline = () => {
+        if (abortControllerRef.current) {
+            abortControllerRef.current.abort();
+            abortControllerRef.current = null;
+        }
+        setPipelineStep('idle');
+        addLog('System', 'Pipeline stopped by user', 'warning');
+    };
 
     // Data source descriptions
     const dataSourceInfo: Record<DataSource, { title: string; description: string; icon: React.ReactNode }> = {
@@ -123,6 +145,10 @@ export default function Dashboard() {
 
     // Run the full pipeline
     const runPipeline = async () => {
+        // Create abort controller for this run
+        abortControllerRef.current = new AbortController();
+        const signal = abortControllerRef.current.signal;
+
         clearLogs();
         setTiming({});
         const startTime = Date.now();
@@ -138,9 +164,9 @@ export default function Dashboard() {
 
             if (dataSource === 'monad_rpc') {
                 addLog('Monad', `Connecting to RPC: ${rpcUrl}`, 'info');
-                addLog('Monad', 'Fetching last 500 agent interactions...', 'info');
+                addLog('Monad', `Fetching transactions for ${agentAddress.slice(0, 10)}...`, 'info');
 
-                const res = await fetch(`${API_URL}/api/v3/agent/0x0000000000000000000000000000000000000000/history?limit=500&rpc_url=${encodeURIComponent(rpcUrl)}`);
+                const res = await fetch(`${API_URL}/api/v3/agent/${agentAddress}/history?limit=500&rpc_url=${encodeURIComponent(rpcUrl)}`);
                 if (!res.ok) throw new Error('Failed to fetch Monad data');
                 const data = await res.json();
 
@@ -408,15 +434,28 @@ export default function Dashboard() {
                             </div>
 
                             {dataSource === 'monad_rpc' && (
-                                <div className="mb-4">
-                                    <label className="block text-[10px] text-slate-500 mb-1.5 uppercase tracking-wider">RPC URL</label>
-                                    <input
-                                        type="text"
-                                        value={rpcUrl}
-                                        onChange={(e) => setRpcUrl(e.target.value)}
-                                        disabled={isRunning}
-                                        className="w-full bg-black/50 border border-white/10 rounded-lg px-3 py-2 text-xs font-mono focus:outline-none focus:border-blue-500/50 disabled:opacity-50"
-                                    />
+                                <div className="space-y-3 mb-4">
+                                    <div>
+                                        <label className="block text-[10px] text-slate-500 mb-1.5 uppercase tracking-wider">Agent Address</label>
+                                        <input
+                                            type="text"
+                                            value={agentAddress}
+                                            onChange={(e) => setAgentAddress(e.target.value)}
+                                            placeholder="0x..."
+                                            disabled={isRunning}
+                                            className="w-full bg-black/50 border border-white/10 rounded-lg px-3 py-2 text-xs font-mono focus:outline-none focus:border-blue-500/50 disabled:opacity-50"
+                                        />
+                                    </div>
+                                    <div>
+                                        <label className="block text-[10px] text-slate-500 mb-1.5 uppercase tracking-wider">RPC URL</label>
+                                        <input
+                                            type="text"
+                                            value={rpcUrl}
+                                            onChange={(e) => setRpcUrl(e.target.value)}
+                                            disabled={isRunning}
+                                            className="w-full bg-black/50 border border-white/10 rounded-lg px-3 py-2 text-xs font-mono focus:outline-none focus:border-blue-500/50 disabled:opacity-50"
+                                        />
+                                    </div>
                                 </div>
                             )}
 
@@ -442,6 +481,15 @@ export default function Dashboard() {
                                     {isRunning ? <Loader size={16} className="animate-spin" /> : <Play size={16} />}
                                     {isRunning ? 'Running...' : 'Run Pipeline'}
                                 </button>
+                                {isRunning && (
+                                    <button
+                                        onClick={stopPipeline}
+                                        className="p-3 bg-red-500/20 hover:bg-red-500/30 border border-red-500/30 rounded-xl transition-colors"
+                                        title="Stop Pipeline"
+                                    >
+                                        <div className="w-4 h-4 bg-red-500 rounded-sm" />
+                                    </button>
+                                )}
                                 <button
                                     onClick={clearAll}
                                     disabled={isRunning}

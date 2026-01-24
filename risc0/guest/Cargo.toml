@@ -1,0 +1,9 @@
+[package]
+name = "poec-guest"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+risc0-zkvm = { workspace = true, default-features = false, features = ["std"] }
+serde = { workspace = true }
+sha2 = { workspace = true }

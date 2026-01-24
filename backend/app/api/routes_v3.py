@@ -366,7 +366,7 @@ async def verify_zk_proof(request: ZKVerifyRequest):
     """
     Verify a ZK proof off-chain.
     
-    For on-chain verification, use the Groth16Verifier contract on Monad.
+    For on-chain verification, use the Risc0Verifier contract on Monad.
     """
     try:
         prover = create_prover()
@@ -382,16 +382,70 @@ async def verify_zk_proof(request: ZKVerifyRequest):
         raise HTTPException(status_code=500, detail=str(e))
 
 
+class ProofGenerateRequest(BaseModel):
+    """Request to generate a ZK proof."""
+    data_hash: str
+    model_hash: str
+    anomaly_scores: List[float] = []
+    threshold: float = 0.75
+
+
+@router.post("/proof/generate")
+async def generate_zk_proof(request: ProofGenerateRequest):
+    """
+    Generate a ZK proof using Risc0 zkVM.
+    
+    Proves that the GNN anomaly detection was computed correctly.
+    Falls back to hash commitment if Risc0 is not installed.
+    """
+    try:
+        from ..zk.risc0_prover import get_prover, ProofInput
+        
+        prover = get_prover()
+        
+        # Prepare input
+        input_data = prover.prepare_input(
+            data_hash=request.data_hash,
+            anomaly_scores=request.anomaly_scores or [0.5],  # Default score if none
+            model_hash=request.model_hash,
+            threshold=request.threshold
+        )
+        
+        # Generate proof
+        receipt = await prover.generate_proof(input_data)
+        
+        # Format for response
+        return {
+            "success": True,
+            "proof_system": "risc0" if prover.risc0_available else "hash_commitment",
+            "image_id": receipt.image_id,
+            "commitment": receipt.output.commitment,
+            "anomaly_count": receipt.output.anomaly_count,
+            "max_score": receipt.output.max_score,
+            "threshold_exceeded": receipt.output.threshold_exceeded,
+            "proof_size": f"{receipt.proof_size_kb:.2f} KB",
+            "generated_at": datetime.utcnow().isoformat()
+        }
+    except Exception as e:
+        logger.error(f"Error generating proof: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+
 @router.get("/config")
 async def get_config():
     """Get v3 configuration."""
+    from ..zk.risc0_prover import get_prover
+    
+    prover = get_prover()
+    
     return {
         "network": "monad_testnet",
         "chain_id": 10143,
         "rpc_url": "https://testnet.monad.xyz",
         "explorer": "https://explorer.testnet.monad.xyz",
-        "zk_circuit": "gnn_proof.circom",
-        "proof_system": "groth16",
+        "zk_enabled": True,
+        "zk_system": "risc0" if prover.risc0_available else "hash_commitment",
+        "proof_system": "risc0_zkvm" if prover.risc0_available else "sha256_commitment",
         "supported_patterns": [
             "circular_trading",
             "wash_trading",
@@ -400,3 +454,4 @@ async def get_config():
             "collusion"
         ]
     }
+

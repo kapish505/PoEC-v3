@@ -34,7 +34,7 @@ function loadConfig(): AgentConfig {
         poecApiUrl: process.env.POEC_API_URL || 'http://localhost:8000',
         blockchainNetwork: process.env.BLOCKCHAIN_NETWORK || 'hardhat',
         ethereumNodeUrl: process.env.ETHEREUM_NODE_URL || 'http://localhost:8545',
-        resultAnchorAddress: process.env.RESULT_ANCHOR_ADDRESS || '0x5FbDB2315678afecb367f032d93F642f64180aa3',
+        resultAnchorAddress: process.env.RESULT_ANCHOR_ADDRESS || '0xb46ced9f82335a2fd1ca12c899c23e8d5aefe35e',
         agentPrivateKey: process.env.AGENT_PRIVATE_KEY || '',
     };
 }

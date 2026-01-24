@@ -3,7 +3,7 @@
         "hardhat": {
             "rpc_url": "http://localhost:8545",
             "chain_id": 31337,
-            "result_anchor_address": "0x5FbDB2315678afecb367f032d93F642f64180aa3",
+            "result_anchor_address": "0xb46ced9f82335a2fd1ca12c899c23e8d5aefe35e",
             "deployer_key_env": "DEPLOYER_PRIVATE_KEY",
             "gas_limit": 2000000,
             "confirmations": 1

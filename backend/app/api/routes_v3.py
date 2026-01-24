@@ -690,7 +690,7 @@ async def fetch_proof(address: str):
         w3 = Web3(Web3.HTTPProvider(rpc_url))
         
         # Get contract address
-        contract_address = os.getenv("ANCHOR_CONTRACT_ADDRESS")
+        contract_address = os.getenv("ANCHOR_CONTRACT_ADDRESS", "0xb46ced9f82335a2fd1ca12c899c23e8d5aefe35e")
         
         if not contract_address:
             # No anchor deployed yet, return empty

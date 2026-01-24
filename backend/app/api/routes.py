@@ -68,7 +68,7 @@ CONTRACT_ABI = [
         "type": "function"
     }
 ]
-CONTRACT_ADDRESS = os.getenv("ANCHOR_CONTRACT_ADDRESS", "0x5FbDB2315678afecb367f032d93F642f64180aa3") 
+CONTRACT_ADDRESS = os.getenv("ANCHOR_CONTRACT_ADDRESS", "0xb46ced9f82335a2fd1ca12c899c23e8d5aefe35e") 
 
 @router.post("/ingest", response_model=IngestResponse)
 async def ingest_data(file: UploadFile = File(...), db: Session = Depends(database.get_db)):

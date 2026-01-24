@@ -1,574 +1,321 @@
 import React from 'react';
 import Head from 'next/head';
 import Link from 'next/link';
-import { motion, useScroll, useTransform } from 'framer-motion';
-import { ShieldCheck, Network, Activity, ArrowRight, Database, Lock, Search, AlertTriangle, Check, GitMerge, FileSearch, Cpu, Zap, Eye, Target } from 'lucide-react';
-import { useBackend } from '../components/BackendContext';
+import { ArrowRight, Zap, Network, Shield, AlertTriangle, Check, X, ChevronDown, ExternalLink } from 'lucide-react';
+import { motion } from 'framer-motion';
 
 export default function Home() {
-    const { status: serverStatus } = useBackend();
-    const { scrollY } = useScroll();
-    const y1 = useTransform(scrollY, [0, 500], [0, 200]);
-    const y2 = useTransform(scrollY, [0, 500], [0, -150]);
-
-    const fadeInUp = {
-        hidden: { opacity: 0, y: 60 },
-        visible: { opacity: 1, y: 0, transition: { duration: 0.8, ease: "easeOut" } }
-    };
-
     return (
-        <div className="min-h-screen bg-[#0a0a0a] text-white selection:bg-blue-500/30 overflow-x-hidden font-sans">
+        <>
             <Head>
-                <title>PoEC | ZK-Verified Risk Engine for x402 Agent Economy</title>
+                <title>PoEC | Trust Infrastructure for Monad's Agent Economy</title>
+                <meta name="description" content="Zero-knowledge verified agent reputation for autonomous M2M transactions on Monad" />
             </Head>
 
-            {/* Navigation */}
-            <nav className="fixed top-0 w-full z-50 backdrop-blur-md border-b border-white/10 bg-black/50">
-                <div className="max-w-7xl mx-auto px-6 h-16 flex items-center justify-between">
-                    <div className="flex items-center gap-2 font-bold tracking-tighter text-xl">
-                        <div className="w-8 h-8 bg-blue-600 rounded-lg flex items-center justify-center">P</div>
-                        <span>PoEC</span>
-                    </div>
-                    <div className="flex gap-6 text-sm font-medium text-slate-400">
-                        <Link href="/dashboard" className="hover:text-white transition-colors">Dashboard</Link>
-                        <Link href="/verify" className="hover:text-white transition-colors">Verify</Link>
-                        <Link href="/agent_sim" className="hover:text-white transition-colors">Agent Sim</Link>
-                        <Link href="/about" className="hover:text-white transition-colors">About</Link>
-                    </div>
-                    <Link href="/dashboard" className="px-4 py-2 bg-white text-black text-xs font-bold uppercase tracking-wider rounded-full hover:bg-slate-200 transition-colors">
-                        Launch App
-                    </Link>
-                </div>
-            </nav>
-
-            {/* Hero Section */}
-            <header className="relative h-screen flex items-center justify-center overflow-hidden">
-                {/* Dynamic Background */}
-                <div className="absolute inset-0 bg-grid-pattern opacity-20 z-0"></div>
-                <div className="absolute top-0 left-1/2 -translate-x-1/2 w-[1000px] h-[500px] bg-blue-600/20 blur-[120px] rounded-full pointer-events-none z-0" />
-
-                <div className="relative z-20 text-center px-6 max-w-4xl mx-auto">
-                    <motion.div
-                        initial={{ opacity: 0, scale: 0.9 }}
-                        animate={{ opacity: 1, scale: 1 }}
-                        transition={{ duration: 1 }}
-                    >
-                        <div className={`inline-flex items-center gap-2 px-3 py-1 rounded-full border text-xs font-mono mb-6 transition-colors
-                            ${serverStatus === 'online'
-                                ? 'border-emerald-500/30 bg-emerald-500/10 text-emerald-400'
-                                : 'border-amber-500/30 bg-amber-500/10 text-amber-400'}`}>
-                            <span className="relative flex h-2 w-2">
-                                <span className={`animate-ping absolute inline-flex h-full w-full rounded-full opacity-75 ${serverStatus === 'online' ? 'bg-emerald-400' : 'bg-amber-400'}`}></span>
-                                <span className={`relative inline-flex rounded-full h-2 w-2 ${serverStatus === 'online' ? 'bg-emerald-500' : 'bg-amber-500'}`}></span>
-                            </span>
-                            {serverStatus === 'online' ? 'GNN Engine Online • Monad Connected' : 'Connecting to Neural Core...'}
-                        </div>
-                    </motion.div>
-
-                    <motion.h1
-                        className="text-6xl md:text-8xl font-bold tracking-tight mb-6 bg-clip-text text-transparent bg-gradient-to-b from-white to-slate-500"
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 0.2, duration: 0.8 }}
-                    >
-                        ZK Risk Engine <br />for x402 Agents
-                    </motion.h1>
-
-                    <motion.p
-                        className="text-lg text-slate-400 mb-10 max-w-2xl mx-auto leading-relaxed"
-                        initial={{ opacity: 0 }}
-                        animate={{ opacity: 1 }}
-                        transition={{ delay: 0.4, duration: 0.8 }}
-                    >
-                        <strong className="text-white">Trustless M2M risk verification for autonomous agents.</strong><br />
-                        PoEC combines <span className="text-blue-400">Graph Neural Networks</span> with <span className="text-emerald-400">Zero-Knowledge Proofs</span> to enable x402 agents to detect economic anomalies, prove their computations, and make trustless decisions — all anchored on <span className="text-purple-400">Monad</span>.
-                    </motion.p>
-
-                    <motion.div
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        transition={{ delay: 0.6 }}
-                        className="flex justify-center gap-4 relative z-30"
-                    >
-                        <Link href="/dashboard" className="group px-8 py-4 bg-blue-600 hover:bg-blue-500 text-white rounded-full font-semibold flex items-center gap-2 transition-all shadow-[0_0_20px_rgba(37,99,235,0.3)] hover:shadow-[0_0_30px_rgba(37,99,235,0.5)]">
-                            Start Analysis <ArrowRight size={18} className="group-hover:translate-x-1 transition-transform" />
-                        </Link>
-                        <Link href="/about" className="px-8 py-4 bg-white/5 hover:bg-white/10 border border-white/10 rounded-full font-semibold transition-all backdrop-blur-sm">
-                            Technical Deep Dive
-                        </Link>
-                    </motion.div>
-                </div>
-
-                {/* Parallax Elements (Lower z-index to prevent overlay issues) */}
-                <motion.div style={{ y: y1 }} className="absolute bottom-20 left-20 opacity-20 hidden md:block z-0 pointer-events-none">
-                    <Network size={120} />
-                </motion.div>
-                <motion.div style={{ y: y2 }} className="absolute top-40 right-20 opacity-20 hidden md:block z-0 pointer-events-none">
-                    <ShieldCheck size={120} />
-                </motion.div>
-            </header>
-
-            {/* THE PROBLEM */}
-            <section className="py-24 relative overflow-hidden border-t border-white/5">
-                <div className="absolute inset-0 bg-[#0a0a0a] z-0"></div>
-                <div className="absolute left-0 top-20 w-[600px] h-[600px] bg-red-900/10 blur-[120px] rounded-full pointer-events-none z-0"></div>
-
-                <div className="max-w-7xl mx-auto px-6 relative z-10 text-center mb-16">
-                    <motion.div
-                        initial={{ opacity: 0, y: 20 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: false, amount: 0.3 }}
-                    >
-                        <span className="text-red-500 font-bold tracking-widest uppercase text-xs mb-4 block">The Problem</span>
-                        <h2 className="text-4xl md:text-5xl font-bold mb-8 text-white">$4.7 Trillion Lost Annually to Financial Crime</h2>
-                        <div className="max-w-3xl mx-auto text-lg text-slate-400 leading-relaxed space-y-6">
-                            <p>
-                                Traditional forensic tools rely on <strong className="text-white">static rules</strong> like "Flag if amount &gt; $10,000".<br />
-                                Sophisticated criminals easily bypass these with techniques like:
-                            </p>
-                        </div>
-                    </motion.div>
-                </div>
-
-                <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-3 gap-8 relative z-10">
-                    <div className="p-8 bg-red-500/5 border border-red-500/20 rounded-2xl">
-                        <div className="mb-6 p-4 bg-red-500/10 w-fit rounded-xl text-red-400">
-                            <GitMerge size={32} />
-                        </div>
-                        <h3 className="text-xl font-bold text-white mb-3">Smurfing / Structuring</h3>
-                        <p className="text-slate-400 text-sm leading-relaxed">
-                            Breaking large sums into many small transactions below reporting thresholds. Each transaction looks innocent in isolation.
-                        </p>
+            <div className="min-h-screen">
+                {/* Hero Section */}
+                <section className="relative py-20 px-6 overflow-hidden">
+                    {/* Background gradients */}
+                    <div className="absolute inset-0 pointer-events-none">
+                        <div className="absolute top-20 left-1/4 w-[500px] h-[500px] bg-blue-500/10 rounded-full blur-3xl" />
+                        <div className="absolute bottom-0 right-1/4 w-[400px] h-[400px] bg-purple-500/10 rounded-full blur-3xl" />
                     </div>
 
-                    <div className="p-8 bg-red-500/5 border border-red-500/20 rounded-2xl">
-                        <div className="mb-6 p-4 bg-red-500/10 w-fit rounded-xl text-red-400">
-                            <Activity size={32} />
-                        </div>
-                        <h3 className="text-xl font-bold text-white mb-3">Circular Trading</h3>
-                        <p className="text-slate-400 text-sm leading-relaxed">
-                            Moving money A→B→C→A to create fake volume, manipulate markets, or launder funds through seemingly legitimate trades.
-                        </p>
-                    </div>
-
-                    <div className="p-8 bg-red-500/5 border border-red-500/20 rounded-2xl">
-                        <div className="mb-6 p-4 bg-red-500/10 w-fit rounded-xl text-red-400">
-                            <Network size={32} />
-                        </div>
-                        <h3 className="text-xl font-bold text-white mb-3">Collusion Networks</h3>
-                        <p className="text-slate-400 text-sm leading-relaxed">
-                            Groups of entities trading exclusively with each other to create artificial economic activity or evade taxes.
-                        </p>
-                    </div>
-                </div>
-            </section>
-
-            {/* THE SOLUTION */}
-            <section className="py-24 relative overflow-hidden">
-                <div className="absolute inset-0 bg-[#0F0F0F] z-0"></div>
-                <div className="absolute right-0 top-20 w-[600px] h-[600px] bg-blue-900/10 blur-[120px] rounded-full pointer-events-none z-0"></div>
-
-                <div className="max-w-7xl mx-auto px-6 relative z-10 text-center mb-16">
-                    <motion.div
-                        initial={{ opacity: 0, y: 20 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: false, amount: 0.3 }}
-                    >
-                        <span className="text-blue-500 font-bold tracking-widest uppercase text-xs mb-4 block">Our Solution</span>
-                        <h2 className="text-4xl md:text-5xl font-bold mb-8 text-white">See the Forest, Not Just the Trees</h2>
-                        <div className="max-w-3xl mx-auto text-lg text-slate-400 leading-relaxed space-y-6">
-                            <p>
-                                <strong className="text-white">PoEC changes the paradigm.</strong> Instead of looking at individual transactions,<br />
-                                we analyze the <span className="text-blue-400 font-bold">shape of the entire economy</span> using Graph Neural Networks.
-                            </p>
-                        </div>
-                    </motion.div>
-                </div>
-
-                <div className="max-w-7xl mx-auto px-6 grid grid-cols-1 md:grid-cols-3 gap-8 relative z-10">
-                    <div className="p-8 bg-white/5 border border-white/10 rounded-2xl hover:bg-white/10 transition-all group">
-                        <div className="mb-6 p-4 bg-blue-500/10 w-fit rounded-xl text-blue-400 group-hover:scale-110 transition-transform">
-                            <Network size={32} />
-                        </div>
-                        <h3 className="text-xl font-bold text-white mb-3">Graph-Based Intelligence</h3>
-                        <p className="text-slate-400 text-sm leading-relaxed">
-                            We convert flat CSV ledgers into <strong>directed graphs</strong> where entities become nodes and transactions become edges. This reveals hidden patterns that spreadsheets can never show.
-                        </p>
-                    </div>
-
-                    <div className="p-8 bg-white/5 border border-white/10 rounded-2xl hover:bg-white/10 transition-all group">
-                        <div className="mb-6 p-4 bg-purple-500/10 w-fit rounded-xl text-purple-400 group-hover:scale-110 transition-transform">
-                            <Cpu size={32} />
-                        </div>
-                        <h3 className="text-xl font-bold text-white mb-3">GNN Anomaly Detection</h3>
-                        <p className="text-slate-400 text-sm leading-relaxed">
-                            Our <strong>Graph Neural Network</strong> learns what "normal" looks like without labeled data. It mathematically isolates structural deviations using <strong>GraphSAGE</strong> neighbor aggregation.
-                        </p>
-                    </div>
-
-                    <div className="p-8 bg-white/5 border border-white/10 rounded-2xl hover:bg-white/10 transition-all group">
-                        <div className="mb-6 p-4 bg-emerald-500/10 w-fit rounded-xl text-emerald-400 group-hover:scale-110 transition-transform">
-                            <ShieldCheck size={32} />
-                        </div>
-                        <h3 className="text-xl font-bold text-white mb-3">Cryptographic Proof</h3>
-                        <p className="text-slate-400 text-sm leading-relaxed">
-                            We don't just find crime — we <strong>prove it</strong>. Every detection is bundled into Merkle trees and anchored on <strong>Ethereum (Sepolia)</strong> for tamper-proof chain of custody.
-                        </p>
-                    </div>
-                </div>
-            </section>
-
-            {/* SYSTEM ARCHITECTURE FLOWCHART */}
-            <section className="py-32 bg-[#0a0a0a] relative overflow-hidden border-y border-white/5">
-                <div className="absolute top-0 right-0 p-32 bg-purple-600/10 rounded-full blur-[100px] pointer-events-none" />
-                <div className="max-w-7xl mx-auto px-6 relative z-10">
-                    <motion.div
-                        initial="hidden"
-                        whileInView="visible"
-                        viewport={{ once: false, amount: 0.3 }}
-                        variants={fadeInUp}
-                        className="text-center mb-20"
-                    >
-                        <span className="text-purple-400 font-mono text-sm tracking-widest uppercase mb-4 block">System Architecture</span>
-                        <h2 className="text-4xl md:text-5xl font-bold mb-6">End-to-End Evidence Pipeline</h2>
-                        <p className="text-slate-400 max-w-2xl mx-auto text-lg">
-                            From raw transaction data to blockchain-anchored proof in 4 automated steps.
-                        </p>
-                    </motion.div>
-
-                    <div className="grid grid-cols-1 md:grid-cols-4 gap-12 relative">
-                        {/* Connecting Line */}
-                        <div className="hidden md:block absolute top-12 left-[12%] right-[12%] h-0.5 bg-gradient-to-r from-blue-500/0 via-blue-500/30 to-blue-500/0 z-0"></div>
-
-                        {[
-                            {
-                                step: "01",
-                                title: "Data Ingestion",
-                                desc: "Upload CSV transaction logs. System normalizes data, extracts entities, and builds a directed graph where nodes = accounts and edges = money flow.",
-                                icon: <Database />,
-                                color: "blue"
-                            },
-                            {
-                                step: "02",
-                                title: "GNN Analysis",
-                                desc: "Graph Neural Network (SAGEConv) scans topology. Computes 5D node features and calculates anomaly scores using μ+2σ threshold detection.",
-                                icon: <Activity />,
-                                color: "purple"
-                            },
-                            {
-                                step: "03",
-                                title: "Proof Generation",
-                                desc: "Detected anomalies are hashed and bundled into Merkle trees. Each detection gets a cryptographic proof path. Bundle stored on IPFS (Pinata).",
-                                icon: <Lock />,
-                                color: "violet"
-                            },
-                            {
-                                step: "04",
-                                title: "Chain Anchoring",
-                                desc: "Merkle root, data hash, and model hash anchored to Ethereum Sepolia via ResultAnchor smart contract. Creates immutable audit trail.",
-                                icon: <ShieldCheck />,
-                                color: "emerald"
-                            }
-                        ].map((item, i) => (
-                            <motion.div
-                                key={i}
-                                initial={{ opacity: 0, y: 30 }}
-                                whileInView={{ opacity: 1, y: 0 }}
-                                viewport={{ once: false, amount: 0.3 }}
-                                transition={{ delay: i * 0.2 }}
-                                className="relative z-10 bg-[#151515] p-8 rounded-2xl border border-white/10 hover:border-blue-500/50 transition-colors"
-                            >
-                                <div className="w-12 h-12 bg-blue-900/20 text-blue-400 rounded-lg flex items-center justify-center mb-6 font-bold shadow-lg shadow-blue-900/10">
-                                    {item.icon}
-                                </div>
-                                <span className="absolute top-8 right-8 text-4xl font-bold text-white/5 font-mono pointer-events-none">{item.step}</span>
-                                <h3 className="text-xl font-bold mb-3">{item.title}</h3>
-                                <p className="text-slate-400 text-sm leading-relaxed">{item.desc}</p>
-                            </motion.div>
-                        ))}
-                    </div>
-                </div>
-            </section>
-
-            {/* x402 INTEGRATION */}
-            <section className="py-24 bg-black relative overflow-hidden border-b border-white/5">
-                <div className="absolute inset-0 bg-green-500/5 z-0"></div>
-                <div className="max-w-7xl mx-auto px-6 relative z-10">
-                    <div className="grid grid-cols-1 lg:grid-cols-2 gap-16 items-center">
+                    <div className="max-w-5xl mx-auto text-center relative z-10">
                         <motion.div
-                            initial={{ opacity: 0, x: -30 }}
-                            whileInView={{ opacity: 1, x: 0 }}
-                            viewport={{ once: false, amount: 0.3 }}
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            transition={{ duration: 0.6 }}
                         >
-                            <div className="flex items-center gap-3 mb-6">
-                                <div className="px-3 py-1 rounded bg-green-500/10 border border-green-500/20 text-green-400 text-xs font-mono font-bold tracking-widest uppercase">
-                                    Powered by x402
-                                </div>
+                            {/* Badge */}
+                            <div className="inline-flex items-center gap-2 px-4 py-2 rounded-full bg-blue-500/10 border border-blue-500/20 text-blue-400 text-sm font-medium mb-8">
+                                <Zap size={14} />
+                                For x402 Agent Economy
                             </div>
-                            <h2 className="text-4xl font-bold text-white mb-6">
-                                Fully Autonomous <br />
-                                <span className="text-transparent bg-clip-text bg-gradient-to-r from-green-400 to-emerald-600">Agent Runtime</span>
-                            </h2>
-                            <p className="text-slate-400 text-lg leading-relaxed mb-8">
-                                PoEC isn't just a dashboard — it's an <strong>autonomous financial security agent</strong> built on the x402 standard. It runs 24/7 in the background, ingesting transaction streams, detecting threats, and anchoring proofs without human intervention.
+
+                            <h1 className="text-5xl md:text-7xl font-bold tracking-tight mb-6">
+                                <span className="bg-gradient-to-r from-white via-slate-200 to-slate-400 bg-clip-text text-transparent">
+                                    Trust Infrastructure
+                                </span>
+                                <br />
+                                <span className="bg-gradient-to-r from-blue-400 to-purple-400 bg-clip-text text-transparent">
+                                    for Monad
+                                </span>
+                            </h1>
+
+                            <p className="text-xl text-slate-400 max-w-2xl mx-auto mb-10 leading-relaxed">
+                                When autonomous agents make financial decisions, how do they verify trust?
+                                <br />
+                                <span className="text-white font-medium">PoEC provides ZK-verified reputation scoring for M2M transactions.</span>
                             </p>
 
-                            <ul className="space-y-4">
-                                {[
-                                    "Continuous monitoring of bank APIs & mempools",
-                                    "Self-executing GNN inference pipelines",
-                                    "Automated Merkle proof generation & signing",
-                                    "Wallet-agnostic on-chain interactions"
-                                ].map((item, i) => (
-                                    <li key={i} className="flex items-center gap-3 text-slate-300">
-                                        <div className="w-6 h-6 rounded-full bg-green-500/20 flex items-center justify-center text-green-400">
-                                            <Check size={14} strokeWidth={3} />
-                                        </div>
-                                        {item}
-                                    </li>
-                                ))}
-                            </ul>
-
-                            <div className="mt-10">
-                                <Link href="/agent_sim" className="px-6 py-3 bg-green-600 hover:bg-green-500 text-black font-bold rounded-lg transition-colors flex w-fit items-center gap-2">
-                                    <Zap size={18} />
-                                    Launch Agent Simulator
+                            {/* CTAs */}
+                            <div className="flex flex-col sm:flex-row items-center justify-center gap-4">
+                                <Link
+                                    href="/dashboard"
+                                    className="px-8 py-4 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 rounded-xl font-semibold text-lg flex items-center gap-2 transition-all shadow-xl shadow-blue-500/25"
+                                >
+                                    Launch Dashboard
+                                    <ArrowRight size={20} />
+                                </Link>
+                                <Link
+                                    href="/about"
+                                    className="px-8 py-4 bg-white/5 hover:bg-white/10 border border-white/10 rounded-xl font-semibold text-lg transition-all"
+                                >
+                                    How It Works
                                 </Link>
                             </div>
                         </motion.div>
-
-                        <motion.div
-                            initial={{ opacity: 0, x: 30 }}
-                            whileInView={{ opacity: 1, x: 0 }}
-                            viewport={{ once: false, amount: 0.3 }}
-                            className="relative"
-                        >
-                            {/* Code/Terminal Visualization */}
-                            <div className="rounded-xl bg-[#050505] border border-white/10 p-4 font-mono text-xs shadow-2xl relative overflow-hidden group">
-                                <div className="absolute top-0 left-0 w-full h-1 bg-gradient-to-r from-green-500 to-blue-500"></div>
-                                <div className="flex gap-2 mb-4 opacity-50">
-                                    <div className="w-3 h-3 rounded-full bg-red-500"></div>
-                                    <div className="w-3 h-3 rounded-full bg-yellow-500"></div>
-                                    <div className="w-3 h-3 rounded-full bg-green-500"></div>
-                                </div>
-                                <div className="space-y-2 text-slate-300">
-                                    <div className="flex gap-2">
-                                        <span className="text-green-500">➜</span>
-                                        <span className="text-blue-400">~</span>
-                                        <span>x402-agent start --mode=daemon</span>
-                                    </div>
-                                    <div className="text-slate-500 opacity-0 animate-[fadeIn_0.5s_0.5s_forwards]">
-                                        [INFO] Initializing GNN Neural Core v2.1...
-                                    </div>
-                                    <div className="text-slate-500 opacity-0 animate-[fadeIn_0.5s_1.0s_forwards]">
-                                        [INFO] Connected to Ethereum Sepolia (ChainID: 11155111)
-                                    </div>
-                                    <div className="text-slate-500 opacity-0 animate-[fadeIn_0.5s_1.5s_forwards]">
-                                        [INFO] Listening for transaction events...
-                                    </div>
-                                    <div className="text-emerald-400 opacity-0 animate-[fadeIn_0.5s_2.5s_forwards]">
-                                        [WARN] ANOMALY DETECTED: Batch #8921 (Risk: 98.4%)
-                                    </div>
-                                    <div className="opacity-0 animate-[fadeIn_0.5s_3.0s_forwards]">
-                                        <span className="text-blue-400">➜</span> Generating Merkle Proof...
-                                    </div>
-                                    <div className="opacity-0 animate-[fadeIn_0.5s_4.0s_forwards]">
-                                        <span className="text-blue-400">➜</span> Proof Bundle CID: QmX7...9z2
-                                    </div>
-                                    <div className="text-green-400 opacity-0 animate-[fadeIn_0.5s_5.0s_forwards]">
-                                        [SUCCESS] Anchored to block #4829102 🔒
-                                    </div>
-                                    <div className="animate-pulse opacity-0 animate-[fadeIn_0.5s_6.0s_forwards]">
-                                        _
-                                    </div>
-                                </div>
-                            </div>
-
-                            {/* Floating Element */}
-                            <div className="absolute -bottom-6 -right-6 p-6 bg-[#111] border border-white/10 rounded-xl shadow-xl backdrop-blur-md hidden md:block">
-                                <div className="flex items-center gap-3 mb-2">
-                                    <div className="w-2 h-2 rounded-full bg-green-500 animate-pulse"></div>
-                                    <span className="text-xs font-bold text-slate-300 uppercase">System Status</span>
-                                </div>
-                                <div className="text-2xl font-bold text-white">Online</div>
-                                <div className="text-xs text-slate-500 mt-1">Uptime: 99.98%</div>
-                            </div>
-                        </motion.div>
                     </div>
-                </div>
-            </section>
-            <section className="py-24 bg-[#0F0F0F] relative overflow-hidden">
-                <div className="max-w-7xl mx-auto px-6 relative z-10">
-                    <motion.div
-                        initial={{ opacity: 0, y: 20 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: false, amount: 0.3 }}
-                        className="text-center mb-16"
-                    >
-                        <span className="text-emerald-400 font-mono text-sm tracking-widest uppercase mb-4 block">Why PoEC Wins</span>
-                        <h2 className="text-4xl md:text-5xl font-bold mb-6">Key Differentiators</h2>
-                    </motion.div>
+                </section>
 
-                    <div className="grid grid-cols-1 md:grid-cols-2 gap-8">
-                        <div className="p-8 bg-gradient-to-br from-blue-500/10 to-transparent border border-blue-500/20 rounded-2xl">
-                            <div className="flex items-center gap-4 mb-4">
-                                <div className="p-3 bg-blue-500/20 rounded-lg text-blue-400">
-                                    <Eye size={24} />
-                                </div>
-                                <h3 className="text-xl font-bold text-white">Unsupervised Detection</h3>
-                            </div>
-                            <p className="text-slate-400 leading-relaxed">
-                                No need for labeled fraud datasets. Our GNN learns normal patterns from the graph structure itself and flags statistical outliers automatically.
+                {/* The Problem Section */}
+                <section className="py-20 px-6 border-t border-white/5">
+                    <div className="max-w-5xl mx-auto">
+                        <motion.div
+                            initial={{ opacity: 0 }}
+                            whileInView={{ opacity: 1 }}
+                            viewport={{ once: true }}
+                            className="text-center mb-12"
+                        >
+                            <span className="text-red-400 text-sm font-bold uppercase tracking-widest">The Problem</span>
+                            <h2 className="text-3xl md:text-4xl font-bold mt-3 mb-4">
+                                Monad Has No Verification Layer
+                            </h2>
+                            <p className="text-slate-400 max-w-2xl mx-auto">
+                                When Agent A wants to pay Agent B via x402, there's no way to verify trust.
                             </p>
-                        </div>
+                        </motion.div>
 
-                        <div className="p-8 bg-gradient-to-br from-purple-500/10 to-transparent border border-purple-500/20 rounded-2xl">
-                            <div className="flex items-center gap-4 mb-4">
-                                <div className="p-3 bg-purple-500/20 rounded-lg text-purple-400">
-                                    <Target size={24} />
+                        {/* Scenario Flowchart */}
+                        <div className="bg-[#0a0a0a] border border-white/10 rounded-2xl p-8 md:p-12">
+                            <div className="grid md:grid-cols-3 gap-6">
+                                {/* Step 1 */}
+                                <div className="text-center">
+                                    <div className="w-16 h-16 mx-auto mb-4 rounded-2xl bg-blue-500/10 border border-blue-500/20 flex items-center justify-center">
+                                        <Network size={28} className="text-blue-400" />
+                                    </div>
+                                    <h3 className="font-bold text-lg mb-2">Agent A Finds Agent B</h3>
+                                    <p className="text-sm text-slate-400">
+                                        "I want to pay Agent B 50 MON for this service"
+                                    </p>
                                 </div>
-                                <h3 className="text-xl font-bold text-white">Multi-Pattern Detection</h3>
-                            </div>
-                            <p className="text-slate-400 leading-relaxed">
-                                Detects Circular Trading, Wash Trading, Structuring (Smurfing), Rapid Movement, and Collusion Clusters in a single analysis pass.
-                            </p>
-                        </div>
 
-                        <div className="p-8 bg-gradient-to-br from-emerald-500/10 to-transparent border border-emerald-500/20 rounded-2xl">
-                            <div className="flex items-center gap-4 mb-4">
-                                <div className="p-3 bg-emerald-500/20 rounded-lg text-emerald-400">
-                                    <ShieldCheck size={24} />
+                                {/* Arrow */}
+                                <div className="hidden md:flex items-center justify-center">
+                                    <ChevronDown size={32} className="text-slate-600 rotate-[-90deg]" />
                                 </div>
-                                <h3 className="text-xl font-bold text-white">Legally Admissible Proofs</h3>
-                            </div>
-                            <p className="text-slate-400 leading-relaxed">
-                                Every detection generates a Merkle proof anchored on Ethereum. This creates a cryptographic chain of custody that can be verified in court.
-                            </p>
-                        </div>
 
-                        <div className="p-8 bg-gradient-to-br from-amber-500/10 to-transparent border border-amber-500/20 rounded-2xl">
-                            <div className="flex items-center gap-4 mb-4">
-                                <div className="p-3 bg-amber-500/20 rounded-lg text-amber-400">
-                                    <Zap size={24} />
+                                {/* Step 2 */}
+                                <div className="text-center">
+                                    <div className="w-16 h-16 mx-auto mb-4 rounded-2xl bg-amber-500/10 border border-amber-500/20 flex items-center justify-center">
+                                        <AlertTriangle size={28} className="text-amber-400" />
+                                    </div>
+                                    <h3 className="font-bold text-lg mb-2">Trust Verification?</h3>
+                                    <p className="text-sm text-slate-400">
+                                        "How do I know Agent B isn't a scammer?"
+                                    </p>
                                 </div>
-                                <h3 className="text-xl font-bold text-white">Autonomous Agent Runtime</h3>
                             </div>
-                            <p className="text-slate-400 leading-relaxed">
-                                x402-style agent can run continuously — acquiring data, running analysis, generating proofs, and anchoring to blockchain without human intervention.
-                            </p>
+
+                            {/* Comparison */}
+                            <div className="mt-12 grid md:grid-cols-2 gap-6">
+                                <div className="p-6 rounded-xl bg-emerald-500/5 border border-emerald-500/20">
+                                    <div className="flex items-center gap-3 mb-4">
+                                        <Check size={20} className="text-emerald-400" />
+                                        <span className="font-bold text-emerald-400">On Ethereum</span>
+                                    </div>
+                                    <div className="space-y-2 text-sm text-slate-300">
+                                        <div className="flex items-center gap-2">
+                                            <ExternalLink size={14} className="text-slate-500" />
+                                            Etherscan labels
+                                        </div>
+                                        <div className="flex items-center gap-2">
+                                            <ExternalLink size={14} className="text-slate-500" />
+                                            ChainAnalysis risk scores
+                                        </div>
+                                        <div className="flex items-center gap-2">
+                                            <ExternalLink size={14} className="text-slate-500" />
+                                            Arkham entity intelligence
+                                        </div>
+                                    </div>
+                                </div>
+
+                                <div className="p-6 rounded-xl bg-red-500/5 border border-red-500/20">
+                                    <div className="flex items-center gap-3 mb-4">
+                                        <X size={20} className="text-red-400" />
+                                        <span className="font-bold text-red-400">On Monad Today</span>
+                                    </div>
+                                    <div className="text-center py-4">
+                                        <span className="text-4xl font-bold text-red-400/60">???</span>
+                                        <p className="text-sm text-slate-500 mt-2">No verification infrastructure exists</p>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
                     </div>
-                </div>
-            </section>
+                </section>
 
-            {/* REAL-WORLD APPLICATIONS */}
-            <section className="py-24 bg-[#0a0a0a] relative overflow-hidden">
-                <div className="absolute left-0 bottom-0 w-[500px] h-[500px] bg-indigo-900/10 blur-[120px] rounded-full pointer-events-none z-0"></div>
-                <div className="max-w-7xl mx-auto px-6 relative z-10">
-                    <motion.div
-                        initial={{ opacity: 0, y: 20 }}
-                        whileInView={{ opacity: 1, y: 0 }}
-                        viewport={{ once: false, amount: 0.3 }}
-                        className="text-center mb-16"
-                    >
-                        <span className="text-indigo-400 font-mono text-sm tracking-widest uppercase mb-4 block">Real-World Impact</span>
-                        <h2 className="text-4xl md:text-5xl font-bold mb-6">Where PoEC Can Be Deployed</h2>
-                    </motion.div>
-
-                    <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6">
+                {/* The Solution Section */}
+                <section className="py-20 px-6 border-t border-white/5 bg-gradient-to-b from-transparent to-blue-500/5">
+                    <div className="max-w-5xl mx-auto">
                         <motion.div
-                            initial={{ opacity: 0, y: 30 }}
-                            whileInView={{ opacity: 1, y: 0 }}
-                            viewport={{ once: false, amount: 0.3 }}
-                            transition={{ delay: 0 }}
-                            className="p-6 bg-[#111] border border-white/10 rounded-2xl hover:border-indigo-500/50 transition-colors"
+                            initial={{ opacity: 0 }}
+                            whileInView={{ opacity: 1 }}
+                            viewport={{ once: true }}
+                            className="text-center mb-12"
                         >
-                            <div className="text-3xl mb-4">🏛️</div>
-                            <h3 className="text-lg font-bold text-white mb-2">Government Tax Audit</h3>
-                            <p className="text-slate-400 text-sm leading-relaxed">
-                                Detect GST/VAT circular trading, fake invoicing, and input tax credit fraud with court-admissible proofs.
+                            <span className="text-blue-400 text-sm font-bold uppercase tracking-widest">The Solution</span>
+                            <h2 className="text-3xl md:text-4xl font-bold mt-3 mb-4">
+                                PoEC: Proof of Economic Computation
+                            </h2>
+                            <p className="text-slate-400 max-w-2xl mx-auto">
+                                AI-powered risk analysis with zero-knowledge proofs, anchored immutably to Monad.
                             </p>
                         </motion.div>
 
-                        <motion.div
-                            initial={{ opacity: 0, y: 30 }}
-                            whileInView={{ opacity: 1, y: 0 }}
-                            viewport={{ once: false, amount: 0.3 }}
-                            transition={{ delay: 0.1 }}
-                            className="p-6 bg-[#111] border border-white/10 rounded-2xl hover:border-indigo-500/50 transition-colors"
-                        >
-                            <div className="text-3xl mb-4">💰</div>
-                            <h3 className="text-lg font-bold text-white mb-2">DeFi Security</h3>
-                            <p className="text-slate-400 text-sm leading-relaxed">
-                                Monitor on-chain graphs to detect flash loan attacks, front-running, and wash trading in real-time.
-                            </p>
-                        </motion.div>
+                        {/* Pipeline Flowchart */}
+                        <div className="bg-[#0a0a0a] border border-white/10 rounded-2xl p-8 md:p-12">
+                            <div className="grid grid-cols-2 md:grid-cols-5 gap-4">
+                                {[
+                                    { icon: <Network size={24} className="text-blue-400" />, label: 'Monad RPC', desc: 'Real transaction data' },
+                                    { icon: <span className="text-2xl">🧠</span>, label: 'GNN Analysis', desc: 'AI risk detection' },
+                                    { icon: <Shield size={24} className="text-blue-400" />, label: 'zkVM Proof', desc: 'Verifiable computation' },
+                                    { icon: <span className="text-2xl">🌳</span>, label: 'Merkle Tree', desc: 'Data integrity' },
+                                    { icon: <Zap size={24} className="text-blue-400" />, label: 'On-Chain', desc: 'Immutable anchor' }
+                                ].map((step, i) => (
+                                    <div key={i} className="relative">
+                                        <div className="text-center p-4 rounded-xl bg-white/5 border border-white/10">
+                                            <div className="w-12 h-12 mx-auto mb-3 rounded-xl bg-gradient-to-br from-blue-500/20 to-purple-500/20 flex items-center justify-center">
+                                                {step.icon}
+                                            </div>
+                                            <h4 className="font-bold text-sm mb-1">{step.label}</h4>
+                                            <p className="text-[10px] text-slate-500">{step.desc}</p>
+                                        </div>
+                                        {i < 4 && (
+                                            <div className="hidden md:block absolute top-1/2 -right-2 transform -translate-y-1/2">
+                                                <ArrowRight size={16} className="text-slate-600" />
+                                            </div>
+                                        )}
+                                    </div>
+                                ))}
+                            </div>
 
-                        <motion.div
-                            initial={{ opacity: 0, y: 30 }}
-                            whileInView={{ opacity: 1, y: 0 }}
-                            viewport={{ once: false, amount: 0.3 }}
-                            transition={{ delay: 0.2 }}
-                            className="p-6 bg-[#111] border border-white/10 rounded-2xl hover:border-indigo-500/50 transition-colors"
-                        >
-                            <div className="text-3xl mb-4">🏦</div>
-                            <h3 className="text-lg font-bold text-white mb-2">Bank AML Compliance</h3>
-                            <p className="text-slate-400 text-sm leading-relaxed">
-                                Detect money laundering patterns like smurfing and layering that evade traditional rule-based systems.
-                            </p>
-                        </motion.div>
-
-                        <motion.div
-                            initial={{ opacity: 0, y: 30 }}
-                            whileInView={{ opacity: 1, y: 0 }}
-                            viewport={{ once: false, amount: 0.3 }}
-                            transition={{ delay: 0.3 }}
-                            className="p-6 bg-[#111] border border-white/10 rounded-2xl hover:border-indigo-500/50 transition-colors"
-                        >
-                            <div className="text-3xl mb-4">📦</div>
-                            <h3 className="text-lg font-bold text-white mb-2">Supply Chain Integrity</h3>
-                            <p className="text-slate-400 text-sm leading-relaxed">
-                                Verify transaction authenticity, detect phantom vendors and circular procurement fraud.
-                            </p>
-                        </motion.div>
+                            {/* Result */}
+                            <div className="mt-8 p-6 rounded-xl bg-emerald-500/10 border border-emerald-500/20 text-center">
+                                <div className="flex items-center justify-center gap-3 mb-2">
+                                    <Check size={24} className="text-emerald-400" />
+                                    <span className="font-bold text-lg text-emerald-400">Verifiable Trust Score</span>
+                                </div>
+                                <p className="text-sm text-slate-400">
+                                    Agent A can now verify Agent B's reputation with cryptographic proof
+                                </p>
+                            </div>
+                        </div>
                     </div>
-                </div>
-            </section>
+                </section>
 
-            {/* Tech Specs Marquee / Grid */}
-            <section className="py-20 border-y border-white/10 bg-[#0F0F0F]">
-                <div className="max-w-7xl mx-auto px-6">
-                    <div className="text-center mb-10">
-                        <span className="text-slate-500 font-mono text-xs tracking-widest uppercase">Technology Stack</span>
+                {/* Why Monad Needs This */}
+                <section className="py-20 px-6 border-t border-white/5">
+                    <div className="max-w-5xl mx-auto">
+                        <motion.div
+                            initial={{ opacity: 0 }}
+                            whileInView={{ opacity: 1 }}
+                            viewport={{ once: true }}
+                            className="text-center mb-12"
+                        >
+                            <span className="text-purple-400 text-sm font-bold uppercase tracking-widest">Why Monad Needs This</span>
+                            <h2 className="text-3xl md:text-4xl font-bold mt-3 mb-4">
+                                Infrastructure for the Agent Economy
+                            </h2>
+                        </motion.div>
+
+                        <div className="grid md:grid-cols-2 gap-8">
+                            {/* Without PoEC */}
+                            <div className="bg-[#0a0a0a] border border-white/10 rounded-2xl p-8">
+                                <h3 className="font-bold text-lg mb-6 text-red-400 flex items-center gap-2">
+                                    <X size={20} />
+                                    Monad Today
+                                </h3>
+                                <div className="space-y-4">
+                                    {[
+                                        'No on-chain verification',
+                                        'Agents must blindly trust',
+                                        'High fraud risk for M2M',
+                                        'No reputation infrastructure'
+                                    ].map((item, i) => (
+                                        <div key={i} className="flex items-center gap-3 text-slate-400">
+                                            <X size={16} className="text-red-400/60" />
+                                            <span>{item}</span>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+
+                            {/* With PoEC */}
+                            <div className="bg-[#0a0a0a] border border-emerald-500/20 rounded-2xl p-8">
+                                <h3 className="font-bold text-lg mb-6 text-emerald-400 flex items-center gap-2">
+                                    <Check size={20} />
+                                    Monad + PoEC
+                                </h3>
+                                <div className="space-y-4">
+                                    {[
+                                        'ZK-verified reputation',
+                                        'Trustless M2M decisions',
+                                        'AI-powered risk detection',
+                                        'Immutable proof anchoring'
+                                    ].map((item, i) => (
+                                        <div key={i} className="flex items-center gap-3 text-slate-200">
+                                            <Check size={16} className="text-emerald-400" />
+                                            <span>{item}</span>
+                                        </div>
+                                    ))}
+                                </div>
+                            </div>
+                        </div>
                     </div>
-                    <div className="flex justify-between items-center text-slate-500 font-mono text-sm uppercase tracking-widest flex-wrap gap-8">
-                        <span className="flex items-center gap-2"><Cpu size={16} /> PyTorch Geometric</span>
-                        <span className="flex items-center gap-2"><Database size={16} /> FastAPI + PostgreSQL</span>
-                        <span className="flex items-center gap-2"><Lock size={16} /> Solidity + Hardhat</span>
-                        <span className="flex items-center gap-2"><Network size={16} /> Cytoscape.js</span>
-                        <span className="flex items-center gap-2"><ShieldCheck size={16} /> Next.js 14</span>
+                </section>
+
+                {/* Final CTA */}
+                <section className="py-20 px-6 border-t border-white/5">
+                    <div className="max-w-3xl mx-auto text-center">
+                        <h2 className="text-3xl md:text-4xl font-bold mb-6">
+                            Ready to Try It?
+                        </h2>
+                        <p className="text-slate-400 mb-8">
+                            Run a real analysis on Monad testnet data and see PoEC in action.
+                        </p>
+                        <Link
+                            href="/dashboard"
+                            className="inline-flex items-center gap-2 px-10 py-5 bg-gradient-to-r from-blue-600 to-purple-600 hover:from-blue-500 hover:to-purple-500 rounded-xl font-semibold text-lg transition-all shadow-xl shadow-blue-500/25"
+                        >
+                            <Zap size={20} />
+                            Launch Dashboard
+                            <ArrowRight size={20} />
+                        </Link>
                     </div>
-                </div>
-            </section>
+                </section>
 
-            {/* Final CTA */}
-            <section className="py-32 text-center bg-black relative">
-                <div className="absolute inset-0 bg-blue-600/5 blur-3xl pointer-events-none" />
-                <div className="relative z-10 max-w-3xl mx-auto px-6">
-                    <h2 className="text-4xl font-bold mb-6">Ready to Investigate?</h2>
-                    <p className="text-slate-400 mb-10 text-lg">
-                        Upload your transaction data, let the GNN detect anomalies, and anchor proof to the blockchain — all in one seamless flow.
-                    </p>
-                    <Link href="/dashboard" className="inline-flex items-center gap-3 px-10 py-5 bg-white text-black rounded-full font-bold uppercase tracking-wide hover:bg-slate-200 transition-colors">
-                        Launch Dashboard <ArrowRight className="w-5 h-5" />
-                    </Link>
-                </div>
-            </section>
-
-            {/* Footer */}
-            <footer className="py-12 bg-black border-t border-white/10 text-center text-slate-600 text-sm">
-                <p>© 2026 PoEC — Built for x402 Hackathon</p>
-            </footer>
-        </div>
+                {/* Footer */}
+                <footer className="py-8 px-6 border-t border-white/5">
+                    <div className="max-w-5xl mx-auto flex flex-col md:flex-row items-center justify-between gap-4 text-sm text-slate-500">
+                        <div className="flex items-center gap-2">
+                            <div className="w-6 h-6 bg-gradient-to-br from-blue-500 to-purple-600 rounded-lg flex items-center justify-center">
+                                <Zap size={12} className="text-white" />
+                            </div>
+                            <span>PoEC v3 — Proof of Economic Computation</span>
+                        </div>
+                        <div className="flex items-center gap-6">
+                            <a href="https://github.com/kapish505/PoEC-v3" target="_blank" rel="noopener noreferrer" className="hover:text-white transition-colors">
+                                GitHub
+                            </a>
+                            <Link href="/about" className="hover:text-white transition-colors">
+                                About
+                            </Link>
+                        </div>
+                    </div>
+                </footer>
+            </div>
+        </>
     );
 }

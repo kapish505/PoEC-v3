@@ -148,7 +148,8 @@ async def get_agent_identity(address: str):
 async def get_agent_history(
     address: str,
     block_range: int = Query(default=1000, ge=100, le=10000),
-    limit: int = Query(default=100, ge=10, le=500)
+    limit: int = Query(default=100, ge=10, le=500),
+    rpc_url: Optional[str] = Query(None)
 ):
     """
     Fetch transaction history for an agent from Monad RPC.
@@ -156,7 +157,7 @@ async def get_agent_history(
     Returns transaction graph data suitable for GNN analysis.
     """
     try:
-        fetcher = create_fetcher()
+        fetcher = create_fetcher(rpc_url)
         graph_data = await fetcher.build_transaction_graph(
             address,
             block_range=block_range,

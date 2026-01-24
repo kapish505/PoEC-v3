@@ -191,6 +191,62 @@ export default function About() {
                         </div>
                     </motion.div>
 
+                    {/* Why PoEC - Differentiation */}
+                    <motion.div
+                        initial={{ opacity: 0 }}
+                        animate={{ opacity: 1 }}
+                        transition={{ delay: 0.35 }}
+                        className="bg-gradient-to-br from-purple-500/10 to-blue-500/10 border border-purple-500/20 rounded-2xl p-8 mb-8"
+                    >
+                        <h2 className="text-xl font-bold mb-6 flex items-center gap-2">
+                            <span className="text-2xl">🤔</span>
+                            Why PoEC, Not Arkham?
+                        </h2>
+
+                        <p className="text-slate-400 text-sm mb-6">
+                            "Why not just use Arkham Entity Intelligence like Ethereum has?"
+                        </p>
+
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                            {[
+                                {
+                                    title: 'Monad Has Nothing',
+                                    desc: 'Arkham doesn\'t support Monad. We\'re building what Arkham is for Ethereum, but for Monad\'s agent economy.',
+                                    icon: '🔴'
+                                },
+                                {
+                                    title: 'Agent-to-Agent',
+                                    desc: 'Arkham is for human analysts. PoEC is for autonomous agents making real-time M2M decisions.',
+                                    icon: '🤖'
+                                },
+                                {
+                                    title: 'On-Chain Verifiable',
+                                    desc: 'Arkham gives you a score to trust. PoEC anchors proofs on-chain — smart contracts can verify.',
+                                    icon: '⛓️'
+                                },
+                                {
+                                    title: 'ZK Provable',
+                                    desc: 'We don\'t just tell you the score. We prove we computed it correctly with zero-knowledge proofs.',
+                                    icon: '🔐'
+                                }
+                            ].map((item, i) => (
+                                <div key={i} className="p-4 rounded-xl bg-black/30 border border-white/5">
+                                    <div className="flex items-center gap-2 mb-2">
+                                        <span className="text-lg">{item.icon}</span>
+                                        <h4 className="font-bold text-sm">{item.title}</h4>
+                                    </div>
+                                    <p className="text-xs text-slate-400">{item.desc}</p>
+                                </div>
+                            ))}
+                        </div>
+
+                        <div className="mt-6 p-4 rounded-xl bg-emerald-500/10 border border-emerald-500/20">
+                            <p className="text-sm text-emerald-400 font-medium">
+                                💡 TL;DR: Arkham is entity intelligence for Ethereum humans. PoEC is <strong>provable trust infrastructure</strong> for Monad's x402 agent economy — on-chain verifiable, ZK-proven, and x402-native.
+                            </p>
+                        </div>
+                    </motion.div>
+
                     {/* Links */}
                     <motion.div
                         initial={{ opacity: 0 }}

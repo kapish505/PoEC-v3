@@ -173,7 +173,7 @@ export default function Dashboard() {
                     headers: { 'Content-Type': 'application/json' },
                     body: JSON.stringify({
                         address: agentAddress,
-                        block_range: 200,  // Increased to 200 blocks
+                        block_range: 3000,  // Increased to 3000 blocks (~50 mins)
                         rpc_url: rpcUrl
                     }),
                     signal

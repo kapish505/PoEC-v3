@@ -271,45 +271,53 @@ class MonadFetcher:
         connected_addresses: Set[str] = set()
         address_lower = address.lower()
         
-        # Limit scan to most recent 50 blocks to avoid timeout
-        actual_start = max(start_block, end_block - 50)
+        # Parallel Fetching Configuration
+        max_concurrent = 20  # Safe limit for public RPC
+        lookback_blocks = 3000  # Scan last 3000 blocks (~50 mins on Monad)
         
-        logger.info(f"Scanning blocks {actual_start} to {end_block} for {address_lower[:10]}...")
+        actual_start = max(start_block, end_block - lookback_blocks)
+        logger.info(f"Scanning blocks {actual_start} to {end_block} (Range: {end_block - actual_start}) for {address_lower[:10]}...")
         
-        # Scan blocks (most recent first)
-        for block_num in range(end_block, actual_start, -1):
+        # Create batches
+        block_numbers = list(range(end_block, actual_start, -1))
+        
+        # Process in chunks to respect rate limits
+        for i in range(0, len(block_numbers), max_concurrent):
             if len(transactions) >= max_txs:
                 break
+                
+            chunk = block_numbers[i:i + max_concurrent]
+            tasks = [self.get_block(bn) for bn in chunk]
             
             try:
-                block = await self.get_block(block_num)
-                if not block or not block.get("transactions"):
-                    continue
+                # Fetch batch
+                blocks = await asyncio.gather(*tasks, return_exceptions=True)
                 
-                for tx in block["transactions"]:
-                    if isinstance(tx, str):
-                        continue  # Skip if only hash
+                for block in blocks:
+                    if isinstance(block, Exception) or not block or not block.get("transactions"):
+                        continue
                     
-                    tx_from = (tx.get("from") or "").lower()
-                    tx_to = (tx.get("to") or "").lower()
-                    
-                    if tx_from == address_lower or tx_to == address_lower:
-                        parsed = self._parse_transaction(tx, block)
-                        transactions.append(parsed)
+                    for tx in block["transactions"]:
+                        if isinstance(tx, str):
+                            continue  # Skip if only hash
                         
-                        # Track connected addresses
-                        if tx_from and tx_from != address_lower:
-                            connected_addresses.add(tx_from)
-                        if tx_to and tx_to != address_lower:
-                            connected_addresses.add(tx_to)
+                        tx_from = (tx.get("from") or "").lower()
+                        tx_to = (tx.get("to") or "").lower()
                         
-                        if len(transactions) >= max_txs:
-                            break
-            except asyncio.TimeoutError:
-                logger.warning(f"Timeout fetching block {block_num}, continuing...")
-                continue
+                        if tx_from == address_lower or tx_to == address_lower:
+                            parsed = self._parse_transaction(tx, block)
+                            transactions.append(parsed)
+                            
+                            # Track connected addresses
+                            if tx_from and tx_from != address_lower:
+                                connected_addresses.add(tx_from)
+                            if tx_to and tx_to != address_lower:
+                                connected_addresses.add(tx_to)
+                            
+                            if len(transactions) >= max_txs:
+                                break
             except Exception as e:
-                logger.warning(f"Error fetching block {block_num}: {e}")
+                logger.warning(f"Error fetching batch: {e}")
                 continue
         
         return transactions, connected_addresses

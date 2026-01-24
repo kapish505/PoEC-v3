@@ -361,15 +361,28 @@ export default function Pipeline() {
                             )}
 
                             {dataSource === 'csv' && (
-                                <div className="mb-4">
-                                    <label className="block text-xs text-slate-500 mb-2">Upload CSV</label>
-                                    <input
-                                        type="file"
-                                        accept=".csv"
-                                        onChange={(e) => setCsvFile(e.target.files?.[0] || null)}
-                                        className="w-full text-sm text-slate-400 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:bg-blue-600 file:text-white file:cursor-pointer"
-                                    />
-                                </div>
+                                <>
+                                    <div className="mb-4">
+                                        <label className="block text-xs text-slate-500 mb-2">Upload CSV</label>
+                                        <input
+                                            type="file"
+                                            accept=".csv"
+                                            onChange={(e) => setCsvFile(e.target.files?.[0] || null)}
+                                            className="w-full text-sm text-slate-400 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:bg-blue-600 file:text-white file:cursor-pointer"
+                                        />
+                                    </div>
+                                    <div className="mb-4">
+                                        <a
+                                            href="https://drive.google.com/drive/u/0/folders/15AJ_1RmY4DF61d1lQ0Mk17sT37_V4OwY"
+                                            target="_blank"
+                                            rel="noopener noreferrer"
+                                            className="flex items-center gap-2 text-xs text-blue-400 hover:text-blue-300 transition-colors w-full justify-center border border-blue-500/20 bg-blue-500/10 p-2 rounded-lg"
+                                        >
+                                            <ExternalLink size={14} />
+                                            Download Demo CSV Files
+                                        </a>
+                                    </div>
+                                </>
                             )}
 
                             <button
@@ -481,22 +494,24 @@ export default function Pipeline() {
                 </div>
 
                 {/* View Report Button */}
-                {currentStep === 'complete' && (
-                    <motion.div
-                        initial={{ opacity: 0, y: 20 }}
-                        animate={{ opacity: 1, y: 0 }}
-                        className="mt-8 text-center"
-                    >
-                        <Link
-                            href="/verify"
-                            className="inline-flex items-center gap-2 px-8 py-4 bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-500 hover:to-blue-500 rounded-xl font-semibold transition-all shadow-lg"
+                {
+                    currentStep === 'complete' && (
+                        <motion.div
+                            initial={{ opacity: 0, y: 20 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            className="mt-8 text-center"
                         >
-                            <Shield size={20} />
-                            View Full Verification Report
-                        </Link>
-                    </motion.div>
-                )}
-            </main>
-        </div>
+                            <Link
+                                href="/verify"
+                                className="inline-flex items-center gap-2 px-8 py-4 bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-500 hover:to-blue-500 rounded-xl font-semibold transition-all shadow-lg"
+                            >
+                                <Shield size={20} />
+                                View Full Verification Report
+                            </Link>
+                        </motion.div>
+                    )
+                }
+            </main >
+        </div >
     );
 }

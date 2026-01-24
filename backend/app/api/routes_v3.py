@@ -506,14 +506,48 @@ async def analyze_full(request: FullAnalysisRequest):
         logger.info(f"[{task_id}] Fetching transactions for {request.address[:10]}...")
         
         fetcher = create_fetcher(request.rpc_url)
-        fetch_result = await fetcher.build_transaction_graph(
-            address=request.address,
-            block_range=request.block_range,
-            max_transactions=200
-        )
+        
+        try:
+            fetch_result = await fetcher.build_transaction_graph(
+                address=request.address,
+                block_range=request.block_range,
+                max_transactions=200
+            )
+        except Exception as fetch_error:
+            logger.error(f"[{task_id}] Fetch failed: {fetch_error}")
+            raise HTTPException(
+                status_code=502, 
+                detail=f"Failed to connect to Monad RPC: {str(fetch_error)}"
+            )
         
         transactions = fetch_result.get("transactions", [])
         logger.info(f"[{task_id}] Fetched {len(transactions)} transactions")
+        
+        # Handle empty results gracefully
+        if len(transactions) == 0:
+            # Return a minimal valid response indicating no activity
+            return FullAnalysisResponse(
+                task_id=task_id,
+                address=request.address,
+                graph={
+                    "nodes": [{"id": request.address, "label": request.address[:8] + "..."}],
+                    "edges": [],
+                    "node_count": 1,
+                    "edge_count": 0
+                },
+                anomalies=[],
+                proof={
+                    "system": "hash_commitment",
+                    "commitment": hashlib.sha256(request.address.encode()).hexdigest(),
+                    "anomaly_count": 0,
+                    "max_score": 0.0,
+                    "proof_size_kb": 0.1
+                },
+                anchor_tx=None,
+                merkle_root=hashlib.sha256(request.address.encode()).hexdigest(),
+                data_hash=hashlib.sha256(request.address.encode()).hexdigest(),
+                analyzed_at=datetime.utcnow().isoformat()
+            )
         
         # ==================== STEP 2: BUILD GRAPH ====================
         logger.info(f"[{task_id}] Building graph...")

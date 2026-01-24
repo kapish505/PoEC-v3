@@ -247,13 +247,22 @@ class MonadFetcher:
         end_block: int,
         max_txs: int
     ) -> tuple:
-        """Fetch transactions for a single address."""
+        """
+        Fetch transactions for a single address.
+        
+        Optimized approach: scan only most recent 50 blocks to avoid timeout.
+        """
         transactions = []
         connected_addresses: Set[str] = set()
         address_lower = address.lower()
         
+        # Limit scan to most recent 50 blocks to avoid timeout
+        actual_start = max(start_block, end_block - 50)
+        
+        logger.info(f"Scanning blocks {actual_start} to {end_block} for {address_lower[:10]}...")
+        
         # Scan blocks (most recent first)
-        for block_num in range(end_block, start_block, -1):
+        for block_num in range(end_block, actual_start, -1):
             if len(transactions) >= max_txs:
                 break
             
@@ -281,6 +290,9 @@ class MonadFetcher:
                         
                         if len(transactions) >= max_txs:
                             break
+            except asyncio.TimeoutError:
+                logger.warning(f"Timeout fetching block {block_num}, continuing...")
+                continue
             except Exception as e:
                 logger.warning(f"Error fetching block {block_num}: {e}")
                 continue

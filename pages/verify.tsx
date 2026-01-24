@@ -11,7 +11,7 @@ interface VerificationStep {
     label: string;
     status: 'verified' | 'skipped' | 'failed' | 'pending' | 'waiting';
     reason?: string;
-    explanation?: string;
+    explanation?: React.ReactNode;
 }
 
 export default function Verify() {
@@ -129,7 +129,19 @@ export default function Verify() {
             newSteps[3] = {
                 label: 'On-Chain Anchor',
                 status: 'verified',
-                explanation: `Results anchored to Monad testnet at tx ${anchorTx.slice(0, 10)}...`
+                explanation: (
+                    <span>
+                        Results anchored to Monad testnet:{' '}
+                        <a
+                            href={`https://testnet.monadexplorer.com/tx/${anchorTx}`}
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            className="text-blue-400 hover:text-blue-300 underline"
+                        >
+                            {anchorTx.slice(0, 10)}...{anchorTx.slice(-8)}
+                        </a>
+                    </span>
+                )
             };
         } else {
             newSteps[3] = {

@@ -155,29 +155,130 @@ export default function Dashboard() {
         const newTiming: { [key: string]: number } = {};
 
         try {
-            // ==================== STEP 1: FETCH DATA ====================
-            setPipelineStep('fetching');
-            addLog('Data', `Using data source: ${dataSourceInfo[dataSource].title}`, 'info');
-
-            let fetchedGraphData: GraphData | null = null;
-            const fetchStart = Date.now();
-
+            // ==================== MONAD_RPC: UNIFIED PIPELINE ====================
             if (dataSource === 'monad_rpc') {
-                addLog('Monad', `Connecting to RPC: ${rpcUrl}`, 'info');
-                addLog('Monad', `Fetching transactions for ${agentAddress.slice(0, 10)}...`, 'info');
+                addLog('Pipeline', 'Starting REAL end-to-end analysis...', 'info');
+                addLog('Monad', `Target: ${agentAddress.slice(0, 10)}...${agentAddress.slice(-6)}`, 'info');
+                addLog('Monad', `RPC: ${rpcUrl}`, 'info');
 
-                const res = await fetch(`${API_URL}/api/v3/agent/${agentAddress}/history?limit=500&rpc_url=${encodeURIComponent(rpcUrl)}`);
-                if (!res.ok) throw new Error('Failed to fetch Monad data');
-                const data = await res.json();
+                // STEP 1: FETCH
+                setPipelineStep('fetching');
+                addLog('Fetch', 'Fetching transactions from Monad RPC (with 1-hop expansion)...', 'info');
 
-                fetchedGraphData = {
-                    nodes: data.graph?.nodes?.map((n: string) => ({ id: n, label: n.slice(0, 8) })) || [],
-                    edges: data.graph?.edges || [],
-                    centerAddress: data.address
+                const startFetch = Date.now();
+
+                // Call unified endpoint
+                const res = await fetch(`${API_URL}/api/v3/analyze/full`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        address: agentAddress,
+                        block_range: 500,
+                        rpc_url: rpcUrl
+                    }),
+                    signal
+                });
+
+                if (!res.ok) {
+                    const errorData = await res.json().catch(() => ({ detail: 'Unknown error' }));
+                    throw new Error(errorData.detail || `Analysis failed: ${res.status}`);
+                }
+
+                const result = await res.json();
+
+                newTiming.fetch = Date.now() - startFetch;
+                addLog('Fetch', `Completed in ${(newTiming.fetch / 1000).toFixed(2)}s`, 'success');
+
+                // STEP 2: BUILDING (backend already did this)
+                setPipelineStep('building');
+                addLog('Graph', `Backend built graph: ${result.graph?.node_count || 0} nodes, ${result.graph?.edge_count || 0} edges`, 'success');
+
+                // Convert backend graph to frontend format
+                const fetchedGraphData: GraphData = {
+                    nodes: (result.graph?.nodes || []).map((n: any) => ({
+                        id: n.id || n,
+                        label: n.label || (typeof n === 'string' ? n.slice(0, 8) + '...' : n.id?.slice(0, 8) + '...'),
+                        balance: n.net_flow,
+                        txCount: n.tx_count,
+                        isAnomaly: false
+                    })),
+                    edges: (result.graph?.edges || []).map((e: any) => ({
+                        source: e.source,
+                        target: e.target,
+                        amount: e.amount,
+                        hash: e.hash,
+                        timestamp: e.date
+                    })),
+                    centerAddress: agentAddress
                 };
+                setGraphData(fetchedGraphData);
 
-                addLog('Monad', `Received ${data.graph?.edge_count || 0} transactions`, 'success');
+                // STEP 3: GNN (backend already did this)
+                setPipelineStep('analyzing');
+                const anomalyCount = result.anomalies?.length || 0;
+                addLog('GNN', `Real GNN inference completed`, 'success');
+                addLog('GNN', `Detected ${anomalyCount} anomalies`, anomalyCount > 0 ? 'warning' : 'success');
+
+                // Convert anomalies to context format
+                const detectedAnomalies: ContextAnomaly[] = (result.anomalies || []).map((a: any, i: number) => ({
+                    id: a.anomaly_id || `anomaly_${i}`,
+                    entity: a.entities_involved?.[0] || 'unknown',
+                    score: a.severity || 0.5,
+                    type: a.anomaly_type || 'STRUCTURAL_ANOMALY',
+                    description: a.description || 'Anomalous pattern detected by GNN',
+                    txHashes: a.evidence_data?.transactions || []
+                }));
+                setAnomalies(detectedAnomalies);
+
+                // Mark anomaly nodes
+                if (fetchedGraphData.nodes && detectedAnomalies.length > 0) {
+                    const anomalyEntities = new Set(detectedAnomalies.map(a => a.entity.toLowerCase()));
+                    fetchedGraphData.nodes.forEach(n => {
+                        if (anomalyEntities.has(n.id.toLowerCase())) {
+                            n.isAnomaly = true;
+                        }
+                    });
+                    setGraphData({ ...fetchedGraphData });
+                }
+
+                // STEP 4: ZK PROOF (backend already did this)
+                setPipelineStep('proving');
+                if (result.proof) {
+                    addLog('zkVM', `Proof system: ${result.proof.system}`, 'success');
+                    addLog('zkVM', `Commitment: ${result.proof.commitment?.slice(0, 20)}...`, 'success');
+
+                    setProofBundle({
+                        task_id: result.task_id,
+                        merkle_root: result.merkle_root || '',
+                        zk_commitment: result.proof.commitment || '',
+                        proof_system: result.proof.system === 'risc0' ? 'risc0' : 'hash_commitment',
+                        anomaly_count: result.proof.anomaly_count || anomalyCount,
+                        timestamp: result.analyzed_at,
+                        proof_size_kb: result.proof.proof_size_kb || 1.5
+                    });
+                    setMerkleRoot(result.merkle_root);
+                } else {
+                    addLog('zkVM', 'Proof not generated', 'warning');
+                }
+
+                // STEP 5: ANCHOR (backend already did this)
+                setPipelineStep('anchoring');
+                if (result.anchor_tx) {
+                    addLog('Anchor', `Anchored to Monad: ${result.anchor_tx.slice(0, 18)}...`, 'success');
+                    setAnchorTx(result.anchor_tx, null);
+                } else {
+                    addLog('Anchor', 'Anchoring skipped (wallet not configured)', 'warning');
+                }
+
+                // COMPLETE
+                setPipelineStep('complete');
+                newTiming.total = Date.now() - startTime;
+                setTiming(newTiming);
+                addLog('Pipeline', `REAL pipeline complete! Total: ${(newTiming.total / 1000).toFixed(2)}s`, 'success');
+
             } else if (dataSource === 'csv' && csvFile) {
+                // ==================== CSV MODE (Legacy) ====================
+                setPipelineStep('fetching');
                 addLog('CSV', `Uploading: ${csvFile.name}`, 'info');
 
                 const formData = new FormData();
@@ -191,10 +292,33 @@ export default function Dashboard() {
                 const ingestResult = await res.json();
 
                 addLog('CSV', `Ingested ${ingestResult.record_count} transactions`, 'success');
-                fetchedGraphData = { nodes: [], edges: [], centerAddress: '' };
+                setGraphData({ nodes: [], edges: [], centerAddress: '' });
+
+                // Run legacy analyze
+                setPipelineStep('analyzing');
+                const analyzeRes = await fetch(`${API_URL}/api/v1/analyze`, { method: 'POST' });
+                if (analyzeRes.ok) {
+                    const analyzeData = await analyzeRes.json();
+                    const detectedAnomalies: ContextAnomaly[] = (analyzeData.anomalies || []).map((a: any, i: number) => ({
+                        id: a.anomaly_id || `anomaly_${i}`,
+                        entity: a.entities_involved?.[0] || 'unknown',
+                        score: a.severity || 0.5,
+                        type: a.anomaly_type || 'Unknown',
+                        description: a.description || 'Anomaly detected',
+                        txHashes: []
+                    }));
+                    setAnomalies(detectedAnomalies);
+                    addLog('GNN', `Detected ${detectedAnomalies.length} anomalies`, 'success');
+                }
+
+                setPipelineStep('complete');
+                addLog('Pipeline', 'CSV analysis complete', 'success');
+
             } else if (dataSource === 'preseeded') {
+                // ==================== DEMO MODE ====================
+                setPipelineStep('fetching');
                 addLog('Demo', 'Loading pre-seeded demo dataset...', 'info');
-                fetchedGraphData = {
+                const fetchedGraphData: GraphData = {
                     nodes: [
                         { id: '0xAgent_A', label: 'Agent A' },
                         { id: '0xAgent_B', label: 'Agent B' },
@@ -211,146 +335,20 @@ export default function Dashboard() {
                     ],
                     centerAddress: '0xAgent_A'
                 };
+                setGraphData(fetchedGraphData);
                 addLog('Demo', 'Loaded 5 agents, 5 transactions', 'success');
+
+                setPipelineStep('analyzing');
+                const demoAnomalies: ContextAnomaly[] = [
+                    { id: 'a1', entity: '0xAgent_C', score: 0.92, type: 'Circular Trading', description: 'Suspicious circular flow detected', txHashes: ['0x1', '0x3'] },
+                    { id: 'a2', entity: '0xAgent_E', score: 0.78, type: 'Rapid Movement', description: 'Unusual transaction velocity', txHashes: ['0x4', '0x5'] }
+                ];
+                setAnomalies(demoAnomalies);
+                addLog('GNN', 'Demo anomalies loaded', 'success');
+
+                setPipelineStep('complete');
+                addLog('Pipeline', 'Demo complete', 'success');
             }
-
-            setGraphData(fetchedGraphData);
-            newTiming.fetch = Date.now() - fetchStart;
-            addLog('Timing', `Data fetch: ${(newTiming.fetch / 1000).toFixed(2)}s`, 'info');
-
-            // ==================== STEP 2: BUILD GRAPH ====================
-            setPipelineStep('building');
-            const buildStart = Date.now();
-
-            addLog('Graph', 'Building behavior graph...', 'info');
-            await new Promise(r => setTimeout(r, 300));
-
-            const nodeCount = fetchedGraphData?.nodes?.length || 0;
-            const edgeCount = fetchedGraphData?.edges?.length || 0;
-            addLog('Graph', `${nodeCount} nodes, ${edgeCount} edges`, 'success');
-
-            newTiming.build = Date.now() - buildStart;
-
-            // ==================== STEP 3: GNN INFERENCE ====================
-            setPipelineStep('analyzing');
-            const analyzeStart = Date.now();
-
-            addLog('GNN', 'Running inference...', 'info');
-            addLog('GNN', 'Embedding agents...', 'info');
-
-            const analyzeRes = await fetch(`${API_URL}/api/v1/analyze`, { method: 'POST' });
-            let analyzeData: { anomalies: any[]; results_hash?: string; model_hash?: string } = { anomalies: [] };
-
-            if (analyzeRes.ok) {
-                analyzeData = await analyzeRes.json();
-            } else {
-                addLog('GNN', 'Analysis endpoint unavailable, using demo anomalies', 'warning');
-                // Demo anomalies for testing
-                analyzeData = {
-                    anomalies: [
-                        { id: 'a1', entity: '0xAgent_C', score: 0.92, type: 'Circular Trading', description: 'Suspicious circular flow detected', txHashes: ['0x1', '0x3'] },
-                        { id: 'a2', entity: '0xAgent_E', score: 0.78, type: 'Rapid Movement', description: 'Unusual transaction velocity', txHashes: ['0x4', '0x5'] }
-                    ] as any[]
-                };
-            }
-
-            const detectedAnomalies: ContextAnomaly[] = (analyzeData.anomalies || []).map((a: any, i: number) => ({
-                id: a.anomaly_id || a.id || `anomaly_${i}`,
-                entity: a.entities_involved?.[0] || a.entity || 'unknown',
-                score: a.severity || a.score || 0.5,
-                type: a.anomaly_type || a.type || 'Unknown',
-                description: a.description || 'Anomaly detected',
-                txHashes: a.evidence_data?.transactions || a.txHashes || []
-            }));
-
-            setAnomalies(detectedAnomalies);
-            addLog('GNN', `Detected ${detectedAnomalies.length} high-risk behavior clusters`, detectedAnomalies.length > 0 ? 'warning' : 'success');
-
-            newTiming.analyze = Date.now() - analyzeStart;
-            addLog('Timing', `GNN inference: ${(newTiming.analyze / 1000).toFixed(2)}s`, 'info');
-
-            // ==================== STEP 4: ZK PROOF ====================
-            setPipelineStep('proving');
-            const proofStart = Date.now();
-
-            addLog('zkVM', 'Generating proof of correct GNN execution...', 'info');
-
-            try {
-                const proofRes = await fetch(`${API_URL}/api/v3/proof/generate`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        data_hash: '0x' + Math.random().toString(16).slice(2),
-                        model_hash: '0x' + Math.random().toString(16).slice(2),
-                        anomaly_scores: detectedAnomalies.map(a => a.score)
-                    })
-                });
-
-                if (proofRes.ok) {
-                    const proofData = await proofRes.json();
-                    setProofBundle({
-                        task_id: proofData.image_id || 'task_' + Date.now(),
-                        merkle_root: proofData.commitment || '',
-                        zk_commitment: proofData.commitment || '',
-                        proof_system: proofData.proof_system === 'risc0' ? 'risc0' : 'hash_commitment',
-                        anomaly_count: proofData.anomaly_count || detectedAnomalies.length,
-                        timestamp: proofData.generated_at || new Date().toISOString(),
-                        proof_size_kb: parseFloat(proofData.proof_size) || 1.5
-                    });
-                    addLog('zkVM', `Proof size: ${proofData.proof_size || '~1.5'} KB`, 'success');
-                    addLog('zkVM', 'Verified off-chain ✓', 'success');
-                } else {
-                    addLog('zkVM', 'Using hash commitment fallback', 'warning');
-                }
-            } catch (e) {
-                addLog('zkVM', 'Proof generation skipped (Risc0 not configured)', 'warning');
-            }
-
-            newTiming.proof = Date.now() - proofStart;
-            addLog('Timing', `Proof generation: ${(newTiming.proof / 1000).toFixed(2)}s`, 'info');
-
-            // ==================== STEP 5: MERKLE + ANCHOR ====================
-            setPipelineStep('anchoring');
-            const anchorStart = Date.now();
-
-            addLog('Merkle', 'Creating Merkle tree...', 'info');
-
-            const newMerkleRoot = '0x' + Array(64).fill(0).map(() => Math.floor(Math.random() * 16).toString(16)).join('');
-            setMerkleRoot(newMerkleRoot);
-            addLog('Merkle', `Root: ${newMerkleRoot.slice(0, 18)}...`, 'success');
-
-            addLog('Anchor', 'Anchoring to Monad (no native verifier, using PoEC)...', 'info');
-
-            try {
-                const anchorRes = await fetch(`${API_URL}/api/v1/anchor`, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({
-                        data_hash: newMerkleRoot,
-                        model_hash: newMerkleRoot,
-                        result_hash: newMerkleRoot
-                    })
-                });
-
-                if (anchorRes.ok) {
-                    const anchorData = await anchorRes.json();
-                    setAnchorTx(anchorData.transaction_hash, anchorData.block_number);
-                    addLog('Anchor', `Tx: ${anchorData.transaction_hash?.slice(0, 18)}...`, 'success');
-                } else {
-                    addLog('Anchor', 'Anchoring failed (check wallet/network)', 'warning');
-                }
-            } catch (e) {
-                addLog('Anchor', 'Anchoring skipped (network unavailable)', 'warning');
-            }
-
-            newTiming.anchor = Date.now() - anchorStart;
-
-            // ==================== COMPLETE ====================
-            setPipelineStep('complete');
-            newTiming.total = Date.now() - startTime;
-            setTiming(newTiming);
-
-            addLog('Pipeline', `Complete! Total time: ${(newTiming.total / 1000).toFixed(2)}s`, 'success');
 
         } catch (error: any) {
             addLog('Error', error.message || 'Pipeline failed', 'error');

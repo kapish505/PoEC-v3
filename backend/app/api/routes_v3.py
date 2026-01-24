@@ -456,3 +456,257 @@ async def get_config():
         ]
     }
 
+
+# ============================================================================
+# Full Analysis Pipeline (End-to-End)
+# ============================================================================
+
+class FullAnalysisRequest(BaseModel):
+    """Request for full end-to-end analysis."""
+    address: str = Field(..., description="Agent address to analyze (required)")
+    block_range: int = Field(default=500, ge=10, le=5000, description="Number of blocks to scan")
+    rpc_url: Optional[str] = Field(default=None, description="Custom RPC URL (optional)")
+
+
+class FullAnalysisResponse(BaseModel):
+    """Response from full analysis pipeline."""
+    task_id: str
+    address: str
+    graph: Dict[str, Any]
+    anomalies: List[Dict[str, Any]]
+    proof: Optional[Dict[str, Any]]
+    anchor_tx: Optional[str]
+    merkle_root: Optional[str]
+    data_hash: str
+    analyzed_at: str
+
+
+@router.post("/analyze/full", response_model=FullAnalysisResponse)
+async def analyze_full(request: FullAnalysisRequest):
+    """
+    Full end-to-end analysis pipeline.
+    
+    1. Fetch transactions from Monad RPC
+    2. Build graph in backend
+    3. Run real GNN inference
+    4. Generate ZK proof
+    5. Anchor to Monad
+    
+    Returns complete analysis with graph, anomalies, proof, and anchor tx.
+    """
+    import uuid
+    from ..services.graph_builder import build_graph
+    from ...gnn import analyze_graph
+    from ..zk.risc0_prover import get_prover
+    
+    task_id = f"poec_{uuid.uuid4().hex[:12]}"
+    
+    try:
+        # ==================== STEP 1: FETCH FROM MONAD ====================
+        logger.info(f"[{task_id}] Fetching transactions for {request.address[:10]}...")
+        
+        fetcher = create_fetcher(request.rpc_url)
+        fetch_result = await fetcher.build_transaction_graph(
+            address=request.address,
+            block_range=request.block_range,
+            max_transactions=200
+        )
+        
+        transactions = fetch_result.get("transactions", [])
+        logger.info(f"[{task_id}] Fetched {len(transactions)} transactions")
+        
+        # ==================== STEP 2: BUILD GRAPH ====================
+        logger.info(f"[{task_id}] Building graph...")
+        
+        graph = build_graph(transactions, request.address)
+        data_hash = graph.get("data_hash", "")
+        
+        logger.info(f"[{task_id}] Graph: {graph['node_count']} nodes, {graph['edge_count']} edges")
+        
+        # ==================== STEP 3: RUN GNN ====================
+        logger.info(f"[{task_id}] Running GNN inference...")
+        
+        # Run in threadpool to avoid blocking
+        gnn_result = await run_in_threadpool(analyze_graph, graph)
+        anomalies = gnn_result.get("anomalies", [])
+        
+        logger.info(f"[{task_id}] Detected {len(anomalies)} anomalies")
+        
+        # ==================== STEP 4: GENERATE PROOF ====================
+        logger.info(f"[{task_id}] Generating ZK proof...")
+        
+        prover = get_prover()
+        
+        # Prepare proof input
+        anomaly_scores = [a.get("severity", 0.5) for a in anomalies]
+        if not anomaly_scores:
+            anomaly_scores = [0.0]  # No anomalies = safe
+        
+        model_hash = hashlib.sha256(b"gnn_v1").hexdigest()
+        
+        proof_input = prover.prepare_input(
+            data_hash=data_hash[:64] if data_hash else "0" * 64,
+            anomaly_scores=anomaly_scores,
+            model_hash=model_hash,
+            threshold=0.75
+        )
+        
+        receipt = await prover.generate_proof(proof_input)
+        
+        proof = {
+            "system": "risc0" if prover.risc0_available else "hash_commitment",
+            "commitment": receipt.output.commitment,
+            "anomaly_count": receipt.output.anomaly_count,
+            "max_score": receipt.output.max_score,
+            "proof_size_kb": receipt.proof_size_kb
+        }
+        
+        merkle_root = receipt.output.commitment
+        
+        logger.info(f"[{task_id}] Proof generated: {proof['system']}")
+        
+        # ==================== STEP 5: ANCHOR TO MONAD ====================
+        anchor_tx = None
+        try:
+            # Import anchor function
+            from .routes import anchor_result
+            
+            # Create anchor request
+            class AnchorRequest:
+                data_hash = data_hash
+                model_hash = model_hash
+                result_hash = merkle_root
+            
+            anchor_result_data = await anchor_result(AnchorRequest())
+            anchor_tx = anchor_result_data.get("transaction_hash")
+            
+            logger.info(f"[{task_id}] Anchored: {anchor_tx}")
+        except Exception as e:
+            logger.warning(f"[{task_id}] Anchor failed (continuing): {e}")
+        
+        # ==================== RETURN RESULT ====================
+        return FullAnalysisResponse(
+            task_id=task_id,
+            address=request.address,
+            graph={
+                "nodes": graph["nodes"],
+                "edges": graph["edges"],
+                "node_count": graph["node_count"],
+                "edge_count": graph["edge_count"]
+            },
+            anomalies=anomalies,
+            proof=proof,
+            anchor_tx=anchor_tx,
+            merkle_root=merkle_root,
+            data_hash=data_hash,
+            analyzed_at=datetime.utcnow().isoformat()
+        )
+        
+    except ValueError as e:
+        raise HTTPException(status_code=400, detail=str(e))
+    except Exception as e:
+        logger.error(f"[{task_id}] Analysis failed: {e}")
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+# ============================================================================
+# Proof Query Endpoint (for x402 Agents)
+# ============================================================================
+
+class ProofQueryResponse(BaseModel):
+    """Response for proof query."""
+    address: str
+    risk_score: float
+    anomaly_count: int
+    merkle_root: Optional[str]
+    anchor_tx: Optional[str]
+    verified_block: Optional[int]
+    queried_at: str
+
+
+@router.get("/agent/fetch_proof/{address}", response_model=ProofQueryResponse)
+async def fetch_proof(address: str):
+    """
+    Fetch proof for an agent address.
+    
+    Queries on-chain ResultAnchor contract for anchored results.
+    Used by x402 agents to verify counterparty trust.
+    """
+    import os
+    from web3 import Web3
+    
+    try:
+        # Connect to Monad
+        rpc_url = os.getenv("MONAD_RPC_URL", "https://testnet-rpc.monad.xyz")
+        w3 = Web3(Web3.HTTPProvider(rpc_url))
+        
+        # Get contract address
+        contract_address = os.getenv("ANCHOR_CONTRACT_ADDRESS")
+        
+        if not contract_address:
+            # No anchor deployed yet, return empty
+            return ProofQueryResponse(
+                address=address,
+                risk_score=0.0,
+                anomaly_count=0,
+                merkle_root=None,
+                anchor_tx=None,
+                verified_block=None,
+                queried_at=datetime.utcnow().isoformat()
+            )
+        
+        # Simplified ABI for getAnchor
+        abi = [
+            {
+                "inputs": [{"internalType": "bytes32", "name": "_taskId", "type": "bytes32"}],
+                "name": "getAnchor",
+                "outputs": [
+                    {"internalType": "bytes32", "name": "datasetHash", "type": "bytes32"},
+                    {"internalType": "bytes32", "name": "modelHash", "type": "bytes32"},
+                    {"internalType": "bytes32", "name": "resultHash", "type": "bytes32"},
+                    {"internalType": "bool", "name": "exists", "type": "bool"},
+                    {"internalType": "uint256", "name": "timestamp", "type": "uint256"},
+                    {"internalType": "address", "name": "submitter", "type": "address"}
+                ],
+                "stateMutability": "view",
+                "type": "function"
+            }
+        ]
+        
+        contract = w3.eth.contract(address=Web3.to_checksum_address(contract_address), abi=abi)
+        
+        # Create task ID from address
+        task_id = w3.keccak(text=f"poec_{address.lower()}")
+        
+        # Query contract
+        try:
+            result = contract.functions.getAnchor(task_id).call()
+            dataset_hash, model_hash, result_hash, exists, timestamp, submitter = result
+            
+            if exists:
+                return ProofQueryResponse(
+                    address=address,
+                    risk_score=0.5,  # Would need to decode from result
+                    anomaly_count=0,
+                    merkle_root=result_hash.hex() if result_hash else None,
+                    anchor_tx=None,  # Would need to query events
+                    verified_block=int(timestamp) if timestamp else None,
+                    queried_at=datetime.utcnow().isoformat()
+                )
+        except Exception as e:
+            logger.warning(f"Contract query failed: {e}")
+        
+        # No proof found
+        return ProofQueryResponse(
+            address=address,
+            risk_score=0.0,
+            anomaly_count=0,
+            merkle_root=None,
+            anchor_tx=None,
+            verified_block=None,
+            queried_at=datetime.utcnow().isoformat()
+        )
+        
+    except Exception as e:
+        logger.error(f"Error fetching proof: {e}")
+        raise HTTPException(status_code=500, detail=str(e))

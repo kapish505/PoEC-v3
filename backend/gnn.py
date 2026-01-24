@@ -228,3 +228,82 @@ class AnomalyDetector:
         gc.collect()
                 
         return {"anomalies": anomalies, "edge_scores": all_scores}
+    
+    def analyze_live_graph(self, graph_data: dict) -> dict:
+        """
+        Analyze live graph data from Monad RPC.
+        
+        Args:
+            graph_data: Dict with 'edges' list containing source/target/amount/date
+        
+        Returns:
+            Analysis result with anomalies
+        """
+        # Convert graph_data to NetworkX DiGraph
+        G = nx.DiGraph()
+        
+        # Add edges with weights
+        edges = graph_data.get("edges", [])
+        for edge in edges:
+            source = edge.get("source", "")
+            target = edge.get("target", "")
+            amount = float(edge.get("amount", 0))
+            
+            if source and target:
+                G.add_edge(source, target, weight=amount)
+        
+        if G.number_of_edges() == 0:
+            return {
+                "anomalies": [],
+                "edge_scores": [],
+                "message": "No edges to analyze"
+            }
+        
+        # Train baseline on this graph
+        self.train_baseline(G, epochs=50)  # Fewer epochs for live data
+        
+        # Detect anomalies
+        result = self.detect(G)
+        
+        # Enrich anomalies with context
+        enriched_anomalies = []
+        for anom in result.get("anomalies", []):
+            enriched_anomalies.append({
+                "anomaly_id": f"live_{hash(anom['source'] + anom['target']) % 10000}",
+                "anomaly_type": "STRUCTURAL_ANOMALY",
+                "severity": anom["score"],
+                "description": anom.get("explanation", "Anomalous transaction pattern detected"),
+                "confidence": "High" if anom["score"] > 0.7 else "Medium",
+                "detection_method": "LEARNED",
+                "entities_involved": [anom["source"], anom["target"]],
+                "evidence_data": {
+                    "source": anom["source"],
+                    "target": anom["target"],
+                    "score": anom["score"]
+                }
+            })
+        
+        return {
+            "anomalies": enriched_anomalies,
+            "edge_scores": result.get("edge_scores", []),
+            "node_count": G.number_of_nodes(),
+            "edge_count": G.number_of_edges()
+        }
+
+
+# Singleton detector instance for reuse
+_detector_instance = None
+
+
+def get_detector() -> AnomalyDetector:
+    """Get or create detector instance."""
+    global _detector_instance
+    if _detector_instance is None:
+        _detector_instance = AnomalyDetector()
+    return _detector_instance
+
+
+def analyze_graph(graph_data: dict) -> dict:
+    """Convenience function to analyze live graph data."""
+    detector = get_detector()
+    return detector.analyze_live_graph(graph_data)

@@ -58,7 +58,9 @@ contract ResultAnchor {
             modelHash: _modelHash,
             bundleCID: _bundleCID,
             timestamp: block.timestamp,
-            submitter: msg.sender
+            submitter: msg.sender,
+            zkVerified: false,
+            zkCommitment: bytes32(0)
         });
         
         emit ProofAnchored(

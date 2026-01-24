@@ -1,8 +1,0 @@
-{
-  "projectId": "e8cc9a25-cdcb-45be-bedd-e3b4e53c6d4c",
-  "createdAt": 1737548534000,
-  "startupCommands": [
-    "bun run dev",
-    "cd backend && uvicorn app.main:app --reload --port 8000"
-  ]
-}

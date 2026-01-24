@@ -1,32 +1,33 @@
+# PoEC v3 Backend - Render Config for Monad
+
 services:
   - type: web
     name: poec-backend
-    env: docker
-    dockerContext: backend
-    dockerfilePath: backend/Dockerfile
+    runtime: python
+    rootDir: backend
+    buildCommand: pip install -r requirements.txt
+    startCommand: uvicorn app.main:app --host 0.0.0.0 --port $PORT
     healthCheckPath: /health
     envVars:
+      # Required for Monad
+      - key: ETHEREUM_NODE_URL
+        value: https://testnet.monad.xyz
+      - key: BLOCKCHAIN_NETWORK
+        value: Monad Testnet
+      - key: ANCHOR_CONTRACT_ADDRESS
+        sync: false  # Set after deploying contracts
+      - key: DEPLOYER_PRIVATE_KEY
+        sync: false  # Keep secret - set in Render dashboard
+      
+      # Optional
       - key: POEC_ENV
         value: production
       - key: DATABASE_URL
-        fromDatabase:
-          name: poec-db
-          property: connectionString
-      - key: ANCHOR_CONTRACT_ADDRESS
-        sync: false
-      - key: ETHEREUM_NODE_URL
-        value: https://rpc.sepolia.org
-      - key: DEPLOYER_PRIVATE_KEY
-        sync: false
-      - key: STORAGE_TYPE
-        value: pinata
-      - key: PINATA_JWT
-        sync: false
-      - key: BLOCKCHAIN_NETWORK
-        value: Sepolia Testnet
+        value: sqlite:///./poec.db  # Or use Render Postgres
 
-databases:
-  - name: poec-db
-    databaseName: poec
-    user: poec_user
-    plan: free # or starter
+      # IPFS Storage (OPTIONAL - only if you want proof bundles on IPFS)
+      # If not set, proofs are stored on-chain only
+      # - key: STORAGE_TYPE
+      #   value: pinata
+      # - key: PINATA_JWT
+      #   sync: false

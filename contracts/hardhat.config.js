@@ -9,7 +9,7 @@ module.exports = {
       chainId: 1337
     },
     monad: {
-      url: "https://testnet-rpc.monad.xyz",
+      url: process.env.MONAD_RPC_URL || "https://testnet-rpc.monad.xyz",
       chainId: 10143,
       accounts: process.env.DEPLOYER_PRIVATE_KEY ? [process.env.DEPLOYER_PRIVATE_KEY] : []
     },

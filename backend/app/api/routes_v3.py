@@ -14,8 +14,10 @@ import secrets
 from datetime import datetime
 
 from ..services.monad_fetcher import MonadFetcher, create_fetcher
-from ..engine.gnn import GNNEngine
+from ..engine.gnn import AnomalyDetector
 from ..zk.prover import ZKProver, create_prover
+import networkx as nx
+from starlette.concurrency import run_in_threadpool
 
 logger = logging.getLogger(__name__)
 
@@ -215,27 +217,49 @@ async def get_agent_reputation(
                 verified=False
             )
         
-        # Run GNN analysis
-        engine = GNNEngine()
-        edges = graph_data["edges"]
+        # Helper to run GNN synchronously in threadpool
+        def _run_gnn(g_data):
+            # Build NetworkX graph
+            G = nx.DiGraph()
+            for node in g_data["nodes"]:
+                G.add_node(node)
+            for edge in g_data["edges"]:
+                G.add_edge(edge["source"], edge["target"], weight=edge["amount"])
+            
+            # Run detector
+            detector = AnomalyDetector()
+            detector.train_baseline(G, epochs=25)
+            output = detector.detect(G)
+            
+            # Explicitly clear memory
+            del detector
+            import gc
+            gc.collect()
+            
+            return output
+
+        # Execute GNN
+        gnn_output = await run_in_threadpool(_run_gnn, graph_data)
         
-        # Convert to GNN input format
-        gnn_result = await engine.analyze_graph({
-            "nodes": graph_data["nodes"],
-            "edges": [
-                {
-                    "source": e["source"],
-                    "target": e["target"],
-                    "amount": e["amount"],
-                    "timestamp": e["timestamp"]
-                }
-                for e in edges
-            ]
-        })
+        # Compute aggregate risk from anomalies
+        anomalies = gnn_output.get("anomalies", [])
+        if anomalies:
+            max_severity = max([a["score"] for a in anomalies])
+            risk_score = int(max_severity * 100)
+        else:
+            # Check edge scores for subtler risk from reconstruction
+            edge_scores = gnn_output.get("edge_scores", [])
+            if edge_scores:
+                avg_score = sum([s["score"] for s in edge_scores]) / len(edge_scores)
+                # Lower weight for non-anomalies
+                risk_score = int(avg_score * 50)  
+            else:
+                risk_score = 10 # Baseline low risk
         
-        # Compute reputation score (inverse of risk)
-        risk_score = gnn_result.get("risk_score", 50)
-        reputation_score = 100 - risk_score
+        reputation_score = max(0, min(100, 100 - risk_score))
+        
+        # We need `gnn_result` dict for feature extraction later in code
+        gnn_result = {"risk_score": risk_score, "features": [0.5]*5}
         
         # Step 3: Generate ZK proof (if requested)
         zk_proof = None

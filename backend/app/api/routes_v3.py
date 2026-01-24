@@ -558,8 +558,25 @@ async def analyze_full(request: FullAnalysisRequest):
         # ==================== STEP 3: RUN GNN ====================
         logger.info(f"[{task_id}] Running GNN inference...")
         
+        # Create NetworkX graph from graph dict
+        def run_gnn_detection(graph_dict):
+            G = nx.DiGraph()
+            for node in graph_dict.get("nodes", []):
+                node_id = node.get("id") if isinstance(node, dict) else node
+                G.add_node(node_id)
+            for edge in graph_dict.get("edges", []):
+                G.add_edge(
+                    edge.get("source") if isinstance(edge, dict) else edge[0],
+                    edge.get("target") if isinstance(edge, dict) else edge[1],
+                    value=edge.get("value", 1.0) if isinstance(edge, dict) else 1.0
+                )
+            
+            # Run AnomalyDetector
+            detector = AnomalyDetector()
+            return detector.detect(G)
+        
         # Run in threadpool to avoid blocking
-        gnn_result = await run_in_threadpool(analyze_graph, graph)
+        gnn_result = await run_in_threadpool(run_gnn_detection, graph)
         anomalies = gnn_result.get("anomalies", [])
         
         logger.info(f"[{task_id}] Detected {len(anomalies)} anomalies")

@@ -80,10 +80,10 @@ export default function Home() {
                         >
                             <span className="text-red-400 text-sm font-bold uppercase tracking-widest">The Problem</span>
                             <h2 className="text-3xl md:text-4xl font-bold mt-3 mb-4">
-                                Monad Has No Verification Layer
+                                No Trust Layer for the Agent Economy
                             </h2>
                             <p className="text-slate-400 max-w-2xl mx-auto">
-                                When Agent A wants to pay Agent B via x402, there's no way to verify trust.
+                                Monad's emerging x402 agent ecosystem lacks native infrastructure for verifying autonomous counterparty risk.
                             </p>
                         </motion.div>
 
@@ -113,7 +113,7 @@ export default function Home() {
                                     </div>
                                     <h3 className="font-bold text-lg mb-2">Trust Verification?</h3>
                                     <p className="text-sm text-slate-400">
-                                        "How do I know Agent B isn't a scammer?"
+                                        "Traditional tools like Arkham don't support autonomous agent flows."
                                     </p>
                                 </div>
                             </div>
@@ -123,20 +123,20 @@ export default function Home() {
                                 <div className="p-6 rounded-xl bg-emerald-500/5 border border-emerald-500/20">
                                     <div className="flex items-center gap-3 mb-4">
                                         <Check size={20} className="text-emerald-400" />
-                                        <span className="font-bold text-emerald-400">On Ethereum</span>
+                                        <span className="font-bold text-emerald-400">Human-Centric Analytics</span>
                                     </div>
                                     <div className="space-y-2 text-sm text-slate-300">
                                         <div className="flex items-center gap-2">
                                             <ExternalLink size={14} className="text-slate-500" />
-                                            Etherscan labels
+                                            Designed for human analysts
                                         </div>
                                         <div className="flex items-center gap-2">
                                             <ExternalLink size={14} className="text-slate-500" />
-                                            ChainAnalysis risk scores
+                                            Reactive (after-the-fact)
                                         </div>
                                         <div className="flex items-center gap-2">
                                             <ExternalLink size={14} className="text-slate-500" />
-                                            Arkham entity intelligence
+                                            No automated API for agents
                                         </div>
                                     </div>
                                 </div>
@@ -144,11 +144,21 @@ export default function Home() {
                                 <div className="p-6 rounded-xl bg-red-500/5 border border-red-500/20">
                                     <div className="flex items-center gap-3 mb-4">
                                         <X size={20} className="text-red-400" />
-                                        <span className="font-bold text-red-400">On Monad Today</span>
+                                        <span className="font-bold text-red-400">Missing on Monad</span>
                                     </div>
-                                    <div className="text-center py-4">
-                                        <span className="text-4xl font-bold text-red-400/60">???</span>
-                                        <p className="text-sm text-slate-500 mt-2">No verification infrastructure exists</p>
+                                    <div className="space-y-2 text-sm text-slate-300">
+                                        <div className="flex items-center gap-2">
+                                            <AlertTriangle size={14} className="text-red-400" />
+                                            No x402-native verification
+                                        </div>
+                                        <div className="flex items-center gap-2">
+                                            <AlertTriangle size={14} className="text-red-400" />
+                                            No real-time GNN risk scoring
+                                        </div>
+                                        <div className="flex items-center gap-2">
+                                            <AlertTriangle size={14} className="text-red-400" />
+                                            No on-chain proof of reputation
+                                        </div>
                                     </div>
                                 </div>
                             </div>

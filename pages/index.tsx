@@ -19,7 +19,7 @@ export default function Home() {
     return (
         <div className="min-h-screen bg-[#0a0a0a] text-white selection:bg-blue-500/30 overflow-x-hidden font-sans">
             <Head>
-                <title>PoEC | AI-Powered Financial Forensics with Cryptographic Proof</title>
+                <title>PoEC | ZK-Verified Risk Engine for x402 Agent Economy</title>
             </Head>
 
             {/* Navigation */}
@@ -61,7 +61,7 @@ export default function Home() {
                                 <span className={`animate-ping absolute inline-flex h-full w-full rounded-full opacity-75 ${serverStatus === 'online' ? 'bg-emerald-400' : 'bg-amber-400'}`}></span>
                                 <span className={`relative inline-flex rounded-full h-2 w-2 ${serverStatus === 'online' ? 'bg-emerald-500' : 'bg-amber-500'}`}></span>
                             </span>
-                            {serverStatus === 'online' ? 'GNN Engine Online • Sepolia Connected' : 'Connecting to Neural Core...'}
+                            {serverStatus === 'online' ? 'GNN Engine Online • Monad Connected' : 'Connecting to Neural Core...'}
                         </div>
                     </motion.div>
 
@@ -71,7 +71,7 @@ export default function Home() {
                         animate={{ opacity: 1, y: 0 }}
                         transition={{ delay: 0.2, duration: 0.8 }}
                     >
-                        Proof of <br />Economic Crime
+                        ZK Risk Engine <br />for x402 Agents
                     </motion.h1>
 
                     <motion.p
@@ -80,8 +80,8 @@ export default function Home() {
                         animate={{ opacity: 1 }}
                         transition={{ delay: 0.4, duration: 0.8 }}
                     >
-                        <strong className="text-white">Detect financial fraud with AI. Prove it with cryptography.</strong><br />
-                        PoEC combines <span className="text-blue-400">Graph Neural Networks</span> with <span className="text-emerald-400">Blockchain Proof Anchoring</span> to detect, analyze, and mathematically verify financial anomalies — creating court-admissible digital evidence.
+                        <strong className="text-white">Trustless M2M risk verification for autonomous agents.</strong><br />
+                        PoEC combines <span className="text-blue-400">Graph Neural Networks</span> with <span className="text-emerald-400">Zero-Knowledge Proofs</span> to enable x402 agents to detect economic anomalies, prove their computations, and make trustless decisions — all anchored on <span className="text-purple-400">Monad</span>.
                     </motion.p>
 
                     <motion.div

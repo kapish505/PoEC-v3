@@ -393,6 +393,46 @@ export default function About() {
 
                         </div>
                     </section>
+
+                    {/* Future Roadmap */}
+                    <section>
+                        <div className="flex items-center gap-4 mb-8">
+                            <div className="p-3 bg-gradient-to-r from-purple-500/20 to-blue-500/20 rounded-lg text-purple-400 border border-purple-500/20">
+                                <Zap size={24} />
+                            </div>
+                            <h2 className="text-3xl font-bold text-white">Future Roadmap</h2>
+                        </div>
+
+                        <div className="grid grid-cols-1 md:grid-cols-2 gap-6">
+                            <div className="bg-[#111] p-6 rounded-xl border border-white/10">
+                                <h3 className="text-lg font-bold text-white mb-2">⚡ MEV/Flash Loan Detector</h3>
+                                <p className="text-slate-400 text-sm leading-relaxed">
+                                    Real-time detection of MEV extraction and flash loan attacks on Monad. Monitor mempool for sandwich attacks, front-running, and arbitrage loops.
+                                </p>
+                            </div>
+
+                            <div className="bg-[#111] p-6 rounded-xl border border-white/10">
+                                <h3 className="text-lg font-bold text-white mb-2">💧 Liquidity Pool Monitor</h3>
+                                <p className="text-slate-400 text-sm leading-relaxed">
+                                    Continuous monitoring of DEX liquidity pools for wash trading and manipulation. Generate health scores for LPs to assess risk before providing liquidity.
+                                </p>
+                            </div>
+
+                            <div className="bg-[#111] p-6 rounded-xl border border-white/10">
+                                <h3 className="text-lg font-bold text-white mb-2">📋 Smart Contract Profiler</h3>
+                                <p className="text-slate-400 text-sm leading-relaxed">
+                                    Analyze smart contract interaction patterns to identify rug pulls, exploits, and risky contracts. Provide wallet-level risk warnings before interactions.
+                                </p>
+                            </div>
+
+                            <div className="bg-[#111] p-6 rounded-xl border border-white/10">
+                                <h3 className="text-lg font-bold text-white mb-2">🔗 Cross-Protocol Detector</h3>
+                                <p className="text-slate-400 text-sm leading-relaxed">
+                                    Detect sophisticated attacks that span multiple protocols to hide tracks. Multi-protocol transaction aggregation and hidden link discovery.
+                                </p>
+                            </div>
+                        </div>
+                    </section>
                 </div>
 
                 <div className="mt-20 pt-10 border-t border-white/10 text-center">

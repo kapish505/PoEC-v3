@@ -66,10 +66,17 @@ class MonadFetcher:
         Args:
             rpc_url: Custom RPC URL. If None, uses RPC_PROVIDER setting.
         """
-        self.rpc_url = rpc_url or get_default_rpc_url()
+        url = rpc_url or get_default_rpc_url()
+        
+        # Auto-fix common URL issues
+        if url and not url.startswith('http://') and not url.startswith('https://'):
+            url = 'https://' + url
+            logger.info(f"Auto-added https:// prefix to RPC URL")
+        
+        self.rpc_url = url
         self.chain_id = MONAD_CHAIN_ID
         self._request_id = 0
-        logger.info(f"MonadFetcher initialized with RPC: {self.rpc_url[:50]}...")
+        logger.info(f"MonadFetcher initialized with RPC: {self.rpc_url[:60]}...")
     
     def _next_id(self) -> int:
         """Get next JSON-RPC request ID."""

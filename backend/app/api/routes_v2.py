@@ -11,10 +11,10 @@ from sqlalchemy.orm import Session
 from app.core import database
 from app.models import Anomaly
 from app.models_orm import AnomalyDB
-from config_loader import config_loader
-from proof_builder import build_proof_bundle, MerkleTree
-from proof_builder.storage import get_storage_adapter
-from wrappers import LimitEnforcer
+from backend.config_loader import config_loader
+from backend.proof_builder import build_proof_bundle, MerkleTree
+from backend.proof_builder.storage import get_storage_adapter
+from backend.wrappers import LimitEnforcer
 
 router = APIRouter()
 

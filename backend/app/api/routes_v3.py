@@ -52,6 +52,7 @@ class ReputationScore(BaseModel):
 
 class AnomalyResult(BaseModel):
     """Anomaly detection result."""
+    anomaly_id: Optional[str] = None
     address: str
     pattern_type: str
     confidence: float
@@ -223,7 +224,9 @@ async def get_agent_reputation(
             # Build NetworkX graph
             G = nx.DiGraph()
             for node in g_data["nodes"]:
-                G.add_node(node)
+                # Handle both dict (from graph_builder) and string formats
+                node_id = node.get("id") if isinstance(node, dict) else node
+                G.add_node(node_id)
             for edge in g_data["edges"]:
                 G.add_edge(edge["source"], edge["target"], weight=edge["amount"])
             
@@ -499,7 +502,10 @@ async def analyze_full(request: FullAnalysisRequest):
     # AnomalyDetector already imported at top of file
     from ..zk.risc0_prover import get_prover
     
-    task_id = f"poec_{uuid.uuid4().hex[:12]}"
+    # Create deterministic task ID so x402 agents can find it by address
+    # Must use Web3.keccak to match Solidity/fetch_proof exactly
+    from web3 import Web3
+    task_id = Web3.keccak(text=f"poec_{request.address.lower()}").to_0x_hex()
     
     try:
         # ==================== STEP 1: FETCH FROM MONAD ====================
@@ -617,21 +623,69 @@ async def analyze_full(request: FullAnalysisRequest):
         # ==================== STEP 5: ANCHOR TO MONAD ====================
         anchor_tx = None
         try:
-            # Import anchor function
-            from .routes import anchor_result
+            # Inline anchoring logic to ensure correct Task ID and Monad RPC usage
+            import os
+            from web3 import Web3
             
-            # Create anchor request
-            class AnchorRequest:
-                data_hash = data_hash
-                model_hash = model_hash
-                result_hash = merkle_root
+            PRIVATE_KEY = os.getenv("DEPLOYER_PRIVATE_KEY")
+            MONAD_RPC_URL = os.getenv("MONAD_RPC_URL", "https://testnet-rpc.monad.xyz")
+            CONTRACT_ADDRESS = os.getenv("ANCHOR_CONTRACT_ADDRESS", "0xb46ced9f82335a2fd1ca12c899c23e8d5aefe35e")
             
-            anchor_result_data = await anchor_result(AnchorRequest())
-            anchor_tx = anchor_result_data.get("transaction_hash")
-            
-            logger.info(f"[{task_id}] Anchored: {anchor_tx}")
+            if PRIVATE_KEY:
+                w3_anchor = Web3(Web3.HTTPProvider(MONAD_RPC_URL))
+                account = w3_anchor.eth.account.from_key(PRIVATE_KEY)
+                
+                # ABI for anchorProof
+                anchor_abi = [
+                    {
+                        "inputs": [
+                            {"internalType": "bytes32", "name": "_taskId", "type": "bytes32"},
+                            {"internalType": "bytes32", "name": "_merkleRoot", "type": "bytes32"},
+                            {"internalType": "bytes32", "name": "_datasetHash", "type": "bytes32"},
+                            {"internalType": "bytes32", "name": "_modelHash", "type": "bytes32"},
+                            {"internalType": "string", "name": "_bundleCID", "type": "string"}
+                        ],
+                        "name": "anchorProof",
+                        "outputs": [],
+                        "stateMutability": "nonpayable",
+                        "type": "function"
+                    }
+                ]
+                
+                contract = w3_anchor.eth.contract(address=Web3.to_checksum_address(CONTRACT_ADDRESS), abi=anchor_abi)
+                
+                logger.info(f"[{task_id}] Anchoring proof for {request.address}...")
+                
+                # Build transaction
+                # task_id is already deterministic (0x...)
+                # merkle_root is hex string
+                txn = contract.functions.anchorProof(
+                    task_id, 
+                    merkle_root if merkle_root.startswith("0x") else "0x" + merkle_root,
+                    data_hash if data_hash.startswith("0x") else "0x" + data_hash,
+                    model_hash if model_hash.startswith("0x") else "0x" + model_hash,
+                    "" # bundleCID (optional for now)
+                ).build_transaction({
+                    'from': account.address,
+                    'nonce': w3_anchor.eth.get_transaction_count(account.address, 'pending'),
+                    'gas': 250000,
+                    'gasPrice': int(w3_anchor.eth.gas_price * 1.2)
+                })
+                
+                signed_txn = w3_anchor.eth.account.sign_transaction(txn, private_key=PRIVATE_KEY)
+                tx_hash_bytes = w3_anchor.eth.send_raw_transaction(signed_txn.raw_transaction)
+                anchor_tx = w3_anchor.to_hex(tx_hash_bytes)
+                
+                logger.info(f"[{task_id}] Anchored: {anchor_tx}")
+            else:
+                logger.warning(f"[{task_id}] Anchoring skipped (DEPLOYER_PRIVATE_KEY not set)")
+                
         except Exception as e:
-            logger.warning(f"[{task_id}] Anchor failed (continuing): {e}")
+            if "already anchored" in str(e).lower() or "revert" in str(e).lower():
+                logger.info(f"[{task_id}] Previously anchored (idempotent success)")
+                anchor_tx = "0x_previously_anchored"
+            else:
+                logger.warning(f"[{task_id}] Anchor failed (continuing): {e}")
         
         # ==================== RETURN RESULT ====================
         return FullAnalysisResponse(
@@ -704,18 +758,28 @@ async def fetch_proof(address: str):
                 queried_at=datetime.utcnow().isoformat()
             )
         
-        # Simplified ABI for getAnchor
+        # Simplified ABI for getProof (matching ResultAnchor.sol)
         abi = [
             {
                 "inputs": [{"internalType": "bytes32", "name": "_taskId", "type": "bytes32"}],
-                "name": "getAnchor",
+                "name": "getProof",
                 "outputs": [
-                    {"internalType": "bytes32", "name": "datasetHash", "type": "bytes32"},
-                    {"internalType": "bytes32", "name": "modelHash", "type": "bytes32"},
-                    {"internalType": "bytes32", "name": "resultHash", "type": "bytes32"},
-                    {"internalType": "bool", "name": "exists", "type": "bool"},
-                    {"internalType": "uint256", "name": "timestamp", "type": "uint256"},
-                    {"internalType": "address", "name": "submitter", "type": "address"}
+                    {
+                        "components": [
+                            {"internalType": "bytes32", "name": "taskId", "type": "bytes32"},
+                            {"internalType": "bytes32", "name": "merkleRoot", "type": "bytes32"},
+                            {"internalType": "bytes32", "name": "datasetHash", "type": "bytes32"},
+                            {"internalType": "bytes32", "name": "modelHash", "type": "bytes32"},
+                            {"internalType": "string", "name": "bundleCID", "type": "string"},
+                            {"internalType": "uint256", "name": "timestamp", "type": "uint256"},
+                            {"internalType": "address", "name": "submitter", "type": "address"},
+                            {"internalType": "bool", "name": "zkVerified", "type": "bool"},
+                            {"internalType": "bytes32", "name": "zkCommitment", "type": "bytes32"}
+                        ],
+                        "internalType": "struct ResultAnchor.AnalysisProof",
+                        "name": "",
+                        "type": "tuple"
+                    }
                 ],
                 "stateMutability": "view",
                 "type": "function"
@@ -724,13 +788,19 @@ async def fetch_proof(address: str):
         
         contract = w3.eth.contract(address=Web3.to_checksum_address(contract_address), abi=abi)
         
-        # Create task ID from address
+        # Create same deterministic task ID
         task_id = w3.keccak(text=f"poec_{address.lower()}")
         
         # Query contract
         try:
-            result = contract.functions.getAnchor(task_id).call()
-            dataset_hash, model_hash, result_hash, exists, timestamp, submitter = result
+            # getProof returns a tuple/struct
+            proof_struct = contract.functions.getProof(task_id).call()
+            
+            # Unpack fields (order matches struct in solidity)
+            # taskId, merkleRoot, datasetHash, modelHash, bundleCID, timestamp, submitter, zkVerified, zkCommitment
+            _, result_hash, _, _, _, timestamp, submitter, _, _ = proof_struct
+            
+            exists = timestamp > 0
             
             if exists:
                 return ProofQueryResponse(

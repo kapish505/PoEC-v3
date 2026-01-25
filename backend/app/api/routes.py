@@ -12,7 +12,7 @@ import os
 import json
 from app.core.context import context_manager
 from app.engine.overlays import TaxOverlay
-from proof_builder.storage import get_storage_adapter
+from backend.proof_builder.storage import get_storage_adapter
 
 router = APIRouter()
 

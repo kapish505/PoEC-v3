@@ -40,6 +40,8 @@ app.include_router(routes.router, prefix="/api/v1")
 from app.api import routes_v2
 app.include_router(routes_v2.router, prefix="/api/v2")
 
+# PoEC v3 Routes (ZK-Verified GNN Risk Engine)
+from app.api import routes_v3
 app.include_router(routes_v3.router)
 
 # Serve SPA Frontend (if built)

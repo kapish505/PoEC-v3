@@ -30,7 +30,7 @@ MONAD_RPC_URL = "https://testnet-rpc.monad.xyz"
 ALCHEMY_MONAD_URL = os.getenv("ALCHEMY_MONAD_URL", "https://monad-testnet.g.alchemy.com/v2/demo")
 
 MONAD_CHAIN_ID = 10143
-MONAD_EXPLORER = "https://monad-testnet.socialscan.io"
+MONAD_EXPLORER = "https://explorer.testnet.monad.xyz"
 
 # Retry settings
 MAX_RETRIES = 3

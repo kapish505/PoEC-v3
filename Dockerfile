@@ -31,16 +31,21 @@ FROM python:3.11-slim
 
 WORKDIR /app
 
-# Install system dependencies
+# Install system dependencies (including Node.js for snarkjs/ZK proofs)
 RUN apt-get update && apt-get install -y --no-install-recommends \
     curl \
     git \
     build-essential \
+    nodejs \
+    npm \
     && rm -rf /var/lib/apt/lists/*
 
 # Install Python dependencies
 COPY backend/requirements.txt ./backend/requirements.txt
 RUN pip install --no-cache-dir -r backend/requirements.txt
+
+# Install snarkjs globally for ZK proofs
+RUN npm install -g snarkjs
 
 # Copy Backend Code
 COPY backend ./backend

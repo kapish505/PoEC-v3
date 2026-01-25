@@ -181,19 +181,77 @@ class AnomalyDetector:
             
         return data # Return processed data for inference
     
+    def detect_heuristic_patterns(self, G: nx.DiGraph) -> list:
+        """
+        Detect logical x402 patterns: Sybil, Loops, Wash Trading.
+        These are deterministic checks independent of the GNN.
+        """
+        anomalies = []
+        nodes = list(G.nodes())
+        
+        # 1. Interaction Loops (Wash Trading / Bot Networks)
+        # Check for simple cycles of length 2 (A<->B) or 3 (A->B->C->A)
+        try:
+            # simple_cycles can be expensive, limit scope if needed
+            cycles = list(nx.simple_cycles(G))
+            for cycle in cycles:
+                if len(cycle) == 2:
+                    anomalies.append({
+                        "source": cycle[0],
+                        "target": cycle[1],
+                        "score": 0.95,
+                        "type": "RECIPROCAL_PAIR",
+                        "explanation": "High-frequency reciprocal trading (A <-> B). Typical wash trading pattern."
+                    })
+                elif len(cycle) == 3:
+                    anomalies.append({
+                        "source": cycle[0],
+                        "target": cycle[1],
+                        "score": 0.85,
+                        "type": "INTERACTION_LOOP",
+                        "explanation": "Closed interaction loop (3-hop). Indicative of circular value recycling or bot network."
+                    })
+        except Exception:
+            pass 
+
+        # 2. Sybil Analysis (Fan-In / Fan-Out)
+        for n in nodes:
+            in_deg = G.in_degree(n)
+            out_deg = G.out_degree(n)
+            
+            # Fan-In: Many senders, few receivers (Aggregation Bot)
+            if in_deg >= 5 and out_deg <= 1:
+                anomalies.append({
+                    "source": n,
+                    "target": n,
+                    "score": 0.80,
+                    "type": "SYBIL_FAN_IN",
+                    "explanation": f"Sybil Fan-In: Received from {in_deg} sources but only sends to {out_deg}. Potential fund consolidation."
+                })
+            
+            # Fan-Out: One sender, many receivers (Dispersion Bot)
+            if out_deg >= 5 and in_deg <= 1:
+                anomalies.append({
+                    "source": n,
+                    "target": n,
+                    "score": 0.80,
+                    "type": "SYBIL_FAN_OUT",
+                    "explanation": f"Sybil Fan-Out: Sends to {out_deg} targets but received from {in_deg}. Potential airdrop farming or dusting."
+                })
+
+        return anomalies
+
     def detect(self, G: nx.DiGraph):
         data, node_map = self.prepare_data(G)
         inv_map = {v: k for k, v in node_map.items()}
         
         self.model.eval()
         
-        # OOM FIX: Wrap entire inference in no_grad to prevent graph storage
         with torch.no_grad():
             z = self.model(data.x, data.edge_index, data.edge_attr)
             scores = self.model.predict_anomaly_scores(z, data.edge_index)
         
-        # Thresholding (e.g., top 5% or > 0.8)
-        anomalies = []
+        gnn_anomalies = []
         all_scores = []
         
         if scores.ndim == 0:
@@ -205,26 +263,105 @@ class AnomalyDetector:
             src = inv_map[src_idx]
             dst = inv_map[dst_idx]
             
-            # Store all scores for visualization/debugging
             all_scores.append({
                 "source": src,
                 "target": dst,
                 "score": float(score)
             })
             
-            if score > 0.75: # Demo Threshold: 0.75 (High Sensitivity)
-                anomalies.append({
+            if score > 0.60: 
+                gnn_anomalies.append({
                     "source": src,
                     "target": dst,
                     "score": float(score),
-                    "type": "STRUCTURAL_ANOMALY",
-                    "explanation": f"AI Insight: The Neural Network is 99% sure this link shouldn't exist based on the graph structure. Its presence is highly abnormal."
+                    "type": "STRUCTURAL_MISMATCH",
+                    "explanation": f"GNN Structural Mismatch: Agent interaction deviates from cluster's learned norm (Score: {score:.2f})."
                 })
         
-        # Explicit cleanup
-        del data
-        del z
-        del scores
+        heuristic_anomalies = self.detect_heuristic_patterns(G)
+        combined_anomalies = heuristic_anomalies + gnn_anomalies
+        
+        # Cleanup
+        del data, z, scores
         gc.collect()
                 
-        return {"anomalies": anomalies, "edge_scores": all_scores}
+        return {"anomalies": combined_anomalies, "edge_scores": all_scores}
+    
+    def analyze_live_graph(self, graph_data: dict) -> dict:
+        """
+        Analyze live graph data from Monad RPC.
+        
+        Args:
+            graph_data: Dict with 'edges' list containing source/target/amount/date
+        
+        Returns:
+            Analysis result with anomalies
+        """
+        # Convert graph_data to NetworkX DiGraph
+        G = nx.DiGraph()
+        
+        # Add edges with weights
+        edges = graph_data.get("edges", [])
+        for edge in edges:
+            source = edge.get("source", "")
+            target = edge.get("target", "")
+            amount = float(edge.get("amount", 0))
+            
+            if source and target:
+                G.add_edge(source, target, weight=amount)
+        
+        if G.number_of_edges() == 0:
+            return {
+                "anomalies": [],
+                "edge_scores": [],
+                "message": "No edges to analyze"
+            }
+        
+        # Train baseline on this graph
+        self.train_baseline(G, epochs=10)  # Reduced for free plan speed
+        
+        # Detect anomalies
+        result = self.detect(G)
+        
+        # Enrich anomalies with context
+        enriched_anomalies = []
+        for anom in result.get("anomalies", []):
+            enriched_anomalies.append({
+                "anomaly_id": f"live_{hash(anom['source'] + anom['target']) % 10000}",
+                "anomaly_type": anom.get("type", "STRUCTURAL_ANOMALY"),
+                "severity": anom["score"],
+                "description": anom.get("explanation", "Anomalous transaction pattern detected"),
+                "confidence": "High" if anom["score"] > 0.7 else "Medium",
+                "detection_method": "LEARNED" if "MISMATCH" in anom.get("type", "") else "HEURISTIC",
+                "entities_involved": [anom["source"], anom["target"]],
+                "evidence_data": {
+                    "source": anom["source"],
+                    "target": anom["target"],
+                    "score": anom["score"]
+                }
+            })
+        
+        return {
+            "anomalies": enriched_anomalies,
+            "edge_scores": result.get("edge_scores", []),
+            "node_count": G.number_of_nodes(),
+            "edge_count": G.number_of_edges()
+        }
+
+
+# Singleton detector instance for reuse
+_detector_instance = None
+
+
+def get_detector() -> AnomalyDetector:
+    """Get or create detector instance."""
+    global _detector_instance
+    if _detector_instance is None:
+        _detector_instance = AnomalyDetector()
+    return _detector_instance
+
+
+def analyze_graph(graph_data: dict) -> dict:
+    """Convenience function to analyze live graph data."""
+    detector = get_detector()
+    return detector.analyze_live_graph(graph_data)

@@ -31,7 +31,8 @@ interface PipelineResult {
 export default function Pipeline() {
     // Data Source State
     const [dataSource, setDataSource] = useState<DataSource>('monad_rpc');
-    const [rpcUrl, setRpcUrl] = useState('https://testnet.monad.xyz');
+    const [rpcUrl, setRpcUrl] = useState('https://testnet-rpc.monad.xyz');
+    const [agentAddress, setAgentAddress] = useState(''); // NEW: Agent address to analyze
     const [csvFile, setCsvFile] = useState<File | null>(null);
 
     // Pipeline State
@@ -98,15 +99,44 @@ export default function Pipeline() {
             const fetchStart = Date.now();
 
             if (dataSource === 'monad_rpc') {
-                addLog('Monad', `Connecting to RPC: ${rpcUrl}`, 'info');
-                addLog('Monad', 'Fetching last 500 agent interactions...', 'info');
+                // Validate address
+                if (!agentAddress || !agentAddress.startsWith('0x') || agentAddress.length !== 42) {
+                    throw new Error('Please enter a valid Monad address (0x...)');
+                }
 
-                // Call v3 API to fetch from Monad
-                const res = await fetch(`${API_URL}/api/v3/agent/0x0000000000000000000000000000000000000000/history?limit=500`);
-                if (!res.ok) throw new Error('Failed to fetch Monad data');
-                graphData = await res.json();
+                addLog('Monad', `Analyzing agent: ${agentAddress.slice(0, 10)}...`, 'info');
+                addLog('Monad', 'Fetching transactions from Monad Testnet...', 'info');
 
-                addLog('Monad', `Received ${graphData.graph?.edge_count || 0} transactions`, 'success');
+                // Call v3 Full Analysis API
+                const res = await fetch(`${API_URL}/api/v3/analyze/full`, {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({
+                        address: agentAddress,
+                        block_range: 500,
+                        rpc_url: rpcUrl
+                    })
+                });
+
+                if (!res.ok) {
+                    const errorData = await res.json().catch(() => ({}));
+                    throw new Error(errorData.detail || 'Failed to fetch Monad data');
+                }
+
+                const fullResult = await res.json();
+                graphData = { graph: fullResult.graph };
+
+                // Store full result for later steps
+                setResult(prev => ({
+                    ...prev,
+                    graphStats: { nodes: fullResult.graph?.node_count || 0, edges: fullResult.graph?.edge_count || 0 },
+                    anomalies: fullResult.anomalies || [],
+                    zkProof: fullResult.proof,
+                    merkleRoot: fullResult.merkle_root,
+                    anchorTx: fullResult.anchor_tx
+                }));
+
+                addLog('Monad', `Fetched ${fullResult.graph?.edge_count || 0} transactions`, 'success');
             } else if (dataSource === 'csv' && csvFile) {
                 addLog('CSV', `Uploading: ${csvFile.name}`, 'info');
 
@@ -349,15 +379,27 @@ export default function Pipeline() {
                             </div>
 
                             {dataSource === 'monad_rpc' && (
-                                <div className="mb-4">
-                                    <label className="block text-xs text-slate-500 mb-2">RPC URL</label>
-                                    <input
-                                        type="text"
-                                        value={rpcUrl}
-                                        onChange={(e) => setRpcUrl(e.target.value)}
-                                        className="w-full bg-black border border-white/10 rounded-lg px-3 py-2 text-sm font-mono focus:outline-none focus:border-blue-500"
-                                    />
-                                </div>
+                                <>
+                                    <div className="mb-4">
+                                        <label className="block text-xs text-slate-500 mb-2">Agent Address *</label>
+                                        <input
+                                            type="text"
+                                            value={agentAddress}
+                                            onChange={(e) => setAgentAddress(e.target.value)}
+                                            placeholder="0x..."
+                                            className="w-full bg-black border border-white/10 rounded-lg px-3 py-2 text-sm font-mono focus:outline-none focus:border-blue-500"
+                                        />
+                                    </div>
+                                    <div className="mb-4">
+                                        <label className="block text-xs text-slate-500 mb-2">RPC URL (Optional)</label>
+                                        <input
+                                            type="text"
+                                            value={rpcUrl}
+                                            onChange={(e) => setRpcUrl(e.target.value)}
+                                            className="w-full bg-black border border-white/10 rounded-lg px-3 py-2 text-sm font-mono focus:outline-none focus:border-blue-500"
+                                        />
+                                    </div>
+                                </>
                             )}
 
                             {dataSource === 'csv' && (

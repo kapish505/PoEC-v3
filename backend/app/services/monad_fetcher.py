@@ -25,16 +25,25 @@ logger = logging.getLogger(__name__)
 # ============================================================================
 
 # RPC Provider settings
-RPC_PROVIDER = os.getenv("RPC_PROVIDER", "monad")  # "monad" or "alchemy"
+# RPC Provider settings
+RPC_PROVIDER = os.getenv("RPC_PROVIDER", "monad")
+# Primary Public RPC
 MONAD_RPC_URL = "https://testnet-rpc.monad.xyz"
-ALCHEMY_MONAD_URL = os.getenv("ALCHEMY_MONAD_URL", "https://monad-testnet.g.alchemy.com/v2/demo")
+# Fallback List (Round-robin)
+FALLBACK_RPCS = [
+    "https://monad-testnet.g.alchemy.com/v2/demo",
+    "https://rpc-devnet.monadinfra.com/rpc",
+    "https://testnet-rpc.monad.xyz" # Loop back
+]
 
 MONAD_CHAIN_ID = 10143
 MONAD_EXPLORER = "https://explorer.testnet.monad.xyz"
 
 # Retry settings
-MAX_RETRIES = 3
-RETRY_DELAYS = [0.5, 1.0, 2.0]  # Exponential backoff
+MAX_RETRIES = 5
+import random
+# Base delay + random jitter to avoid thundering herd on 429
+RETRY_DELAYS = [1.0, 3.0, 5.0, 10.0, 20.0]
 
 # Default settings
 DEFAULT_BLOCK_RANGE = 500
@@ -42,9 +51,7 @@ DEFAULT_MAX_TRANSACTIONS = 200
 
 
 def get_default_rpc_url() -> str:
-    """Get RPC URL based on provider setting."""
-    if RPC_PROVIDER.lower() == "alchemy":
-        return ALCHEMY_MONAD_URL
+    """Get initial RPC URL."""
     return MONAD_RPC_URL
 
 
@@ -121,9 +128,7 @@ class MonadFetcher:
         max_retries: int = MAX_RETRIES
     ) -> Any:
         """
-        Make JSON-RPC call with retry logic.
-        
-        Retries 3 times with exponential backoff: 0.5s, 1s, 2s
+        Make JSON-RPC call with retry logic and RPC rotation.
         """
         last_error = None
         
@@ -132,9 +137,22 @@ class MonadFetcher:
                 return await self._rpc_call(method, params)
             except Exception as e:
                 last_error = e
+                err_str = str(e).lower()
+                
+                # If rate limited (429), rotate URL immediately logic
+                if "429" in err_str or "too many requests" in err_str:
+                    logger.warning(f"RPC 429 Rate Limit on {self.rpc_url}. Switching...")
+                    # Rotate RPC
+                    import random
+                    self.rpc_url = random.choice(FALLBACK_RPCS)
+                
                 if attempt < max_retries - 1:
-                    delay = RETRY_DELAYS[attempt]
-                    logger.warning(f"RPC call failed (attempt {attempt + 1}/{max_retries}), retrying in {delay}s: {e}")
+                    # Add Jitter
+                    import random
+                    jitter = random.uniform(0.5, 1.5)
+                    delay = RETRY_DELAYS[min(attempt, len(RETRY_DELAYS)-1)] * jitter
+                    
+                    logger.warning(f"RPC call failed (attempt {attempt + 1}/{max_retries}), retrying in {delay:.2f}s: {e}")
                     await asyncio.sleep(delay)
                 else:
                     logger.error(f"RPC call failed after {max_retries} attempts: {e}")

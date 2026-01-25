@@ -678,14 +678,22 @@ async def analyze_full(request: FullAnalysisRequest):
                 
                 logger.info(f"[{task_id}] Anchored: {anchor_tx}")
             else:
-                logger.warning(f"[{task_id}] Anchoring skipped (DEPLOYER_PRIVATE_KEY not set)")
+                # critical error if key is missing
+                error_msg = "ANCHORING FAILED: DEPLOYER_PRIVATE_KEY not set in backend environment."
+                logger.error(f"[{task_id}] {error_msg}")
+                raise HTTPException(status_code=500, detail=error_msg)
                 
+        except HTTPException:
+            raise
         except Exception as e:
             if "already anchored" in str(e).lower() or "revert" in str(e).lower():
                 logger.info(f"[{task_id}] Previously anchored (idempotent success)")
                 anchor_tx = "0x_previously_anchored"
             else:
-                logger.warning(f"[{task_id}] Anchor failed (continuing): {e}")
+                # critical error if anchoring fails
+                error_msg = f"ANCHORING FAILED: {str(e)}"
+                logger.error(f"[{task_id}] {error_msg}")
+                raise HTTPException(status_code=500, detail=error_msg)
         
         # ==================== RETURN RESULT ====================
         return FullAnalysisResponse(

@@ -298,8 +298,16 @@ class MonadFetcher:
                         continue
                     
                     for tx in block["transactions"]:
+                        # Fallback: If RPC returned hashes despite request, fetch full tx
                         if isinstance(tx, str):
-                            continue  # Skip if only hash
+                            try:
+                                tx_evt = await self.get_transaction(tx)
+                                if tx_evt:
+                                    tx = tx_evt
+                                else:
+                                    continue
+                            except Exception:
+                                continue
                         
                         tx_from = (tx.get("from") or "").lower()
                         tx_to = (tx.get("to") or "").lower()

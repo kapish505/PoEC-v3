@@ -46,8 +46,8 @@ function NavLink({ href, icon, label, isActive }: NavLinkProps) {
         <Link
             href={href}
             className={`flex items-center gap-2 px-4 py-2 rounded-xl text-sm font-medium transition-all duration-300 ${isActive
-                    ? 'bg-white/10 text-white shadow-lg shadow-blue-500/10'
-                    : 'text-slate-400 hover:text-white hover:bg-white/5'
+                ? 'bg-white/10 text-white shadow-lg shadow-blue-500/10'
+                : 'text-slate-400 hover:text-white hover:bg-white/5'
                 }`}
         >
             {icon}
@@ -90,7 +90,8 @@ export default function Layout({ children }: LayoutProps) {
 
     const navItems = [
         { href: '/dashboard', icon: <BarChart3 size={16} />, label: 'Dashboard' },
-        { href: '/verify', icon: <Shield size={16} />, label: 'Verify' },
+        { href: '/trust-check', icon: <Shield size={16} />, label: 'Trust Check' },
+        { href: '/verify', icon: <Activity size={16} />, label: 'Verify' },
         { href: '/about', icon: <Info size={16} />, label: 'About' },
     ];
 

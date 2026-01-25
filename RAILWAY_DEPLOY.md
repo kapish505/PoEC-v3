@@ -38,8 +38,10 @@ I have already added the necessary files to `backend/`:
    Go to the **Variables** tab and add:
    ```env
    POEC_ENV=production
-   # If getting memory errors with torch, try:
-   # PIP_NO_CACHE_DIR=1
+   # CRITICAL for free tier: prevents pip form caching large wheels
+   PIP_NO_CACHE_DIR=1
+   # Optional: limit workers
+   WEB_CONCURRENCY=1
    ```
    
    *Note: On the free tier, PyTorch can be heavy. If the build fails due to OOM (Out Of Memory), you might need to increase the plan or use a different installation strategy (see Troubleshooting).*

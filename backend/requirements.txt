@@ -9,7 +9,7 @@ httpx
 pytest
 sqlalchemy
 psycopg2-binary
-# Torch CPU Only (Critical for Render/Cloud Limit)
+--extra-index-url https://download.pytorch.org/whl/cpu
 torch
 torch_geometric
 scikit-learn

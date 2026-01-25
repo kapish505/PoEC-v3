@@ -3,6 +3,7 @@
 import React, { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
 import { Shield, ShieldCheck, ShieldX, Search, ExternalLink, Clock, User, Hash, AlertTriangle } from 'lucide-react';
+import Link from 'next/link';
 import Layout from '../components/Layout';
 
 const API_URL = process.env.NEXT_PUBLIC_API_URL || 'http://localhost:8000';
@@ -272,12 +273,12 @@ export default function TrustCheckPage() {
                                         <p className="text-slate-500 text-sm mb-4">
                                             This address has not been analyzed or anchored yet.
                                         </p>
-                                        <a
+                                        <Link
                                             href="/pipeline"
                                             className="inline-flex items-center gap-2 px-4 py-2 bg-blue-600/20 hover:bg-blue-600/30 text-blue-400 rounded-lg text-sm font-medium transition-colors"
                                         >
                                             Run Analysis Pipeline →
-                                        </a>
+                                        </Link>
                                     </div>
                                 )}
                             </motion.div>
